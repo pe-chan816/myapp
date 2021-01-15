@@ -9,10 +9,10 @@ RUN apt-get update -qq && \
             vim \
             yarn && \
     apt-get clean
-WORKDIR /myapp_test
-COPY Gemfile /myapp_test/Gemfile
-COPY Gemfile.lock /myapp_test/Gemfile.lock
+WORKDIR /myapp
+COPY Gemfile /myapp/Gemfile
+COPY Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
-COPY . /myapp_test
-RUN mkdir -p /myapp_test/tmp/sockets
+COPY . /myapp
+RUN mkdir -p /myapp/tmp/sockets
 EXPOSE 3000
