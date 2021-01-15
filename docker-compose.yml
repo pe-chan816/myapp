@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  rails:
+    build:
+      context: .
+    env_file: .env
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
+    volumes:
+      - .:/myapp_test
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+  db:
+    image: mysql:5.7
+    env_file: .env
+    volumes:
+      - DB-data:/var/lib/mysql
+
+volumes:
+  DB-data:
