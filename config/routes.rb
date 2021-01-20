@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  get 'test/test'
-  get '/signup', to:'user#new'
+  get '/signup', to:'users#new'
   root 'home#home'
+  resources :users
 end
