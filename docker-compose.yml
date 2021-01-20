@@ -21,7 +21,7 @@ services:
       dockerfile: ./containers/nginx/Dockerfile
     volumes:
       - tmp-data:/myapp/tmp
-      - public-data/myapp/public
+      - public-data:/myapp/public
     ports:
       - 80:80
     depends_on:
