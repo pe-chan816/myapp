@@ -1,0 +1,9 @@
+- if @user.errors.any?
+  p failed creating account.
+
+
+/- if @user.errors.any?
+  ul
+    - @user.erros.full_messages.each do |msg|
+      li
+        = msg
