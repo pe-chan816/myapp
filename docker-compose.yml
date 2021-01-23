@@ -7,6 +7,8 @@ services:
       dockerfile: ./containers/rails/Dockerfile
     env_file: .env
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec puma -C config/puma.rb"
+    environment:
+      TZ: Asia/Tokyo
     volumes:
       - .:/myapp
       - tmp-data:/myapp/tmp
@@ -19,6 +21,8 @@ services:
     build:
       context: .
       dockerfile: ./containers/nginx/Dockerfile
+    environment:
+      TZ: Asia/Tokyo
     volumes:
       - tmp-data:/myapp/tmp
       - public-data:/myapp/public
