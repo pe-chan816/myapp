@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Users", type: :request do
 
   describe "GET /signup" do
-    it "正しくルーティングされているか" do
+    it "正しく /signup ページを開ける" do
       get "/signup"
       expect(response).to have_http_status(:success)
     end
