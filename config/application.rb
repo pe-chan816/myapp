@@ -15,7 +15,8 @@ module MyappTest
     config.generators do |g|
       g.template_engine :slim
       g.test_framework :rspec,
-                        view_specs: false
+                        view_specs: false,
+                        helper_specs: false
     end
   end
 end

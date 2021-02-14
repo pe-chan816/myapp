@@ -1,14 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+
   context "バリデーションについて" do
-    let(:user) { User.new(params) }
-    let(:params) {{
-      name: 'test-user',
-      email: 'test-email@email.com',
-      password: 'test_password',
-      password_confirmation: 'test_password'
-    }}
+
+    let(:user) { FactoryBot.build(:testuser) }
 
     describe "nameのバリデーション" do
       it "空欄ではない" do
