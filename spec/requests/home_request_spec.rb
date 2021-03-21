@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Homes", type: :request do
 
-  context "new メソッド" do
+  describe "new メソッド" do
     describe "GET /" do
       it "正しくページを開ける" do
         get "/"

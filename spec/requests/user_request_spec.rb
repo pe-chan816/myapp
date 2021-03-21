@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
 
-  context "new メソッド" do
+  describe "new メソッド" do
     describe "GET /signup" do
       it "正しくページを開ける" do
         get "/signup"
@@ -11,7 +11,7 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  context "show メソッド" do
+  describe "show メソッド" do
     describe "ユーザーの個人ページ" do
       it "正しく開ける" do
         user = FactoryBot.create(:testuser)

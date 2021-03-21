@@ -2,8 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
 
-  context "バリデーションについて" do
-
+  describe "バリデーションについて" do
     let(:user) { FactoryBot.build(:testuser) }
 
     describe "nameのバリデーション" do
@@ -60,6 +59,38 @@ RSpec.describe User, type: :model do
         expect(user.valid?).to eq(false)
       end
     end
-
   end
+
+  describe "永続セッションを用いたログイン機能について" do
+    let(:user) { FactoryBot.create(:testuser) }
+    before do
+      user.remember
+    end
+
+    describe "rememer メソッド" do
+      it "正常に :remember_digest に値が入る" do
+        expect(user.remember_digest).not_to eq nil
+      end
+    end
+
+    describe "forget メソッド" do
+      it ":remember_digest が空になる" do
+        user.forget
+        expect(user.remember_digest).to eq nil
+      end
+    end
+
+    describe "authenticed? メソッド" do
+      it ":remember_digest 保存時と同じ remember_token を使えば認証が通る" do
+        authenticate_result = user.authenticated?(user.remember_token)
+        expect(authenticate_result).to eq true
+      end
+      it ":remember_digest が空であれば false が返る" do
+        user.remember_digest = nil
+        authenticate_result = user.authenticated?(user.remember_token)
+        expect(authenticate_result).to eq false
+      end
+    end
+  end
+
 end
