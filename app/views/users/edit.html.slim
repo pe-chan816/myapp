@@ -1,20 +1,18 @@
-- provide :title, 'signup'
-
-h2 Sign up for my App!
+- provide :title, "update_information"
 
 = form_with model: @user, local: true do |f|
   = render partial: 'shared/flash_messages'
 
   = f.label :name
-  = f.text_field :name
+  = f.text_field :name, value: @user.name
 
   = f.label :email
-  = f.email_field :email
+  = f.email_field :email, value: @user.email
 
   = f.label :password
   = f.password_field :password
 
-  = f.label :password_confirmation, "Check your password"
+  = f.label :password_confirmation
   = f.password_field :password_confirmation
 
-  = f.submit "Signup"
+  = f.submit "Update My Information"

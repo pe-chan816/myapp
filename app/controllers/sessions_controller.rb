@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       log_in user
       remember(user)
       flash[:notice] = 'ようこそいらっしゃいました'
-      redirect_to user_path(user)
+      redirect_back_or user_path(user)
     else
       flash.now[:danger] = 'emailとpasswordの組み合わせが正しくありません'
       render 'new'

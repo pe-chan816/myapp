@@ -10,7 +10,7 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
                 = link_to "マイページ", user_path(current_user)
             li class="nav-item"
               a class="nav-link"
-                = link_to "ログアウト", logout_path, method: :delete
-/            li class="nav-item"
+                = link_to "プライベート情報編集", edit_user_path(current_user)
+            li class="nav-item"
               a class="nav-link"
-                | かんたんログイン
+                = link_to "ログアウト", logout_path, method: :delete
