@@ -65,6 +65,16 @@ RSpec.describe "SessionsHelper", type: :helper do
     end
   end
 
+  describe "are_you_current_user?(user) メソッド" do
+    it "ログイン中であれば正しく機能する" do
+      log_in user
+      expect(are_you_current_user?(user)).to eq true
+    end
+    it "ログイン中でないなら false が返る" do
+      expect(are_you_current_user?(user)).to eq false
+    end
+  end
+
   describe "logged_in? メソッド" do
     context "session[:user_id] に値が入っている場合" do
       before do

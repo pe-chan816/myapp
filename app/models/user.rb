@@ -14,7 +14,7 @@ class User < ApplicationRecord
 
   # password のバリデーション
   has_secure_password
-  validates :password, length: {minimum: 8}
+  validates :password, length: {minimum: 8}, allow_nil: true
 
   # 永続セッション用のトークン生成
   def User.new_token
