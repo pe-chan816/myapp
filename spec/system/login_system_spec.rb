@@ -63,6 +63,10 @@ RSpec.describe "ログイン・ログアウト関連", type: :system do
         visit edit_user_path(@user2)
         expect(current_path).to eq root_path
       end
+      it "users_path にアクセスできる" do
+        visit users_path
+        expect(current_path).to eq users_path
+      end
     end
     context "ログイン失敗時" do
       before do

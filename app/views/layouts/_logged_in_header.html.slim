@@ -5,6 +5,9 @@ nav class="navbar navbar-expand-lg navbar-light bg-light"
           span class="navbar-toggler-icon"
         div class="collapse navbar-collapse" id="navbarNav"
           ul class="navbar-nav"
+            li class="navbar-item"
+              a class="nav-item"
+                = link_to "ユーザー一覧", users_path
             li class="nav-item"
               a class="nav-link"
                 = link_to "マイページ", user_path(current_user)

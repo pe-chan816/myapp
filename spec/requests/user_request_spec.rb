@@ -15,11 +15,10 @@ RSpec.describe "Users", type: :request do
 
   describe "edit メソッド" do
     describe "GET edit_user_path" do
-      xit "正しくページを開ける" do
-        # RequestSpec では session が取り扱えないので login_system_spec.rb に書く
-        log_in user
+      it "ログインしていない場合リダイレクトされる" do
+        # RequestSpec では session が取り扱えないのでログイン中の挙動は login_system_spec.rb に書く
         get edit_user_path(user)
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:redirect)
       end
     end
   end
@@ -42,4 +41,11 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+  describe "index メソッド" do
+    it "ログインしていない場合リダイレクトされる" do
+      # RequestSpec では session が取り扱えないのでログイン中の挙動は login_system_spec.rb に書く
+      get users_path
+      expect(response).to have_http_status(:redirect)
+    end
+  end
 end
