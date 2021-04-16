@@ -1,7 +1,6 @@
 - provide :title, "update_information"
 
 = form_with model: @user, local: true do |f|
-  = render partial: 'shared/flash_messages'
 
   = f.label :name
   = f.text_field :name, value: @user.name
@@ -16,3 +15,6 @@
   = f.password_field :password_confirmation
 
   = f.submit "Update My Information"
+
+
+= link_to "Delete this User", user_path, method: :delete, data: { confirm: "本当に削除しますか？"}
