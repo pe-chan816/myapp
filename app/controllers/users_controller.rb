@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
-  before_action :user_must_log_in, only:[:edit, :update, :index]
+  before_action :user_must_log_in, only:[:edit, :update, :index, :destroy]
   before_action :correct_user, only:[:edit, :update]
+  #before_action :admin_user, only: :destroy
 
   def new
     @user = User.new(session[:new_user_params] || {})
@@ -41,6 +42,12 @@ class UsersController < ApplicationController
     @users = User.page(params[:page]).per(10)
   end
 
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "ユーザー情報を削除いたしました"
+    redirect_to users_path
+  end
+
   private
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
@@ -59,4 +66,11 @@ class UsersController < ApplicationController
       flash[:danger] = "ログインしてください"
       redirect_to root_path unless are_you_current_user?(@user)
     end
+
+    #def admin_user
+    #  unless current_user.admin? then
+    #  redirect_to root_path
+    #  flash[:danger] = "情報変更の権限がありません"
+    #  end
+    #end
 end

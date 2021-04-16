@@ -29,6 +29,10 @@ RSpec.describe "Users", type: :request do
         patch '/users/user.id', params:{name:'Another Man'}
         expect(response).not_to have_http_status(:success)
       end
+      it "admin属性は変更できない" do
+        patch '/users/user.id', params:{admin: :true}
+        expect(response).not_to have_http_status(:success)
+      end
     end
   end
 

@@ -3,7 +3,6 @@
 h2 Sign up for my App!
 
 = form_with model: @user, local: true do |f|
-  = render partial: 'shared/flash_messages'
 
   = f.label :name
   = f.text_field :name
