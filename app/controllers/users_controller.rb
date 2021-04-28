@@ -36,6 +36,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @tweet_items = @user.tweets.page(params[:page]).per(10)
   end
 
   def index
@@ -51,14 +52,6 @@ class UsersController < ApplicationController
   private
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
-    end
-
-    def user_must_log_in
-      unless logged_in?
-        store_location
-        flash[:danger] = "ログインしてください"
-        redirect_to login_path
-      end
     end
 
     def correct_user

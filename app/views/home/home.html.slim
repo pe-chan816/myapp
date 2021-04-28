@@ -1,4 +1,15 @@
 - provide :title, 'home'
 
-h1 Welcome to my App
-p This is a portfolio.I'm coding now.
+- if logged_in?
+  = form_with model: @tweet, local: true do |t|
+
+    = t.label :tweet
+    = t.text_field :content, value: @tweet.content
+
+    = t.submit "Send"
+
+  = render 'shared/timeline'
+
+- else
+  h1 Welcome to my App
+  p This is a portfolio.I'm coding now.

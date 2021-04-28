@@ -1,0 +1,7 @@
+- if @tweet_items.any?
+  ul
+    - @tweet_items.each do |tweet|
+      li = tweet.content
+      - if are_you_current_user?(tweet.user)
+        = link_to "Delete this Tweet", tweet_path(tweet), method: :delete, data: {confirm: "本当に削除しますか？"}
+= paginate @tweet_items
