@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :tweets, dependent: :destroy
   before_save {self.email.downcase!}
   require 'digest/md5'
   attr_accessor :remember_token
@@ -41,5 +42,10 @@ class User < ApplicationRecord
   def authenticated?(remember_token)
     return false if remember_digest.nil?
     remember_digest == User.remember_digest(remember_token)
+  end
+
+  # タイムライン表示用
+  def timeline
+    Tweet.where("user_id = ?", id)
   end
 end

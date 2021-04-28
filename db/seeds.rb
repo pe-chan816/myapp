@@ -17,3 +17,11 @@ User.create!(
   password_confirmation: "password",
   admin: true
 )
+
+users = User.order(:created_at).take(5)
+40.times do
+  content = Faker::Games::Pokemon.move
+  users.each do |user|
+    user.tweets.create!(content: content)
+  end
+end

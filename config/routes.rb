@@ -9,4 +9,5 @@ Rails.application.routes.draw do
   root 'home#home'
 
   resources :users
+  resources :tweets, only:[:create, :destroy]
 end

@@ -39,8 +39,7 @@ RSpec.describe "Users", type: :request do
   describe "show メソッド" do
     describe "ユーザーの個人ページ" do
       it "正しく開ける" do
-        get user_path(user)
-        expect(response).to have_http_status(:success)
+        # SessionsHelper が view で絡むので systemspec でカバーする
       end
     end
   end

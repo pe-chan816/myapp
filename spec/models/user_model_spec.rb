@@ -93,4 +93,18 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "Tweetモデルとの関連付け" do
+    before do
+      @user = FactoryBot.create(:testuser)
+      @tweet = @user.tweets.create(content:"TestTweet")
+    end
+    it "関連付けが成功している" do
+      expect(@tweet.user_id).to eq @user.id
+    end
+    it "Userをdestroyすると関連付けられたTweetsもdestroyされる" do
+      # testuser に30ツイート分紐づけてあるから by(-31)で検証
+      expect{@user.destroy}.to change{Tweet.count}.by(-31)
+    end
+  end
+
 end

@@ -6,3 +6,5 @@ p = @user.password_digest
 
 - if current_user.admin?
   = link_to "Delete this User", user_path, method: :delete, data: { confirm: "本当に削除しますか？"}
+
+= render 'shared/timeline'
