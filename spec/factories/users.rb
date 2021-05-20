@@ -27,6 +27,13 @@ FactoryBot.define do
     password_confirmation { "password" }
   end
 
+  factory :testuser3, class: User do
+    name { "TEST_USER_3" }
+    email { "email3@email.com" }
+    password { "password" }
+    password_confirmation { "password" }
+  end
+
   factory :users, class: User do
     sequence :name do |n|
       "FAKE_USER#{n}"

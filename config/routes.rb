@@ -9,5 +9,11 @@ Rails.application.routes.draw do
   root 'home#home'
 
   resources :users
+  resources :users do
+    member do
+      get 'following', 'followers'
+    end
+  end
   resources :tweets, only:[:create, :destroy]
+  resources :relationships, only:[:create, :destroy]
 end

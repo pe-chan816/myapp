@@ -107,4 +107,28 @@ RSpec.describe User, type: :model do
     end
   end
 
+
+  describe "ユーザーフォロー機能について" do
+    before do
+      @user = FactoryBot.create(:testuser)
+      @user2 = FactoryBot.create(:testuser2)
+    end
+
+    describe "follow メソッド" do
+      it "正常に機能している" do
+        expect(@user.following?(@user2)).to eq false
+        @user.follow(@user2)
+        expect(@user.following?(@user2)).to eq true
+      end
+    end
+
+    describe "unfollow メソッド" do
+      it "正常に機能している" do
+        @user.follow(@user2)
+        expect(@user.following?(@user2)).to eq true
+        @user.unfollow(@user2)
+        expect(@user.following?(@user2)).to eq false
+      end
+    end
+  end
 end
