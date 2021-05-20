@@ -11,6 +11,8 @@ module MyappTest
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.0
     config.time_zone = 'Tokyo'
+    # 認証トークンをremoteフォームに埋め込む（ブラウザ側でjavascriptが無効の場合の対策）
+    config.action_view.embed_authenticity_token_in_remote_forms = true
 
     config.generators do |g|
       g.template_engine :slim

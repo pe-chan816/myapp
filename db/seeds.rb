@@ -1,3 +1,4 @@
+# サンプルユーザー
 30.times do |n|
   name = Faker::Name.unique.name
   email = "email#{n+1}@email.com"
@@ -10,6 +11,7 @@
   )
 end
 
+# 管理ユーザー
 User.create!(
   name: "Administrator",
   email: "admin@email.com",
@@ -18,6 +20,7 @@ User.create!(
   admin: true
 )
 
+# サンプルツイート（5ユーザー分）
 users = User.order(:created_at).take(5)
 40.times do
   content = Faker::Games::Pokemon.move
@@ -25,3 +28,11 @@ users = User.order(:created_at).take(5)
     user.tweets.create!(content: content)
   end
 end
+
+# サンプルフォロー関係
+users = User.all
+user = User.first
+following = users[2..20]
+follower = users[10..25]
+following.each {|followed| user.follow(followed)}
+follower.each {|follower| follower.follow(user)}

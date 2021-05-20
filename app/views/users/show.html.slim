@@ -2,9 +2,13 @@
 
 p = @user.name
 p = @user.email
-p = @user.password_digest
+= render 'status'
 
 - if current_user.admin?
   = link_to "Delete this User", user_path, method: :delete, data: { confirm: "本当に削除しますか？"}
 
+= render 'follow_unfollow_form'
+
+/- current_user.follow(@user)
+/p follow
 = render 'shared/timeline'
