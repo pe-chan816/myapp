@@ -1,5 +1,6 @@
 - provide :title, @user.name
 
+= render partial: 'shared/user_image', locals: {user: @user}
 p = @user.name
 p = @user.email
 = render 'status'

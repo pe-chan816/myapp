@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   delete '/logout', to:'sessions#destroy'
 
   get '/signup', to:'users#new'
+  get '/guest', to:'users#guest'
 
   root 'home#home'
 

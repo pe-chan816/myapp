@@ -6,10 +6,7 @@ RSpec.describe "ユーザー一覧関連", type: :system do
       FactoryBot.rewind_sequences
       FactoryBot.create_list(:users, 30)
       @user = FactoryBot.create(:testuser)
-      visit login_path
-      fill_in 'Email', with: 'email@email.com'
-      fill_in 'Password', with: 'password'
-      click_on 'Login'
+      login_as_testuser
     end
 
     it "ユーザー一覧にアクセスできる" do
@@ -34,16 +31,13 @@ RSpec.describe "ユーザー一覧関連", type: :system do
 
   describe "'Delete this User' の挙動" do
     before do
-      @admin = FactoryBot.create(:adminuser)
+      @admin = FactoryBot.create(:administrator)
       @user = FactoryBot.create(:testuser)
     end
 
     context "管理者ユーザーがユーザー削除する場合" do
       before do
-        visit login_path
-        fill_in 'Email', with: 'admin@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_administrator
       end
       it "users_pathに'Delete this User'が表示されている" do
         visit users_path
@@ -70,10 +64,7 @@ RSpec.describe "ユーザー一覧関連", type: :system do
 
     context "一般ユーザーがユーザー削除する場合" do
       before do
-        visit login_path
-        fill_in 'Email', with: 'email@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_testuser
       end
       it "users_path に'Delete this User'が表示されていない" do
         visit users_path
@@ -90,10 +81,7 @@ RSpec.describe "ユーザー一覧関連", type: :system do
       it "正常にユーザー削除できる" do
         visit edit_user_path(@user)
         click_on 'Delete this User'
-        visit login_path
-        fill_in 'Email', with: 'email@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_testuser
         expect(page).to have_content "emailとpasswordの組み合わせが正しくありません"
       end
     end

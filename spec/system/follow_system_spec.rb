@@ -6,15 +6,12 @@ RSpec.describe "フォロー関連", type: :system do
     @user = User.find_by(name: 'TEST_USER_1')
     @user2 = User.find_by(name: 'TEST_USER_2')
     @user3 = FactoryBot.create(:testuser3)
-    visit login_path
   end
 
   describe "ユーザーフォロー機能" do
     # 実際にフォロー・フォロワー数が変動しているかは'user_model_spec'にて検証
     before do
-      fill_in 'Email', with: 'email@email.com'
-      fill_in 'Password', with: 'password'
-      click_on 'Login'
+      login_as_testuser
     end
 
     describe "フォローをする場合" do
@@ -62,9 +59,7 @@ RSpec.describe "フォロー関連", type: :system do
   describe "フォロー・フォロワーリスト関連" do
     describe "フォローリスト" do
       before do
-        fill_in 'Email', with: 'email@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_testuser
       end
 
       describe "フォロー数のリンクをクリックしたとき" do
@@ -87,9 +82,7 @@ RSpec.describe "フォロー関連", type: :system do
 
     describe "フォロワーリスト" do
       before do
-        fill_in 'Email', with: 'email2@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_testuser2
       end
 
       describe "フォロワー数のリンクをクリックしたとき" do

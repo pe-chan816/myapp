@@ -59,9 +59,17 @@ class UsersController < ApplicationController
     @users = @user.followers
   end
 
+  def guest
+    user = User.find_by(email: "i_am_guest_user@email.com")
+    log_in(user)
+    flash[:success] = "ようこそいらっしゃいました"
+    redirect_back_or user_path(user)
+  end
+
   private
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation,
+                                   :profile_image, :remove_profile_image)
     end
 
     def correct_user

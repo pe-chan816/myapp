@@ -4,7 +4,9 @@
   = form_with model: @tweet, local: true do |t|
 
     = t.label :tweet
-    = t.text_field :content, value: @tweet.content
+    = t.text_field :content
+
+    = t.file_field :tweet_image
 
     = t.submit "Send"
 
