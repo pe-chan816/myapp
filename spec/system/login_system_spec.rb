@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "ログイン・ログアウト関連", type: :system do
-  before(:each) do
+  before do
     @user = FactoryBot.create(:testuser)
     @user2 = FactoryBot.create(:testuser2)
   end
@@ -13,6 +13,7 @@ RSpec.describe "ログイン・ログアウト関連", type: :system do
     end
     it "ログインした後はアクセスしようとしたページに飛ぶ" do
       visit edit_user_path(@user)
+      expect(current_path).to eq login_path
       fill_in 'Email', with: 'email@email.com'
       fill_in 'Password', with: 'password'
       click_on 'Login'
@@ -23,10 +24,7 @@ RSpec.describe "ログイン・ログアウト関連", type: :system do
   describe "ログイン時の挙動" do
     context "ログイン成功時" do
       before do
-        visit login_path
-        fill_in 'Email', with: 'email@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_testuser
       end
       it "そのユーザーのページにリダイレクトされる" do
         expect(current_path).to eq user_path(@user)
@@ -44,10 +42,7 @@ RSpec.describe "ログイン・ログアウト関連", type: :system do
     end
     context "ログイン中" do
       before do
-        visit login_path
-        fill_in 'Email', with: 'email@email.com'
-        fill_in 'Password', with: 'password'
-        click_on 'Login'
+        login_as_testuser
       end
       it "edit_user_path にアクセスできる" do
         visit edit_user_path(@user)
@@ -87,11 +82,8 @@ RSpec.describe "ログイン・ログアウト関連", type: :system do
 
   describe "ログアウト時の挙動" do
     before do
-       # ログインする
-      visit login_path
-      fill_in 'Email', with: 'email@email.com'
-      fill_in 'Password', with: 'password'
-      click_on 'Login'
+      # ログインする
+      login_as_testuser
       # ログアウトする
       click_on 'ログアウト'
     end

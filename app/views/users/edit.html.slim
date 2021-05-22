@@ -1,6 +1,9 @@
 - provide :title, "update_information"
 
+/ 最終的にゲストユーザーに対してはボタンをクリックしたら正式ログインを推すポップアップが表示されるようにしたい
 = form_with model: @user, local: true do |f|
+
+  = render partial: 'shared/user_image', locals: {user: @user}
 
   = f.label :name
   = f.text_field :name, value: @user.name
@@ -8,13 +11,22 @@
   = f.label :email
   = f.email_field :email, value: @user.email
 
+  = f.label :profile_image
+  = f.file_field :profile_image
+  div
+    - if @user.profile_image?
+      = f.check_box :remove_profile_image
+      p delete this image
+
   = f.label :password
   = f.password_field :password
 
   = f.label :password_confirmation
   = f.password_field :password_confirmation
 
-  = f.submit "Update My Information"
+  - if @user.guest?
+    p Update My Information
+  - else
+    = f.submit "Update My Information"
 
-
-= link_to "Delete this User", user_path, method: :delete, data: { confirm: "本当に削除しますか？"}
+= link_to "Delete this User", user_path, method: :delete, data: { confirm: "本当に削除しますか？"} unless @user.guest?

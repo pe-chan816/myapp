@@ -8,9 +8,17 @@ class User < ApplicationRecord
                                    foreign_key: "followed_id",
                                    dependent: :destroy
   has_many :followers, through: :passive_relationships, source: :follower
+
   before_save {self.email.downcase!}
+
+  # ハッシュ値化用の下準備
   require 'digest/md5'
+
+  # セッション管理用の下準備
   attr_accessor :remember_token
+
+  # 画像投稿用にcarrierwaveをマウント
+  mount_uploader :profile_image, ImageUploader
 
   # name のバリデーション
   validates :name, presence: true, length:{maximum: 30}

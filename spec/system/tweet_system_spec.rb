@@ -4,10 +4,7 @@ RSpec.describe "ツイート機能について", type: :system do
   describe "home#homeでの表示" do
     before do
       @user = FactoryBot.create(:testuser)
-      visit login_path
-      fill_in 'Email', with: "email@email.com"
-      fill_in 'Password', with: "password"
-      click_on 'Login'
+      login_as_testuser
       visit root_path
     end
 
@@ -33,10 +30,7 @@ RSpec.describe "ツイート機能について", type: :system do
     describe "ページネーションの挙動" do
       before do
         @user = FactoryBot.create(:testuser)
-        visit login_path
-        fill_in 'Email', with: "email@email.com"
-        fill_in 'Password', with: "password"
-        click_on 'Login'
+        login_as_testuser
       end
 
       it "ページネーションが設定通り機能している（最初のページper.10）" do
@@ -61,10 +55,7 @@ RSpec.describe "ツイート機能について", type: :system do
   describe "ツイート投稿機能" do
     before do
       @user = FactoryBot.create(:testuser)
-      visit login_path
-      fill_in 'Email', with: "email@email.com"
-      fill_in 'Password', with: "password"
-      click_on 'Login'
+      login_as_testuser
       visit root_path
       fill_in 'tweet[content]', with: "I'm fine."
       click_on 'Send'
@@ -85,10 +76,7 @@ RSpec.describe "ツイート機能について", type: :system do
       @user = FactoryBot.create(:testuser)
       # なぜか @user.tweets.first で id が最後のツイートが出てきてしまう
       @tweet = @user.tweets.first
-      visit login_path
-      fill_in 'Email', with: "email@email.com"
-      fill_in 'Password', with: "password"
-      click_on 'Login'
+      login_as_testuser
     end
 
     describe "home#homeでの挙動" do

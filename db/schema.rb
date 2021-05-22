@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_28_084619) do
+ActiveRecord::Schema.define(version: 2021_05_22_070737) do
 
   create_table "relationships", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "follower_id"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2021_04_28_084619) do
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "tweet_image"
     t.index ["user_id", "created_at"], name: "index_tweets_on_user_id_and_created_at"
     t.index ["user_id"], name: "index_tweets_on_user_id"
   end
@@ -39,6 +40,8 @@ ActiveRecord::Schema.define(version: 2021_04_28_084619) do
     t.string "password_digest"
     t.string "remember_digest"
     t.boolean "admin", default: false
+    t.string "profile_image"
+    t.boolean "guest", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
