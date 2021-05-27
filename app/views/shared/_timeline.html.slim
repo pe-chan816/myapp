@@ -1,14 +1,4 @@
 - if @tweet_items.any?
-  ul
-    - @tweet_items.each do |tweet|
-      = image_tag(tweet.user.profile_image.url) if tweet.user.profile_image?
-      = tweet.user.name
-      li = tweet.content
-      = image_tag(tweet.tweet_image.url) if tweet.tweet_image?
-
-      = render partial: 'shared/favorite_button', locals: {tweet: tweet}
-
-      - if are_you_current_user?(tweet.user)
-        = link_to "Delete this Tweet", tweet_path(tweet), method: :delete, data: {confirm: "本当に削除しますか？"}
-        <br>
+  - @tweet_items.each do |tweet|
+    = render partial: 'shared/tweet_body', locals: {tweet: tweet}
 = paginate @tweet_items
