@@ -1,9 +1,11 @@
 - @user ||= current_user
-p follow
-= link_to @user.following.count, following_user_path(@user)
-p follower
-div#number_of_followers
-  = link_to @user.followers.count, followers_user_path(@user)
-<br>
-= @user.tweets.count
-p tweets!
+p
+  | follow
+  = link_to @user.following.count, following_user_path(@user)
+p
+  | follower
+  div#number_of_followers
+    = link_to @user.followers.count, followers_user_path(@user)
+p
+  = @user.tweets.count
+  |  tweets!

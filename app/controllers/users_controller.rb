@@ -22,11 +22,9 @@ class UsersController < ApplicationController
   end
 
   def edit
-    #@user = User.find(params[:id])
   end
 
   def update
-    #@user = User.find(params[:id])
     if @user.update_attributes(user_params)
       redirect_to user_path(@user)
     else
@@ -60,7 +58,7 @@ class UsersController < ApplicationController
   end
 
   def guest
-    user = User.find_by(email: "i_am_guest_user@email.com")
+    user = User.find_by(guest: true)
     log_in(user)
     flash[:success] = "ようこそいらっしゃいました"
     redirect_back_or user_path(user)
@@ -79,8 +77,10 @@ class UsersController < ApplicationController
 
     def correct_user
       @user = User.find(params[:id])
-      flash[:danger] = "ログインしてください"
-      redirect_to root_path unless are_you_current_user?(@user)
+      unless are_you_current_user?(@user)
+        flash[:danger] = "ログインしてください"
+        redirect_to root_path
+      end
     end
 
     #def admin_user
