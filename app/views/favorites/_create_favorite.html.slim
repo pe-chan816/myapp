@@ -1,0 +1,3 @@
+= form_with(url: favorites_path) do |f|
+  = f.hidden_field(:favorite_tweet_id, value: tweet.id)
+  = f.submit "いいね"

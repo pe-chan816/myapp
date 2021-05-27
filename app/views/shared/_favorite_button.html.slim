@@ -1,0 +1,10 @@
+p
+  div id="favorite_count"
+    = tweet.favorites.count
+  | いいね
+
+div id="favorite_button"
+  - if tweet.favorited?(current_user)
+    = render partial: 'favorites/destroy_favorite', locals: {tweet: tweet}
+  - else
+    = render partial: 'favorites/create_favorite', locals: {tweet: tweet}

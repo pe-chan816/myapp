@@ -1,0 +1,9 @@
+- provide :title, 'いいね'
+
+- @favorite_tweets.each do |tweet|
+  = render partial: 'shared/user_image', locals: {user: tweet.user}
+  = tweet.user.name
+  = tweet.content
+  = image_tag(tweet.tweet_image.url) if tweet.tweet_image?
+  = render partial: 'shared/favorite_button', locals: {tweet: tweet}
+  <br>
