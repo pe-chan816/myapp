@@ -1,0 +1,4 @@
+$('#favorite_button').html(
+  "<%= escape_javascript( render partial: 'favorites/destroy_favorite', locals:{tweet: @tweet})%>"
+  );
+$('#favorite_count').html("<%= escape_javascript( @tweet.favorites.count)%>");

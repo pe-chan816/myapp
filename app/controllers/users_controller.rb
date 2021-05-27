@@ -66,6 +66,11 @@ class UsersController < ApplicationController
     redirect_back_or user_path(user)
   end
 
+  def favorite
+    @user = User.find(params[:id])
+    @favorite_tweets = @user.favorited_tweets
+  end
+
   private
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation,

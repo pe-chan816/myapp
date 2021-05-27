@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :tweets, dependent: :destroy
+
   has_many :active_relationships, class_name: "Relationship",
                                   foreign_key: "follower_id",
                                   dependent: :destroy
@@ -8,6 +9,9 @@ class User < ApplicationRecord
                                    foreign_key: "followed_id",
                                    dependent: :destroy
   has_many :followers, through: :passive_relationships, source: :follower
+
+  has_many :favorites, dependent: :destroy
+  has_many :favorite_tweets, through: :favorites, source: :tweet
 
   before_save {self.email.downcase!}
 
@@ -62,10 +66,8 @@ class User < ApplicationRecord
 
   # タイムライン表示用
   def timeline
-    #Tweet.where("user_id = ?　OR user_id = ?", self.following_ids, id)
     id = User.where(id: self.id).or(User.where(id: self.following_ids))
     Tweet.where(user_id: id)
-    #Tweet.where("user_id = ?", id)
   end
 
   # ユーザーをフォロー
@@ -81,5 +83,11 @@ class User < ApplicationRecord
   # 他ユーザーをフォローしているか確認する
   def following?(other_user)
     self.following.include?(other_user)
+  end
+
+  # いいねしているツイートの取得
+  def favorited_tweets
+    id = self.favorite_tweets.ids
+    Tweet.where(id: id)
   end
 end

@@ -33,6 +33,10 @@ FactoryBot.define do
     email { "email2@email.com" }
     password { "password" }
     password_confirmation { "password" }
+
+    after(:create) do |testuser2|
+      testuser2.tweets.create(content: "Test Tweet")
+    end
   end
 
   factory :testuser3, class: User do

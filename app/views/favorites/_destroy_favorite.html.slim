@@ -1,0 +1,3 @@
+= form_with(url: favorite_path(tweet), method: :delete) do |f|
+  = f.hidden_field(:tweet_id, value: tweet.id)
+  = f.submit "取り消し"
