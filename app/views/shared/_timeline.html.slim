@@ -1,4 +1,5 @@
 - if @tweet_items.any?
   - @tweet_items.each do |tweet|
-    = render partial: 'shared/tweet_body', locals: {tweet: tweet}
+    div id="tweet-id#{tweet.id}"
+      = render partial: 'shared/tweet_body', locals: {tweet: tweet}
 = paginate @tweet_items

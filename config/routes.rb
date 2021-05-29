@@ -15,7 +15,11 @@ Rails.application.routes.draw do
       get 'following', 'followers', 'favorite'
     end
   end
-  resources :tweets, only:[:create, :destroy]
+  resources :tweets, only:[:create, :destroy, :favorite] do
+    member do
+      get 'favorite'
+    end
+  end
   resources :relationships, only:[:create, :destroy]
   resources :favorites, only:[:create, :destroy]
 end

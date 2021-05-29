@@ -4,6 +4,7 @@ RSpec.describe "いいね関連", type: :system do
   describe "ツイートにいいねをつける場合" do
     before do
       @user = FactoryBot.create(:testuser2)
+      @tweet = Tweet.first
       login_as_testuser2
       visit root_path
     end
@@ -16,9 +17,9 @@ RSpec.describe "いいね関連", type: :system do
     end
 
     it "いいねボタンを押すといいねカウントが増える", js: true do
-      expect(page).to have_selector '#favorite_count', text: '0'
+      expect(page).to have_selector "#favorite_count_tweet_id#{@tweet.id}", text: '0'
       click_on 'いいね'
-      expect(page).to have_selector '#favorite_count', text: '1'
+      expect(page).to have_selector "#favorite_count_tweet_id#{@tweet.id}", text: '1'
     end
 
     it "いいね一覧に表示される" do
@@ -28,6 +29,15 @@ RSpec.describe "いいね関連", type: :system do
       click_on 'いいね'
       visit favorite_user_path(@user)
       expect(page).to have_content 'Test Tweet'
+    end
+
+    it "いいねユーザー一覧に表示される" do
+      click_link '', href: favorite_tweet_path(@tweet)
+      expect(page).not_to have_content "#{@user.name}"
+      visit root_path
+      click_on 'いいね'
+      click_link '', href: favorite_tweet_path(@tweet)
+      expect(page).to have_content "#{@user.name}"
     end
   end
 
@@ -48,9 +58,9 @@ RSpec.describe "いいね関連", type: :system do
     end
 
     it "取り消しボタンを押すといいねカウント減る", js: true do
-      expect(page).to have_selector '#favorite_count', text: '1'
+      expect(page).to have_selector "#favorite_count_tweet_id#{@tweet.id}", text: '1'
       click_on '取り消し'
-      expect(page).to have_selector '#favorite_count', text: '0'
+      expect(page).to have_selector "#favorite_count_tweet_id#{@tweet.id}", text: '0'
     end
 
     it "いいね一覧から消える", js: true do
@@ -59,6 +69,15 @@ RSpec.describe "いいね関連", type: :system do
       click_on '取り消し'
       visit current_path
       expect(page).not_to have_content 'Test Tweet'
+    end
+
+    it "いいねユーザー一覧から消える" do
+      click_link '', href: favorite_tweet_path(@tweet)
+      expect(page).to have_content "#{@user.name}"
+      visit root_path
+      click_on '取り消し'
+      click_link '', href: favorite_tweet_path(@tweet)
+      expect(page).not_to have_content "#{@user.name}"
     end
   end
 end
