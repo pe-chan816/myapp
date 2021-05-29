@@ -6,6 +6,7 @@ class Tweet < ApplicationRecord
   validates :content, length:{maximum: 140}, presence: true
 
   has_many :favorites, dependent: :destroy
+  has_many :user_favorited, through: :favorites, source: :user
 
   # 画像投稿用にcarrierwaveをマウント
   mount_uploader :tweet_image, ImageUploader

@@ -18,6 +18,11 @@ class TweetsController < ApplicationController
     redirect_to request.referrer || root_path
   end
 
+  def favorite
+    tweet = Tweet.find(params[:id])
+    @favorited_users = tweet.user_favorited
+  end
+
   private
   def tweet_params
     params.require(:tweet).permit(:content, :tweet_image)

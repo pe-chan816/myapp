@@ -3,7 +3,6 @@
 = tweet.content
 = image_tag(tweet.tweet_image.url) if tweet.tweet_image?
 = tweet.created_at.strftime("%-H:%M %Y/%m/%d")
-
 = render partial: 'shared/favorite_button', locals: {tweet: tweet}
 
 - if are_you_current_user?(tweet.user)
