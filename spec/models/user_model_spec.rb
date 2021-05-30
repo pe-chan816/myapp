@@ -102,8 +102,8 @@ RSpec.describe User, type: :model do
       expect(@tweet.user_id).to eq @user.id
     end
     it "Userをdestroyすると関連付けられたTweetsもdestroyされる" do
-      # testuser に30ツイート分紐づけてあるから by(-31)で検証
-      expect{@user.destroy}.to change{Tweet.count}.by(-31)
+      # testuser に31ツイート分紐づけてあるから by(-31)で検証
+      expect{@user.destroy}.to change{Tweet.count}.by(-32)
     end
   end
 
