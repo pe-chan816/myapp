@@ -25,6 +25,7 @@ FactoryBot.define do
       30.times do |n|
         testuser.tweets.create(content: "This is No.#{n+1} message.")
       end
+      testuser.tweets.create(content: "I'm TEST_USER_1")
     end
   end
 

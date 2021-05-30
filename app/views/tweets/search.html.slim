@@ -3,6 +3,14 @@
 p
   = "#{@keyword} の検索結果"
 
-- @searched_tweets.each do |tweet|
-  p
-    = render partial: 'shared/tweet_body', locals: {tweet: tweet}
+- if @searched_tweet.exists?
+  p ↓ヒットしたツイート↓
+  - @searched_tweet.each do |tweet|
+    p
+      = render partial: 'shared/tweet_body', locals: {tweet: tweet}
+- if @searched_user.exists?
+  p ↓ヒットしたユーザー↓
+  - @searched_user.each do |user|
+    p
+      = render partial: 'shared/user_image', locals: {user: user}
+      = link_to user.name, user_path(user)
