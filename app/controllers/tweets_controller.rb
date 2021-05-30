@@ -25,7 +25,8 @@ class TweetsController < ApplicationController
 
   def search
     @keyword = params[:search_word]
-    @searched_tweets = Tweet.where("content LIKE ?", "%#{@keyword}%")
+    @searched_tweet = Tweet.where("content LIKE ?", "%#{@keyword}%")
+    @searched_user = User.where("name LIKE ?", "%#{@keyword}%")
   end
 
   private
