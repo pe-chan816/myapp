@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get '/signup', to:'users#new'
   get '/guest', to:'users#guest'
 
-  get '/search', to:'tweets#search'
+  get '/search', to:'searches#search'
 
   root 'home#home'
 
