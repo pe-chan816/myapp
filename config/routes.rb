@@ -9,6 +9,8 @@ Rails.application.routes.draw do
 
   get '/search', to:'searches#search'
 
+  get '/hashtag/:word', to:'hashtags#show'
+
   root 'home#home'
 
   resources :users
@@ -24,4 +26,5 @@ Rails.application.routes.draw do
   end
   resources :relationships, only:[:create, :destroy]
   resources :favorites, only:[:create, :destroy]
+  resources :hashtags, only:[:index]
 end

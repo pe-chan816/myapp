@@ -1,0 +1,7 @@
+h3
+  | #
+  = @hashtag.hashname
+  | が付いたツイート
+
+- @tweets.each do |t|
+  = render partial:'shared/tweet_body', locals:{tweet: t}

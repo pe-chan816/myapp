@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_23_100025) do
+ActiveRecord::Schema.define(version: 2021_06_07_033823) do
 
   create_table "favorites", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
@@ -22,6 +22,13 @@ ActiveRecord::Schema.define(version: 2021_05_23_100025) do
     t.index ["user_id"], name: "index_favorites_on_user_id"
   end
 
+  create_table "hashtags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "hashname"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
+  end
+
   create_table "relationships", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "follower_id"
     t.integer "followed_id"
@@ -30,6 +37,15 @@ ActiveRecord::Schema.define(version: 2021_05_23_100025) do
     t.index ["followed_id"], name: "index_relationships_on_followed_id"
     t.index ["follower_id", "followed_id"], name: "index_relationships_on_follower_id_and_followed_id", unique: true
     t.index ["follower_id"], name: "index_relationships_on_follower_id"
+  end
+
+  create_table "tweet_hashtag_relations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "tweet_id"
+    t.bigint "hashtag_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hashtag_id"], name: "index_tweet_hashtag_relations_on_hashtag_id"
+    t.index ["tweet_id"], name: "index_tweet_hashtag_relations_on_tweet_id"
   end
 
   create_table "tweets", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -55,5 +71,7 @@ ActiveRecord::Schema.define(version: 2021_05_23_100025) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "tweet_hashtag_relations", "hashtags"
+  add_foreign_key "tweet_hashtag_relations", "tweets"
   add_foreign_key "tweets", "users"
 end
