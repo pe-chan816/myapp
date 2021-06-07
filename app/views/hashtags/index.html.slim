@@ -1,0 +1,3 @@
+- @hashtags.each do |h|
+  p
+   = link_to "##{h.hashname}(#{h.tweets.count})", "/hashtag/#{h.hashname}".html_safe
