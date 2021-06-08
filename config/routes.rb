@@ -26,5 +26,5 @@ Rails.application.routes.draw do
   end
   resources :relationships, only:[:create, :destroy]
   resources :favorites, only:[:create, :destroy]
-  resources :hashtags, only:[:index]
+  resources :hashtags, only:[:index, :edit, :update]
 end

@@ -7,7 +7,7 @@ RSpec.describe "ハッシュタグ関連", type: :system do
     login_as_testuser
   end
 
-  describe "ツイートに書かれてたハッシュタグの挙動" do
+  describe "ツイートに書かれているハッシュタグの挙動" do
     it "リンクになった #xxx をクリックするとそのページにリダイレクトされる" do
       visit root_path
       click_on "#test_tag"
@@ -15,10 +15,32 @@ RSpec.describe "ハッシュタグ関連", type: :system do
     end
   end
 
-  describe "タグページの挙動について" do
+  describe "タグ詳細ページの挙動について" do
     it "#xxx のタグページに関連ツイートが表示されている" do
       visit "/hashtag/test_tag"
       expect(page).to have_content "TEST_TWEET #test_tag"
+    end
+
+    # マップ表示用のdivの存在確認 capybaraでのgooglemapのテストの方法が分かり次第書き換えたい
+    it "緯度経度のデータがあるタグの詳細ページでは地図が表示される" do
+      @tag = FactoryBot.create(:hashtag)
+      visit "/hashtag/tag"
+      expect(page).to have_selector '#map'
+    end
+
+    # マップ表示用のdivの存在確認 capybaraでのgooglemapのテストの方法が分かり次第書き換えたい
+    it "緯度経度のデータのないタグの詳細ページでは地図は表示されない" do
+      visit "/hashtag/test_tag"
+      expect(page).not_to have_selector '#map'
+    end
+  end
+
+  describe "タグ編集ページの挙動について" do
+    # マップ表示用のdivの存在確認 capybaraでのgooglemapのテストの方法が分かり次第書き換えたい
+    it "検索用にマップが表示されている" do
+      @tag = FactoryBot.create(:hashtag)
+      visit edit_hashtag_path(@tag)
+      expect(page).to have_selector '#map1'
     end
   end
 
