@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_07_033823) do
+ActiveRecord::Schema.define(version: 2021_06_08_091027) do
 
   create_table "favorites", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2021_06_07_033823) do
     t.string "hashname"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "lat"
+    t.string "lng"
     t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
   end
 

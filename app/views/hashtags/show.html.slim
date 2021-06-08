@@ -1,7 +1,11 @@
+- provide :title, "##{@hashtag.hashname}"
+
 h3
   | #
   = @hashtag.hashname
-  | が付いたツイート
+
+= render partial: 'google_map'
+= link_to 'タグ編集', edit_hashtag_path(@hashtag), data:{'turbolinks': false}
 
 - @tweets.each do |t|
   = render partial:'shared/tweet_body', locals:{tweet: t}
