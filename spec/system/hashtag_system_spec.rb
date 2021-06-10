@@ -33,6 +33,18 @@ RSpec.describe "ハッシュタグ関連", type: :system do
       visit "/hashtag/test_tag"
       expect(page).not_to have_selector '#map'
     end
+
+    it "レシピ登録をすると詳細ページに表示されるようになる" do
+      @tag = FactoryBot.create(:hashtag)
+      visit '/hashtag/tag'
+      expect(page).not_to have_content 'ウイスキー : 60ml'
+      visit edit_hashtag_path(@tag)
+      fill_in 'hashtag_recipes_attributes_0_material', with: 'ウイスキー'
+      fill_in 'hashtag_recipes_attributes_0_amount', with: '60'
+      select 'ml', from: 'hashtag_recipes_attributes_0_unit'
+      click_on 'レシピ登録'
+      expect(page).to have_content 'ウイスキー : 60ml'
+    end
   end
 
   describe "タグ編集ページの挙動について" do
