@@ -8,6 +8,7 @@ require("turbolinks").start()
 require("@rails/activestorage").start()
 require("channels")
 require("jquery") // Rails6でJQueryを使うために追記
+require("@nathanvda/cocoon") // cocoon用に追記
 
 //= require jquery3
 //= require popper

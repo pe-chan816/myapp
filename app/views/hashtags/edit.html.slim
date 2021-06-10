@@ -41,7 +41,6 @@ javascript:
           map: map,
           position: results[0].geometry.location,
         });
-        latlngDis.innerHTML = results[0].geometry.location;
         document.getElementById('latlng').value = results[0].geometry.location;
       } else {
         alert('該当する結果はありませんでした');
@@ -55,3 +54,12 @@ javascript:
 = form_with url: hashtag_path, method: :patch, local: true do |h|
   = h.hidden_field :latlng, value: ""
   = h.submit
+
+h3 レシピ登録
+= form_with url: hashtag_path, model: @hashtag, method: :patch, local: true do |f|
+  #recipes
+    = f.fields_for :recipes do |r|
+      = render partial:'recipe_fields', locals:{f: r}
+    .links
+      = link_to_add_association "+", f, :recipes
+  = f.submit 'レシピ登録'
