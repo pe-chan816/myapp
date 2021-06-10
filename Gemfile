@@ -18,6 +18,8 @@ gem 'kaminari', '~> 1.2.1'
 gem 'carrierwave', '~> 2.0'
 gem 'mini_magick', '~> 4.11'
 gem 'gon', '~> 6.4.0'
+gem 'cocoon', '~> 1.2'
+gem 'acts_as_list', '~> 1.0'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

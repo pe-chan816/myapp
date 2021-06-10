@@ -4,6 +4,9 @@ h3
   | #
   = @hashtag.hashname
 
+- @recipes.each do |r|
+  p #{r.material} : #{r.amount}#{r.unit}
+
 = render partial: 'google_map'
 = link_to 'タグ編集', edit_hashtag_path(@hashtag), data:{'turbolinks': false}
 
