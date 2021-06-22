@@ -1,7 +1,36 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, createContext, useReducer } from 'react';
+import ModalField from 'common/modalField';
+import HomeBase from 'home/homeBase';
 
+const InitialModalStatus = false;
+
+export const ModalShowContext = createContext({
+  show: {},
+  dispatch: () => { }
+});
+
+export const reducerFunction = (show: boolean) => {
+  return !show;
+}
+
+const App = () => {
+  const [show, dispatch] = useReducer(reducerFunction, InitialModalStatus);
+  return (
+    <>
+      <ModalShowContext.Provider value={{ show, dispatch }}>
+        <HomeBase />
+        <ModalField />
+      </ModalShowContext.Provider>
+    </>
+  );
+}
+
+export default App;
+
+/*
+// うざいけど消しちゃダメ
 export default User;
+import axios from 'axios';
 
 function useGetElement() {
   const [userName, setUserName] = useState("");
@@ -29,3 +58,4 @@ function User() {
     </div>
   );
 }
+*/

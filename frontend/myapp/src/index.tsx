@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import User from './App';
+import App from 'App';
+
 import reportWebVitals from './reportWebVitals';
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <User />
+    <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
