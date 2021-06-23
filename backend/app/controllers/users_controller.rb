@@ -1,11 +1,21 @@
 class UsersController < ApplicationController
-  before_action :user_must_log_in, only:[:edit, :update, :index, :destroy]
-  before_action :correct_user, only:[:edit, :update]
-  #before_action :admin_user, only: :destroy
+  #before_action :user_must_log_in, only:[:edit, :update, :index, :destroy]
+  #before_action :correct_user, only:[:edit, :update]
 
   def new
     @user = User.new(session[:new_user_params] || {})
     session[:new_user_params] = nil
+  end
+
+  def signup
+    @user = User.new(user_params)
+
+    if @user.save
+      log_in(@user)
+      render json: {status: :created, user: @user}
+    else
+      render json: {status: 500}
+    end
   end
 
   def create
@@ -82,11 +92,4 @@ class UsersController < ApplicationController
         redirect_to root_path
       end
     end
-
-    #def admin_user
-    #  unless current_user.admin? then
-    #  redirect_to root_path
-    #  flash[:danger] = "情報変更の権限がありません"
-    #  end
-    #end
 end

@@ -11,13 +11,26 @@ services:
     environment:
       TZ: Asia/Tokyo
     volumes:
-      - .:/myapp
+      - ./backend:/myapp
       - tmp-data:/myapp/tmp
       - public-data:/myapp/public
     ports:
       - 3000:3000
     depends_on:
       - db
+
+  react:
+    build:
+      context: .
+      dockerfile: ./containers/react/Dockerfile
+    command: sh -c "yarn start"
+    volumes:
+      - ./frontend:/usr/src/app
+      - React-build:/usr/src/app/myapp/build
+    ports:
+      - 8000:3000
+    depends_on:
+      - rails
 
   nginx:
     build:
@@ -28,10 +41,11 @@ services:
     volumes:
       - tmp-data:/myapp/tmp
       - public-data:/myapp/public
+      - React-build:/myapp/react/build
     ports:
       - 80:80
     depends_on:
-      - rails
+      - react
 
   db:
     image: mysql:5.7
@@ -47,3 +61,4 @@ volumes:
   DB-data:
   tmp-data:
   public-data:
+  React-build:

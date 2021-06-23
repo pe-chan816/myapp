@@ -10,9 +10,9 @@ RUN apt-get update -qq && \
             yarn && \
     apt-get clean
 WORKDIR /myapp
-COPY Gemfile /myapp/Gemfile
-COPY Gemfile.lock /myapp/Gemfile.lock
+COPY ./backend/Gemfile /myapp/Gemfile
+COPY ./backend/Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
-COPY . /myapp
+COPY ./backend /myapp
 RUN mkdir -p /myapp/tmp/sockets
 EXPOSE 3000
