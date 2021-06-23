@@ -1,26 +1,44 @@
 import React, { useState, createContext, useReducer } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+
 import ModalField from 'common/modalField';
 import HomeBase from 'home/homeBase';
 
-const InitialModalStatus = false;
-
+// モーダルを共有するためのコンテクスト
 export const ModalShowContext = createContext({
   show: {},
-  dispatch: () => { }
+  dispatchShow: () => { }
 });
 
-export const reducerFunction = (show: boolean) => {
+export const showFunction = (show: boolean) => {
   return !show;
 }
 
+// ログイン状態を共有するためのコンテクスト
+export const LoginStateContext = createContext({
+  loginState: {},
+  dispatchLoginState: () => { }
+});
+
+export const loginStateFunction = (loginState: boolean) => {
+  return !loginState;
+}
+
 const App = () => {
-  const [show, dispatch] = useReducer(reducerFunction, InitialModalStatus);
+  const [show, dispatchShow] = useReducer(showFunction, false);
+  const [loginState, dispatchLoginState] = useReducer(loginStateFunction, false);
+  const [user, setUser] = useState({});
+
   return (
     <>
-      <ModalShowContext.Provider value={{ show, dispatch }}>
-        <HomeBase />
-        <ModalField />
-      </ModalShowContext.Provider>
+      <Router>
+        <LoginStateContext.Provider value={{ loginState, dispatchLoginState }}>
+          <ModalShowContext.Provider value={{ show, dispatchShow }}>
+            <HomeBase />
+            <ModalField />
+          </ModalShowContext.Provider>
+        </LoginStateContext.Provider>
+      </Router>
     </>
   );
 }
