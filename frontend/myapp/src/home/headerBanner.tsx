@@ -6,11 +6,11 @@ import Signup from 'signup/signup';
 import Login from 'login/login';
 
 import { LoginStateContext } from 'App';
-import { ModalShowContext } from 'App';
-import { LoginUserContext } from 'App';
+import { ModalStateContext } from 'App';
+import { CurrentUserContext } from 'App';
 
 const HeaderBanner = () => {
-  const { show, dispatchShow } = useContext(ModalShowContext);
+  const { modalState, dispatchModalState } = useContext(ModalStateContext);
   const { loginState, dispatchLoginState } = useContext(LoginStateContext);
 
   const Home = () => {
@@ -43,7 +43,7 @@ const HeaderBanner = () => {
           <Route path="/signup" exact component={Signup} />
         </Switch>
       </Router>
-      <button onClick={() => dispatchShow()}>モーダル</button>
+      <button onClick={() => dispatchModalState()}>モーダル</button>
       <button onClick={() => handleLogoutClick()}>ログアウト</button>
     </div>
   );

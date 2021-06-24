@@ -6,13 +6,13 @@ import ModalField from 'common/modalField';
 import HomeBase from 'home/homeBase';
 
 // モーダルを共有するためのコンテクスト
-export const ModalShowContext = createContext({
-  show: {},
-  dispatchShow: () => { }
+export const ModalStateContext = createContext({
+  modalState: {},
+  dispatchModalState: () => { }
 });
 
-export const showFunction = (show: boolean) => {
-  return !show;
+export const modalStateFunction = (modalState: boolean) => {
+  return !modalState;
 }
 
 // ログイン状態を共有するためのコンテクスト
@@ -26,16 +26,16 @@ export const loginStateFunction = (loginState: boolean) => {
 }
 
 // ログインユーザーを共有するためのコンテクスト
-export const LoginUserContext = createContext({
-  loginUser: {}
+export const CurrentUserContext = createContext({
+  currentUser: {}
 });
 
 const App = () => {
-  const [show, dispatchShow] = useReducer(showFunction, false);
+  const [modalState, dispatchModalState] = useReducer(modalStateFunction, false);
   const [loginState, dispatchLoginState] = useReducer(loginStateFunction, false);
-  const [loginUser, setLoginUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({});
 
-  console.log(loginUser);
+  console.log(currentUser);
 
   useEffect(() => {
     if (loginState === false) {
@@ -48,9 +48,9 @@ const App = () => {
       console.log("ログイン状況 :", response);
       if (response.data.logged_in === true) {
         dispatchLoginState();
-        setLoginUser(response.data.user);
+        setCurrentUser(response.data.user);
       } else {
-        setLoginUser({});
+        setCurrentUser({});
       }
     }).catch(response => {
       console.log("ログインエラー", response);
@@ -61,12 +61,12 @@ const App = () => {
     <>
       <Router>
         <LoginStateContext.Provider value={{ loginState, dispatchLoginState }}>
-          <LoginUserContext.Provider value={{ loginUser }}>
-            <ModalShowContext.Provider value={{ show, dispatchShow }}>
+          <CurrentUserContext.Provider value={{ currentUser }}>
+            <ModalStateContext.Provider value={{ modalState, dispatchModalState }}>
               <HomeBase />
               <ModalField />
-            </ModalShowContext.Provider>
-          </LoginUserContext.Provider>
+            </ModalStateContext.Provider>
+          </CurrentUserContext.Provider>
         </LoginStateContext.Provider>
       </Router>
     </>
