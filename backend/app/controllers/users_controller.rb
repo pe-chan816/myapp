@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     session[:new_user_params] = nil
   end
 
-  def signup
+  def create
     @user = User.new(user_params)
 
     if @user.save
@@ -18,6 +18,7 @@ class UsersController < ApplicationController
     end
   end
 
+=begin
   def create
     @user = User.new(user_params)
     if @user.save
@@ -30,6 +31,7 @@ class UsersController < ApplicationController
       redirect_to signup_path
     end
   end
+=end
 
   def edit
   end

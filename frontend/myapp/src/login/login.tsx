@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import axios from 'axios';
 
 import { LoginStateContext } from 'App';
-import { LoginUserContext } from 'App';
+import { CurrentUserContext } from 'App';
 
 const Login = () => {
   const [email, setEmail] = useState("");
