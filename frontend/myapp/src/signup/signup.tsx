@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
+
+import { LoginStateContext } from 'App';
 
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+
+  const { loginState, dispatchLoginState } = useContext(LoginStateContext);
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
@@ -20,6 +24,10 @@ const Signup = () => {
     },
       { withCredentials: true }
     ).then(response => {
+      if (response.data.status === "created") {
+        //const { loginState, dispatchLoginState } = useContext(LoginStateContext);
+        dispatchLoginState();
+      }
       console.log(response, "railsに値を渡しました");
     }).catch(error => [
       console.log(error, "エラーがあるよ")

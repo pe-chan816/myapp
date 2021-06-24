@@ -4,8 +4,7 @@ Rails.application.routes.draw do
   post '/login', to:'sessions#create'
   delete '/logout', to:'sessions#destroy'
 
-
-  get '/logged_in', to:'sessions#logged_in?' # react側でログイン状態を追跡するのに必要
+  get '/check_login', to:'sessions#login_check' # react側でログイン状態を追跡するのに必要
   get '/signup', to:'users#new'
   post '/signup', to: 'users#signup' # お試し イケそうならusers#create で
   get '/guest', to:'users#guest'
