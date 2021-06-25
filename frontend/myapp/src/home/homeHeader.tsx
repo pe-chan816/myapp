@@ -6,32 +6,21 @@ import { LoginStateContext } from 'App';
 import { ModalStateContext } from 'App';
 import { CurrentUserContext } from 'App';
 
+import MyPage from 'user/myPage';
+
+
+
 const HomeHeader = () => {
   const { modalState, dispatchModalState } = useContext(ModalStateContext);
   const { loginState, dispatchLoginState } = useContext(LoginStateContext);
   const currentUser = useContext(CurrentUserContext);
-  console.log(currentUser);
 
   const Home = () => {
-    if (currentUser) {
-      return (
-        <div>
-          <p>currentuserはいる</p>
-          <p>{String(currentUser)}</p>
-        </div>
-      );
-    } else {
-      return (
-        <p>ユーザー情報がない</p>
-      );
-    }
-    /*
     return (
       <div>
         <h1>Welcome to my App!!</h1>
       </div>
     );
-    */
   }
 
   const handleLogoutClick = () => {
@@ -47,7 +36,7 @@ const HomeHeader = () => {
       <Router>
         <Link to="/"><h1>Insyutagram</h1></Link>
         <nav>
-          <Link to="">マイページ</Link>
+          <Link to={`/user/${currentUser.id}`}>マイページ</Link>
           <Link to="">ユーザー一覧</Link>
           <Link to="">マイいいね</Link>
           <Link to="">タグ一覧</Link>
@@ -56,6 +45,8 @@ const HomeHeader = () => {
 
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path='/user/:myPageId' exact component={MyPage} />
+          <Route><h1>404 NOT FOUND</h1></Route>
         </Switch>
       </Router>
       <button onClick={() => dispatchModalState()}>モーダル</button>
@@ -63,7 +54,5 @@ const HomeHeader = () => {
     </div>
   );
 }
-
-
 
 export default HomeHeader;
