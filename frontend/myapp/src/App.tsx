@@ -26,9 +26,11 @@ export const loginStateFunction = (loginState: boolean) => {
 }
 
 // ログインユーザーを共有するためのコンテクスト
-export const CurrentUserContext = createContext({
-  currentUser: {}
-});
+type test = {
+  neme: string;
+  id: number;
+}
+export const CurrentUserContext = createContext({});
 
 const App = () => {
   const [modalState, dispatchModalState] = useReducer(modalStateFunction, false);
@@ -71,6 +73,7 @@ const App = () => {
       </Router>
     </>
   );
+
 }
 
 export default App;

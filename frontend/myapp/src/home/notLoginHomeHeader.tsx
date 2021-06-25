@@ -1,15 +1,12 @@
-import React, { useState, useContext, createContext, useReducer } from 'react';
+import { useContext } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import axios from 'axios';
 
-import Signup from 'signup/signup';
-import Login from 'login/login';
+import { ModalStateContext, LoginStateContext } from "App";
 
-import { LoginStateContext } from 'App';
-import { ModalStateContext } from 'App';
-import { CurrentUserContext } from 'App';
+import Login from "login/login";
+import Signup from "signup/signup";
 
-const HeaderBanner = () => {
+const NotLoginHomeHeader = () => {
   const { modalState, dispatchModalState } = useContext(ModalStateContext);
   const { loginState, dispatchLoginState } = useContext(LoginStateContext);
 
@@ -21,15 +18,9 @@ const HeaderBanner = () => {
     );
   }
 
-  const handleLogoutClick = () => {
-    axios.delete("http://localhost:3000/logout", { withCredentials: true }).then(response => {
-      console.log("ログアウト状況: ", response);
-      dispatchLoginState();
-    }).catch(error => console.log("ログアウトエラー", error));
-  }
-
   return (
     <div className="header-banner">
+      <p>未ログイン</p>
       <Router>
         <Link to="/"><h1>Insyutagram</h1></Link>
         <nav>
@@ -44,11 +35,8 @@ const HeaderBanner = () => {
         </Switch>
       </Router>
       <button onClick={() => dispatchModalState()}>モーダル</button>
-      <button onClick={() => handleLogoutClick()}>ログアウト</button>
     </div>
   );
 }
 
-
-
-export default HeaderBanner;
+export default NotLoginHomeHeader;
