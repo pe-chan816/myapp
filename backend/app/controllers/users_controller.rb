@@ -46,7 +46,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    @tweet_items = @user.tweets.page(params[:page]).per(10)
+    render json: {user: @user}
+    #@tweet_items = @user.tweets.page(params[:page]).per(10)
   end
 
   def index
