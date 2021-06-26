@@ -13,7 +13,7 @@ import MyPage from 'user/myPage';
 const HomeHeader = () => {
   const { modalState, dispatchModalState } = useContext(ModalStateContext);
   const { loginState, dispatchLoginState } = useContext(LoginStateContext);
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
   const Home = () => {
     return (
@@ -30,6 +30,7 @@ const HomeHeader = () => {
     }).catch(error => console.log("ログアウトエラー", error));
   }
 
+  console.log(currentUser);
   return (
     <div className="header-banner">
       <p>ログイン中</p>

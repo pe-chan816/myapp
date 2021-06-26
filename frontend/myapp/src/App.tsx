@@ -33,12 +33,15 @@ type userType = {
   name: string;
   id: number;
 }
-export const CurrentUserContext = createContext<Partial<userType>>({});
+export const CurrentUserContext = createContext({} as {
+  currentUser: Partial<userType>,
+  setCurrentUser: any
+});
 
 const App = () => {
   const [modalState, dispatchModalState] = useReducer(modalStateFunction, false);
   const [loginState, dispatchLoginState] = useReducer(loginStateFunction, false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState<Partial<userType>>({});
 
   useEffect(() => {
     if (loginState === false) {
@@ -63,7 +66,7 @@ const App = () => {
     <>
       <Router>
         <LoginStateContext.Provider value={{ loginState, dispatchLoginState }}>
-          <CurrentUserContext.Provider value={currentUser}>
+          <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
             <ModalStateContext.Provider value={{ modalState, dispatchModalState }}>
               <HomeBase />
               <ModalField />

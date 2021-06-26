@@ -9,6 +9,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { loginState, dispatchLoginState } = useContext(LoginStateContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
   const handleSubmit = (e: any) => {
     console.log("ログインイベント発火");
@@ -22,6 +23,7 @@ const Login = () => {
       { withCredentials: true }
     ).then(response => {
       if (response.data.logged_in === true) {
+        setCurrentUser(response.data.user);
         dispatchLoginState();
         console.log("login response: ", response);
       }
