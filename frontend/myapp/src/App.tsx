@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import ModalField from 'common/modalField';
 import HomeBase from 'home/homeBase';
-import { boolean } from 'yargs';
 
 // モーダルを共有するためのコンテクスト
 export const ModalStateContext = createContext({
