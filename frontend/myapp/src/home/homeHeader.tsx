@@ -7,7 +7,7 @@ import { ModalStateContext } from 'App';
 import { CurrentUserContext } from 'App';
 
 import MyPage from 'user/myPage';
-
+import UpdateUserSettings from 'user/updateUserSettings';
 
 
 const HomeHeader = () => {
@@ -41,12 +41,13 @@ const HomeHeader = () => {
           <Link to="">ユーザー一覧</Link>
           <Link to="">マイいいね</Link>
           <Link to="">タグ一覧</Link>
-          <Link to="">プロフィール編集</Link>
+          <Link to="/user/edit/account">アカウント設定</Link>
         </nav>
 
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path='/user/:myPageId' exact component={MyPage} />
+          <Route path="/user/edit/account" exact component={UpdateUserSettings} />
           <Route><h1>404 NOT FOUND</h1></Route>
         </Switch>
       </Router>

@@ -13,6 +13,9 @@ module Myapp
     config.time_zone = 'Tokyo'
     # 認証トークンをremoteフォームに埋め込む（ブラウザ側でjavascriptが無効の場合の対策）
     config.action_view.embed_authenticity_token_in_remote_forms = true
+    # 各種メッセージの日本語化
+    config.i18n.default_locale = :ja
+
 
     config.generators do |g|
       g.template_engine :slim
