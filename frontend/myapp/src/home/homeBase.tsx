@@ -6,7 +6,7 @@ import HomeHeader from 'home/homeHeader'
 import NotLoginHomeHeader from './notLoginHomeHeader';
 
 const HomeBase = () => {
-  const { loginState, dispatchLoginState } = useContext(LoginStateContext);
+  const { loginState, setLoginState } = useContext(LoginStateContext);
 
   if (loginState === true) {
     return (

@@ -11,8 +11,8 @@ import MyPage from 'user/myPage';
 
 
 const HomeHeader = () => {
-  const { modalState, dispatchModalState } = useContext(ModalStateContext);
-  const { loginState, dispatchLoginState } = useContext(LoginStateContext);
+  const { modalState, setModalState } = useContext(ModalStateContext);
+  const { loginState, setLoginState } = useContext(LoginStateContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
   const Home = () => {
@@ -26,7 +26,7 @@ const HomeHeader = () => {
   const handleLogoutClick = () => {
     axios.delete("http://localhost:3000/logout", { withCredentials: true }).then(response => {
       console.log("ログアウト状況: ", response);
-      dispatchLoginState();
+      setLoginState(false);
     }).catch(error => console.log("ログアウトエラー", error));
   }
 
@@ -50,7 +50,7 @@ const HomeHeader = () => {
           <Route><h1>404 NOT FOUND</h1></Route>
         </Switch>
       </Router>
-      <button onClick={() => dispatchModalState()}>モーダル</button>
+      <button onClick={() => setModalState(true)}>モーダル</button>
       <button onClick={() => handleLogoutClick()}>ログアウト</button>
     </div>
   );
