@@ -19,15 +19,18 @@ export const LoginStateContext = createContext({} as {
 
 
 // ログインユーザーが誰かを共有
-type userType = {
+type currentUserType = {
   admin: boolean;
   email: string;
   gueat: boolean;
-  name: string;
   id: number;
+  name: string;
+  profile_image: {
+    url?: string
+  };
 }
 export const CurrentUserContext = createContext({} as {
-  currentUser: Partial<userType>,
+  currentUser: Partial<currentUserType>,
   setCurrentUser: any
 });
 
@@ -40,7 +43,7 @@ export const MessageContext = createContext({} as {
 const App = () => {
   const [modalState, setModalState] = useState<boolean>(false);
   const [loginState, setLoginState] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<Partial<userType>>({});
+  const [currentUser, setCurrentUser] = useState<Partial<currentUserType>>({});
   const [message, setMessage] = useState<string[]>([]);
 
   useEffect(() => {

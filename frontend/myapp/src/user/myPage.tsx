@@ -14,15 +14,26 @@ const MyPage = (props: any) => {
     };
   }
 
-  const [userId, setUserId] = useState<number>();
-  const [userName, setUserName] = useState<string>("");
+  type userType = {
+    email: string;
+    id: number;
+    name: string;
+    profile_image: {
+      url?: string
+    };
+  }
+
+  const [user, setUser] = useState<Partial<userType>>({});
   const [tweet, setTweet] = useState<tweetType[]>([]);
 
   const targetUser = () => {
+    setUser({});
     setTweet([]);
-    axios.get(`http://localhost:3000/users/${myPageId}`, { withCredentials: true }).then(response => {
-      setUserId(response.data.user.id);
-      setUserName(response.data.user.name);
+    const url = `http://localhost:3000/users/${myPageId}`;
+    axios.get(url, { withCredentials: true }).then(response => {
+      console.log(response.data);
+
+      setUser(response.data.user);
       response.data.tweets.forEach((e: tweetType) => setTweet(tweet => [...tweet, e]));
       console.log("fetched rails");
     })
@@ -31,21 +42,39 @@ const MyPage = (props: any) => {
   useEffect(targetUser, [props.location.pathname]);
 
   const MyPageTweet = () => {
-    const tweets = tweet.map((e, i) => <p key={i}> {e.user_id} : {e.content}</p>);
+
+    const tweets = tweet.map((e, i) => {
+      const imageUrl = e.tweet_image.url;
+      return (
+        <>
+          <p key={i}> {e.user_id} : {e.content}</p>
+          {imageUrl && <img src={`http://localhost:3000/${imageUrl}`} alt="画像" />}
+        </>
+      );
+    });
+
     return <div>{tweets}</div>;
   }
 
   console.log("loading.....");
+  const MypageTimeline = () => {
+    const userImage = user.profile_image?.url;
+    return (
+      <div>
+        <p>ユーザーID: {user.id}</p>
+        <p>名前: {user.name}</p>
+        {userImage && <img src={`http://localhost:3000/${user.profile_image?.url}`} alt="画像" />}
+        <p>マイページ</p>
+        <MyPageTweet />
+      </div>
+    );
+  }
+
   return (
     <div>
-      <p>ユーザーID: {userId}</p>
-      <p>名前: {userName}</p>
-      <p>マイページ</p>
-      <MyPageTweet />
+      <MypageTimeline />
     </div>
   );
 }
-
-
 
 export default MyPage;
