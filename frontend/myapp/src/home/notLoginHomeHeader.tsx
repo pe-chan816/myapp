@@ -1,14 +1,13 @@
 import { useContext } from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
-import { ModalStateContext, LoginStateContext } from "App";
+import { ModalStateContext } from "App";
 
 import Login from "login/login";
 import Signup from "signup/signup";
 
 const NotLoginHomeHeader = () => {
-  const { modalState, dispatchModalState } = useContext(ModalStateContext);
-  const { loginState, dispatchLoginState } = useContext(LoginStateContext);
+  const { modalState, setModalState } = useContext(ModalStateContext);
 
   const Home = () => {
     return (
@@ -34,7 +33,7 @@ const NotLoginHomeHeader = () => {
           <Route path="/signup" exact component={Signup} />
         </Switch>
       </Router>
-      <button onClick={() => dispatchModalState()}>モーダル</button>
+      <button onClick={() => setModalState(!modalState)}>モーダル</button>
     </div>
   );
 }

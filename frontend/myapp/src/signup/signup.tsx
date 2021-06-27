@@ -9,7 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const { loginState, dispatchLoginState } = useContext(LoginStateContext);
+  const { loginState, setLoginState } = useContext(LoginStateContext);
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
@@ -26,7 +26,7 @@ const Signup = () => {
     ).then(response => {
       if (response.data.status === "created") {
         //const { loginState, dispatchLoginState } = useContext(LoginStateContext);
-        dispatchLoginState();
+        setLoginState(true);
       }
       console.log(response, "railsに値を渡しました");
     }).catch(error => [

@@ -24,13 +24,12 @@ const MyPage = (props: any) => {
       setUserId(response.data.user.id);
       setUserName(response.data.user.name);
       response.data.tweets.forEach((e: tweetType) => setTweet(tweet => [...tweet, e]));
-      console.log("fetching rails");
+      console.log("fetched rails");
     })
   }
 
   useEffect(targetUser, [props.location.pathname]);
 
-  console.log(tweet);
   const MyPageTweet = () => {
     const tweets = tweet.map((e, i) => <p key={i}> {e.user_id} : {e.content}</p>);
     return <div>{tweets}</div>;

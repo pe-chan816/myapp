@@ -1,4 +1,4 @@
-import React, { useState, createContext, useReducer, useEffect } from 'react';
+import { useState, createContext, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import axios from 'axios';
 
@@ -6,26 +6,19 @@ import ModalField from 'common/modalField';
 import HomeBase from 'home/homeBase';
 
 // モーダルを共有するためのコンテクスト
-export const ModalStateContext = createContext({
-  modalState: {},
-  dispatchModalState: () => { }
+export const ModalStateContext = createContext({} as {
+  modalState: boolean,
+  setModalState: any
 });
 
-export const modalStateFunction = (modalState: boolean) => {
-  return !modalState;
-}
-
-// ログイン状態を共有するためのコンテクスト
-export const LoginStateContext = createContext({
-  loginState: {},
-  dispatchLoginState: () => { }
+// ログイン状態を共有
+export const LoginStateContext = createContext({} as {
+  loginState: boolean,
+  setLoginState: any
 });
 
-export const loginStateFunction = (loginState: boolean) => {
-  return !loginState;
-}
 
-// ログインユーザーを共有するためのコンテクスト
+// ログインユーザーが誰かを共有
 type userType = {
   admin: boolean;
   email: string;
@@ -33,12 +26,15 @@ type userType = {
   name: string;
   id: number;
 }
-export const CurrentUserContext = createContext<Partial<userType>>({});
+export const CurrentUserContext = createContext({} as {
+  currentUser: Partial<userType>,
+  setCurrentUser: any
+});
 
 const App = () => {
-  const [modalState, dispatchModalState] = useReducer(modalStateFunction, false);
-  const [loginState, dispatchLoginState] = useReducer(loginStateFunction, false);
-  const [currentUser, setCurrentUser] = useState({});
+  const [modalState, setModalState] = useState<boolean>(false);
+  const [loginState, setLoginState] = useState<boolean>(false);
+  const [currentUser, setCurrentUser] = useState<Partial<userType>>({});
 
   useEffect(() => {
     if (loginState === false) {
@@ -49,7 +45,7 @@ const App = () => {
   const checkLoginStatus = () => {
     axios.get("http://localhost:3000/check_login", { withCredentials: true }).then(response => {
       if (response.data.logged_in === true) {
-        dispatchLoginState();
+        setLoginState(true);
         setCurrentUser(response.data.user);
       } else {
         setCurrentUser({});
@@ -58,13 +54,13 @@ const App = () => {
       console.log("ログインエラー", response);
     })
   }
-
+  console.log(loginState);
   return (
     <>
       <Router>
-        <LoginStateContext.Provider value={{ loginState, dispatchLoginState }}>
-          <CurrentUserContext.Provider value={currentUser}>
-            <ModalStateContext.Provider value={{ modalState, dispatchModalState }}>
+        <LoginStateContext.Provider value={{ loginState, setLoginState }}>
+          <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+            <ModalStateContext.Provider value={{ modalState, setModalState }}>
               <HomeBase />
               <ModalField />
             </ModalStateContext.Provider>
