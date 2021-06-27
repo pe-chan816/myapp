@@ -31,10 +31,17 @@ export const CurrentUserContext = createContext({} as {
   setCurrentUser: any
 });
 
+// 格納したメッセージを共有
+export const MessageContext = createContext({} as {
+  message: string[],
+  setMessage: any
+});
+
 const App = () => {
   const [modalState, setModalState] = useState<boolean>(false);
   const [loginState, setLoginState] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Partial<userType>>({});
+  const [message, setMessage] = useState<string[]>([]);
 
   useEffect(() => {
     if (loginState === false) {
@@ -61,8 +68,10 @@ const App = () => {
         <LoginStateContext.Provider value={{ loginState, setLoginState }}>
           <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
             <ModalStateContext.Provider value={{ modalState, setModalState }}>
-              <HomeBase />
-              <ModalField />
+              <MessageContext.Provider value={{ message, setMessage }}>
+                <HomeBase />
+                <ModalField />
+              </MessageContext.Provider>
             </ModalStateContext.Provider>
           </CurrentUserContext.Provider>
         </LoginStateContext.Provider>
