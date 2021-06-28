@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
 
 import { LoginStateContext } from 'App';
@@ -8,8 +8,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { loginState, setLoginState } = useContext(LoginStateContext);
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { setLoginState } = useContext(LoginStateContext);
+  const { setCurrentUser } = useContext(CurrentUserContext);
 
   const handleSubmit = (e: any) => {
     console.log("ログインイベント発火");

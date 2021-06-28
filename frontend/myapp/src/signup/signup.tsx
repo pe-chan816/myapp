@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from 'axios';
 
 import { LoginStateContext } from 'App';
@@ -9,7 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
-  const { loginState, setLoginState } = useContext(LoginStateContext);
+  const { setLoginState } = useContext(LoginStateContext);
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
