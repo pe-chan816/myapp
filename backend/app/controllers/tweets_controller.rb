@@ -5,10 +5,9 @@ class TweetsController < ApplicationController
   def create
     @tweet = current_user.tweets.build(tweet_params)
     if @tweet.save
-      flash[:success] = "You've got tweeted!"
-      redirect_to root_path
+      render json: {message: "メッセージ投稿！"}
     else
-      redirect_to root_path
+      render json: {message: "メッセージ投稿失敗..."}
     end
   end
 
