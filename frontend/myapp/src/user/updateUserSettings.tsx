@@ -48,8 +48,6 @@ const UpdateUserSettings = () => {
     return fd;
   };
 
-  console.log(name);
-
   return (
     <div>
       <h1>UPDATE USER SETTING</h1>

@@ -25,7 +25,6 @@ const Signup = () => {
       { withCredentials: true }
     ).then(response => {
       if (response.data.status === "created") {
-        //const { loginState, dispatchLoginState } = useContext(LoginStateContext);
         setLoginState(true);
       }
       console.log(response, "railsに値を渡しました");

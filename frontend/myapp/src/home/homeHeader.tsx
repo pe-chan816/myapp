@@ -8,6 +8,7 @@ import { CurrentUserContext } from 'App';
 
 import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
+import TweetForm from 'tweet/tweetForm';
 
 
 const HomeHeader = () => {
@@ -38,6 +39,7 @@ const HomeHeader = () => {
         <Link to="/"><h1>Insyutagram</h1></Link>
         <nav>
           <Link to={`/user/${currentUser.id}`}>マイページ</Link>
+          <Link to="/tweet">ツイート</Link>
           <Link to="">ユーザー一覧</Link>
           <Link to="">マイいいね</Link>
           <Link to="">タグ一覧</Link>
@@ -46,6 +48,7 @@ const HomeHeader = () => {
 
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/tweet" exact component={TweetForm} />
           <Route path='/user/:myPageId' exact component={MyPage} />
           <Route path="/user/edit/account" exact component={UpdateUserSettings} />
           <Route><h1>404 NOT FOUND</h1></Route>
