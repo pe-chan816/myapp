@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, useReducer } from 'react';
+import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -11,9 +11,9 @@ import UpdateUserSettings from 'user/updateUserSettings';
 
 
 const HomeHeader = () => {
-  const { modalState, setModalState } = useContext(ModalStateContext);
-  const { loginState, setLoginState } = useContext(LoginStateContext);
-  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { setModalState } = useContext(ModalStateContext);
+  const { setLoginState } = useContext(LoginStateContext);
+  const { currentUser } = useContext(CurrentUserContext);
 
   const Home = () => {
     return (

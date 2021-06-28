@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 
@@ -45,35 +45,37 @@ const MyPage = (props: any) => {
 
     const tweets = tweet.map((e, i) => {
       const imageUrl = e.tweet_image.url;
+      const url = `http://localhost:3000/${imageUrl}`;
       return (
-        <>
-          <p key={i}> {e.user_id} : {e.content}</p>
-          {imageUrl && <img src={`http://localhost:3000/${imageUrl}`} alt="画像" />}
-        </>
+        <div key={i}>
+          <p>
+            {e.user_id} : {e.content}
+          </p>
+          {imageUrl && <img src={url} alt="画像" />}
+        </div>
       );
     });
 
     return <div>{tweets}</div>;
   }
 
-  console.log("loading.....");
   const MypageTimeline = () => {
     const userImage = user.profile_image?.url;
+    const url = `http://localhost:3000/${user.profile_image?.url}`;
     return (
       <div>
         <p>ユーザーID: {user.id}</p>
         <p>名前: {user.name}</p>
-        {userImage && <img src={`http://localhost:3000/${user.profile_image?.url}`} alt="画像" />}
+        {userImage && <img src={url} alt="画像" />}
         <p>マイページ</p>
         <MyPageTweet />
       </div>
     );
   }
 
+  console.log("loading.....");
   return (
-    <div>
-      <MypageTimeline />
-    </div>
+    <MypageTimeline />
   );
 }
 

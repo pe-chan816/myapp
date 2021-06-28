@@ -1,5 +1,5 @@
 import { useState, createContext, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 
 import ModalField from 'common/modalField';
