@@ -10,10 +10,12 @@ const UpdateUserSettings = () => {
   const { setMessage } = useContext(MessageContext);
 
   const [name, setName] = useState(currentUser.name);
-  const [image, setImage] = useState<File>()
+  const [image, setImage] = useState<File>();
   const [email, setEmail] = useState(currentUser.email);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+
+  const [preview, setPreview] = useState<string>("");
 
   const handleSubmit = async (e: any) => {
     const url = `http://localhost:3000/users/${currentUser.id}`;
@@ -48,6 +50,14 @@ const UpdateUserSettings = () => {
     return fd;
   };
 
+  const currentUserImage = () => {
+    if (!preview && currentUser.profile_image?.url) {
+      return (
+        <img src={`http://localhost:3000/${currentUser.profile_image?.url}`} alt="profile" />
+      );
+    }
+  };
+
   return (
     <div>
       <h1>UPDATE USER SETTING</h1>
@@ -66,8 +76,13 @@ const UpdateUserSettings = () => {
             name="image"
             type="file"
             onChange={(e) => {
-              return e.target.files !== null ? setImage(e.target.files[0]) : null;
+              if (e.target.files) {
+                setImage(e.target.files[0]);
+                setPreview(window.URL.createObjectURL(e.target.files[0]));
+              }
             }} />
+          {currentUserImage()}
+          {preview && <img src={preview} alt="profile" />}
         </div>
         <div>
           <span>Email : </span>
