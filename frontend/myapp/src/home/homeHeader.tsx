@@ -6,6 +6,7 @@ import { LoginStateContext } from 'App';
 import { ModalStateContext } from 'App';
 import { CurrentUserContext } from 'App';
 
+import HomeContent from './homeContent';
 import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
@@ -15,14 +16,6 @@ const HomeHeader = () => {
   const { setModalState } = useContext(ModalStateContext);
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser } = useContext(CurrentUserContext);
-
-  const Home = () => {
-    return (
-      <div>
-        <h1>Welcome to my App!!</h1>
-      </div>
-    );
-  }
 
   const handleLogoutClick = () => {
     axios.delete("http://localhost:3000/logout", { withCredentials: true }).then(response => {
@@ -47,9 +40,9 @@ const HomeHeader = () => {
         </nav>
 
         <Switch>
-          <Route path="/" exact component={Home} />
-          <Route path="/tweet" exact component={TweetForm} />
+          <Route path="/" exact component={HomeContent} />
           <Route path='/user/:myPageId' exact component={MyPage} />
+          <Route path="/tweet" exact component={TweetForm} />
           <Route path="/user/edit/account" exact component={UpdateUserSettings} />
           <Route><h1>404 NOT FOUND</h1></Route>
         </Switch>
