@@ -48,9 +48,14 @@ class UsersController < ApplicationController
   end
 
   def show
-    @user = User.find(params[:id])
-    @tweet_items = @user.tweets#.page(params[:page]).per(10)
-    render json: {user: @user, tweets: @tweet_items}
+    user = User.find(params[:id])
+    followings = user.following
+    followers = user.followers
+    tweet_items = user.tweets
+    render json: { user: user,
+                   tweets: tweet_items,
+                   followings: followings,
+                   followers: followers}
 
   end
 

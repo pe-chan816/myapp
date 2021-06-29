@@ -24,24 +24,35 @@ const MyPage = (props: any) => {
   }
 
   const [user, setUser] = useState<Partial<userType>>({});
+  const [followings, setFollowings] = useState<userType[]>([]);
+  const [followers, setFollowers] = useState<userType[]>([]);
   const [tweet, setTweet] = useState<tweetType[]>([]);
 
-  const targetUser = () => {
+  const resetData = () => {
     setUser({});
+    setFollowings([]);
+    setFollowers([]);
     setTweet([]);
+  }
+
+  const getData = () => {
+    resetData();
+
     const url = `http://localhost:3000/users/${myPageId}`;
     axios.get(url, { withCredentials: true }).then(response => {
       console.log(response.data);
 
       setUser(response.data.user);
+      response.data.followings.forEach((e: userType) => setFollowings(followings => [...followings, e]));
+      response.data.followers.forEach((e: userType) => setFollowers(followers => [...followers, e]));
       response.data.tweets.forEach((e: tweetType) => setTweet(tweet => [...tweet, e]));
       console.log("fetched rails");
     })
   }
 
-  useEffect(targetUser, [props.location.pathname]);
+  useEffect(getData, [props.location.pathname]);
 
-  const MyPageTweet = () => {
+  const MyPageTimeline = () => {
 
     const tweets = tweet.map((e, i) => {
       const imageUrl = e.tweet_image.url;
@@ -59,23 +70,23 @@ const MyPage = (props: any) => {
     return <div>{tweets}</div>;
   }
 
-  const MypageTimeline = () => {
+  const MypageContent = () => {
     const userImage = user.profile_image?.url;
     const url = `http://localhost:3000/${user.profile_image?.url}`;
     return (
       <div>
-        <p>ユーザーID: {user.id}</p>
-        <p>名前: {user.name}</p>
         {userImage && <img src={url} alt="user" />}
-        <p>マイページ</p>
-        <MyPageTweet />
+        <p>名前: {user.name}</p>
+        <p>フォロー : {followings.length}</p>
+        <p>フォロワー : {followers.length}</p>
+        <MyPageTimeline />
       </div>
     );
   }
 
   console.log("loading.....");
   return (
-    <MypageTimeline />
+    <MypageContent />
   );
 }
 
