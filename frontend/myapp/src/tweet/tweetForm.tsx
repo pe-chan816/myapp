@@ -49,7 +49,7 @@ const TweetForm = () => {
               setPreview(window.URL.createObjectURL(e.target.files[0]));
             }
           }} />
-        {preview && <img src={preview} alt="preview image" />}
+        {preview && <img src={preview} alt="preview" />}
         <button type="submit">投稿</button>
       </form>
     </>

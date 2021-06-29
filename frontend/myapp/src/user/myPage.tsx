@@ -51,7 +51,7 @@ const MyPage = (props: any) => {
           <p>
             {e.user_id} : {e.content}
           </p>
-          {imageUrl && <img src={url} alt="画像" />}
+          {imageUrl && <img src={url} alt="tweet" />}
         </div>
       );
     });
@@ -66,7 +66,7 @@ const MyPage = (props: any) => {
       <div>
         <p>ユーザーID: {user.id}</p>
         <p>名前: {user.name}</p>
-        {userImage && <img src={url} alt="画像" />}
+        {userImage && <img src={url} alt="user" />}
         <p>マイページ</p>
         <MyPageTweet />
       </div>
