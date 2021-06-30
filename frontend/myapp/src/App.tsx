@@ -34,6 +34,19 @@ export const CurrentUserContext = createContext({} as {
   setCurrentUser: any
 });
 
+// 対象のユーザーの情報を共有
+export const UserContext = createContext({} as {
+  user: Partial<currentUserType>,
+  setUser: any
+});
+
+// 対象ユーザーのフォロー状況を共有
+export const FollowOrNotContext = createContext({} as {
+  followOrNot: boolean,
+  setFollowOrNot: any
+});
+
+
 // 格納したメッセージを共有
 export const MessageContext = createContext({} as {
   message: string[],
@@ -45,6 +58,9 @@ const App = () => {
   const [loginState, setLoginState] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<Partial<currentUserType>>({});
   const [message, setMessage] = useState<string[]>([]);
+
+  const [user, setUser] = useState<Partial<currentUserType>>({});
+  const [followOrNot, setFollowOrNot] = useState<boolean>(false);
 
   useEffect(() => {
     if (loginState === false) {
@@ -70,12 +86,16 @@ const App = () => {
       <Router>
         <LoginStateContext.Provider value={{ loginState, setLoginState }}>
           <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
-            <ModalStateContext.Provider value={{ modalState, setModalState }}>
-              <MessageContext.Provider value={{ message, setMessage }}>
-                <HomeBase />
-                <ModalField />
-              </MessageContext.Provider>
-            </ModalStateContext.Provider>
+            <UserContext.Provider value={{ user, setUser }}>
+              <FollowOrNotContext.Provider value={{ followOrNot, setFollowOrNot }}>
+                <ModalStateContext.Provider value={{ modalState, setModalState }}>
+                  <MessageContext.Provider value={{ message, setMessage }}>
+                    <HomeBase />
+                    <ModalField />
+                  </MessageContext.Provider>
+                </ModalStateContext.Provider>
+              </FollowOrNotContext.Provider>
+            </UserContext.Provider>
           </CurrentUserContext.Provider>
         </LoginStateContext.Provider>
       </Router>

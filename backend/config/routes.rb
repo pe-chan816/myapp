@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   post '/signup', to: 'users#create'
   get '/guest', to:'users#guest'
 
+  post '/unfollow', to:'relationships#unfollow'
+
   get '/search', to:'searches#search'
 
   get '/hashtag/:word', to:'hashtags#show'
@@ -26,7 +28,7 @@ Rails.application.routes.draw do
       get 'favorite'
     end
   end
-  resources :relationships, only:[:create, :destroy]
+  resources :relationships, only:[:create]
   resources :favorites, only:[:create, :destroy]
   resources :hashtags, only:[:index, :edit, :update]
 end

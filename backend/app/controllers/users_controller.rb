@@ -52,10 +52,12 @@ class UsersController < ApplicationController
     followings = user.following
     followers = user.followers
     tweet_items = user.tweets
+    follow_or_not = current_user.following?(user)
     render json: { user: user,
                    tweets: tweet_items,
                    followings: followings,
-                   followers: followers}
+                   followers: followers,
+                   follow_or_not: follow_or_not}
 
   end
 
