@@ -1,6 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
+
+import { CurrentUserContext, UserContext } from 'App';
+import { FollowOrNotContext } from 'App';
+
+type userType = {
+  email: string;
+  id: number;
+  name: string;
+  profile_image?: {
+    url: string
+  };
+}
 
 const MyPage = (props: any) => {
   const myPageId = Object.values(useParams());
@@ -9,42 +22,51 @@ const MyPage = (props: any) => {
     id: number;
     content: string;
     user_id: number;
-    tweet_image: {
-      url?: string
+    tweet_image?: {
+      url: string
     };
   }
 
-  type userType = {
-    email: string;
-    id: number;
-    name: string;
-    profile_image: {
-      url?: string
-    };
-  }
+  const { currentUser } = useContext(CurrentUserContext);
 
-  const [user, setUser] = useState<Partial<userType>>({});
+  const { user, setUser } = useContext(UserContext);
+  const { followOrNot, setFollowOrNot } = useContext(FollowOrNotContext);
+  const [followings, setFollowings] = useState<userType[]>([]);
+  const [followingsNumber, setFollowingsNumber] = useState<number>(0);
+  const [followers, setFollowers] = useState<userType[]>([]);
+  const [followersNumber, setFollowersNumber] = useState<number>(0);
   const [tweet, setTweet] = useState<tweetType[]>([]);
 
-  const targetUser = () => {
+  const resetData = () => {
     setUser({});
+    setFollowings([]);
+    setFollowers([]);
     setTweet([]);
+  }
+
+  const getData = () => {
+    resetData();
+
     const url = `http://localhost:3000/users/${myPageId}`;
     axios.get(url, { withCredentials: true }).then(response => {
       console.log(response.data);
 
       setUser(response.data.user);
+      setFollowOrNot(response.data.follow_or_not);
+      response.data.followings.forEach((e: userType) => setFollowings(followings => [...followings, e]));
+      setFollowingsNumber(response.data.followings_count);
+      response.data.followers.forEach((e: userType) => setFollowers(followers => [...followers, e]));
+      setFollowersNumber(response.data.followers_count);
       response.data.tweets.forEach((e: tweetType) => setTweet(tweet => [...tweet, e]));
       console.log("fetched rails");
     })
   }
+  useEffect(getData, [props.location.pathname]);
 
-  useEffect(targetUser, [props.location.pathname]);
-
-  const MyPageTweet = () => {
+  const MyPageTimeline = () => {
 
     const tweets = tweet.map((e, i) => {
-      const imageUrl = e.tweet_image.url;
+      const imageUrl = e.tweet_image?.url;
       const url = `http://localhost:3000/${imageUrl}`;
       return (
         <div key={i}>
@@ -59,23 +81,68 @@ const MyPage = (props: any) => {
     return <div>{tweets}</div>;
   }
 
-  const MypageTimeline = () => {
+  const MypageContent = () => {
     const userImage = user.profile_image?.url;
     const url = `http://localhost:3000/${user.profile_image?.url}`;
+
+    const myPageUrl = `/user/${user.id}`;
+    const followingsPage = {
+      pathname: `/user/${myPageId}/followings`,
+      state: followings
+    };
+    const followersPage = {
+      pathname: `/user/${myPageId}/followers`,
+      state: followers
+    }
+
+    const FollowButton = () => {
+      const clickFollow = () => {
+        const url = `http://localhost:3000/relationships`;
+        const data = { followed_id: user.id };
+        const config = { withCredentials: true };
+        axios.post(url, data, config).then(response => {
+          console.log(response.data);
+          setFollowOrNot(true);
+          setFollowersNumber(response.data.number_of_followers);
+        });
+      };
+      const clickUnfollow = () => {
+        const url = `http://localhost:3000/unfollow`;
+        const data = { followed_id: user.id };
+        const config = { withCredentials: true };
+        axios.post(url, data, config).then(response => {
+          console.log(response.data);
+          setFollowOrNot(false);
+          setFollowersNumber(response.data.number_of_followers);
+        });
+      };
+
+      console.log(followOrNot);
+      if (followOrNot === false) {
+        return <button onClick={clickFollow}>フォロー</button>;
+      } else {
+        return <button onClick={clickUnfollow}>フォロー解除</button>;
+      }
+    };
+
     return (
       <div>
-        <p>ユーザーID: {user.id}</p>
-        <p>名前: {user.name}</p>
         {userImage && <img src={url} alt="user" />}
-        <p>マイページ</p>
-        <MyPageTweet />
-      </div>
+        <p>名前: <Link to={myPageUrl}>{user.name}</Link></p>
+        <p>フォロー: <Link to={followingsPage}>{followingsNumber}</Link></p>
+        <p>フォロワー : <Link to={followersPage}>{followersNumber}</Link></p>
+
+        {user.id !== currentUser.id && <FollowButton />}
+        <MyPageTimeline />
+      </div >
     );
   }
 
   console.log("loading.....");
   return (
-    <MypageTimeline />
+    <>
+      <MypageContent />
+    </>
   );
 }
 

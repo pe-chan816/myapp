@@ -10,6 +10,7 @@ import HomeContent from './homeContent';
 import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
+import UserRelationship from 'user/followings';
 
 
 const HomeHeader = () => {
@@ -28,25 +29,28 @@ const HomeHeader = () => {
   return (
     <div className="header-banner">
       <p>ログイン中</p>
-      <Router>
-        <Link to="/"><h1>Insyutagram</h1></Link>
-        <nav>
-          <Link to={`/user/${currentUser.id}`}>マイページ</Link>
-          <Link to="/tweet">ツイート</Link>
-          <Link to="">ユーザー一覧</Link>
-          <Link to="">マイいいね</Link>
-          <Link to="">タグ一覧</Link>
-          <Link to="/user/edit/account">アカウント設定</Link>
-        </nav>
 
-        <Switch>
-          <Route path="/" exact component={HomeContent} />
-          <Route path='/user/:myPageId' exact component={MyPage} />
-          <Route path="/tweet" exact component={TweetForm} />
-          <Route path="/user/edit/account" exact component={UpdateUserSettings} />
-          <Route><h1>404 NOT FOUND</h1></Route>
-        </Switch>
-      </Router>
+      <Link to="/"><h1>Insyutagram</h1></Link>
+      <nav>
+        <Link to={`/user/${currentUser.id}`}>マイページ</Link>
+        <Link to="/tweet">ツイート</Link>
+        <Link to="">ユーザー一覧</Link>
+        <Link to="">マイいいね</Link>
+        <Link to="">タグ一覧</Link>
+        <Link to="/user/edit/account">アカウント設定</Link>
+      </nav>
+
+      <Switch>
+        <Route path="/" exact component={HomeContent} />
+        <Route path="/user/:myPageId" exact component={MyPage} />
+        <Route path="/tweet" exact component={TweetForm} />
+        <Route path="/user/edit/account" exact component={UpdateUserSettings} />
+
+        <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
+        <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
+        <Route><h1>404 NOT FOUND</h1></Route>
+      </Switch>
+
       <button onClick={() => setModalState(true)}>モーダル</button>
       <button onClick={() => handleLogoutClick()}>ログアウト</button>
     </div>
