@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 
-import { UserContext } from 'App';
+import { CurrentUserContext, UserContext } from 'App';
 import { FollowOrNotContext } from 'App';
 
 type userType = {
@@ -27,10 +27,14 @@ const MyPage = (props: any) => {
     };
   }
 
+  const { currentUser } = useContext(CurrentUserContext);
+
   const { user, setUser } = useContext(UserContext);
   const { followOrNot, setFollowOrNot } = useContext(FollowOrNotContext);
   const [followings, setFollowings] = useState<userType[]>([]);
+  const [followingsNumber, setFollowingsNumber] = useState<number>(0);
   const [followers, setFollowers] = useState<userType[]>([]);
+  const [followersNumber, setFollowersNumber] = useState<number>(0);
   const [tweet, setTweet] = useState<tweetType[]>([]);
 
   const resetData = () => {
@@ -50,7 +54,9 @@ const MyPage = (props: any) => {
       setUser(response.data.user);
       setFollowOrNot(response.data.follow_or_not);
       response.data.followings.forEach((e: userType) => setFollowings(followings => [...followings, e]));
+      setFollowingsNumber(response.data.followings_count);
       response.data.followers.forEach((e: userType) => setFollowers(followers => [...followers, e]));
+      setFollowersNumber(response.data.followers_count);
       response.data.tweets.forEach((e: tweetType) => setTweet(tweet => [...tweet, e]));
       console.log("fetched rails");
     })
@@ -94,10 +100,10 @@ const MyPage = (props: any) => {
         const url = `http://localhost:3000/relationships`;
         const data = { followed_id: user.id };
         const config = { withCredentials: true };
-
         axios.post(url, data, config).then(response => {
           console.log(response.data);
           setFollowOrNot(true);
+          setFollowersNumber(response.data.number_of_followers);
         });
       };
       const clickUnfollow = () => {
@@ -107,11 +113,11 @@ const MyPage = (props: any) => {
         axios.post(url, data, config).then(response => {
           console.log(response.data);
           setFollowOrNot(false);
+          setFollowersNumber(response.data.number_of_followers);
         });
       };
 
       console.log(followOrNot);
-
       if (followOrNot === false) {
         return <button onClick={clickFollow}>フォロー</button>;
       } else {
@@ -123,10 +129,10 @@ const MyPage = (props: any) => {
       <div>
         {userImage && <img src={url} alt="user" />}
         <p>名前: <Link to={myPageUrl}>{user.name}</Link></p>
-        <p>フォロー: <Link to={followingsPage}>{followings.length}</Link></p>
-        <p>フォロワー : <Link to={followersPage}>{followers.length}</Link></p>
+        <p>フォロー: <Link to={followingsPage}>{followingsNumber}</Link></p>
+        <p>フォロワー : <Link to={followersPage}>{followersNumber}</Link></p>
 
-        <FollowButton />
+        {user.id !== currentUser.id && <FollowButton />}
         <MyPageTimeline />
       </div >
     );

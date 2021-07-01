@@ -50,13 +50,18 @@ class UsersController < ApplicationController
   def show
     user = User.find(params[:id])
     followings = user.following
+    followings_count = followings.count
     followers = user.followers
+    followers_count = followers.count
     tweet_items = user.tweets
     follow_or_not = current_user.following?(user)
+
     render json: { user: user,
                    tweets: tweet_items,
                    followings: followings,
+                   followings_count: followings_count,
                    followers: followers,
+                   followers_count: followers_count,
                    follow_or_not: follow_or_not}
 
   end
