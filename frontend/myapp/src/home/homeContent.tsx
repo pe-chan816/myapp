@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+import useTimeline from "hooks/useTimeline";//!!!
+
 const HomeContent = () => {
   type contentType = {
     content: string,
@@ -33,35 +35,38 @@ const HomeContent = () => {
     });
   };
 
-  const TimeLine = () => {
-    const timeLineContent = content.map((e, i) => {
-      const whoTweet = user.filter(user => {
-        return user.id === e.user_id;
+  /*
+    const TimeLine = () => {
+      const timeLineContent = content.map((e, i) => {
+        const whoTweet = user.filter(user => {
+          return user.id === e.user_id;
+        });
+        const tweetUser = whoTweet[0];
+  
+        return (
+          <div key={i}>
+            {tweetUser.profile_image?.url && <img src={`http://localhost:3000/${tweetUser.profile_image.url}`} alt="user" />}
+            <p>{tweetUser.name}</p>
+            <p>{e.content}</p>
+            {e.tweet_image?.url && <img src={`http://localhost:3000/${e.tweet_image.url}`} alt="tweet" />}
+            <p>{e.created_at}</p>
+          </div>
+        );
       });
-      const tweetUser = whoTweet[0];
-
+  
       return (
-        <div key={i}>
-          {tweetUser.profile_image?.url && <img src={`http://localhost:3000/${tweetUser.profile_image.url}`} alt="user" />}
-          <p>{tweetUser.name}</p>
-          <p>{e.content}</p>
-          {e.tweet_image?.url && <img src={`http://localhost:3000/${e.tweet_image.url}`} alt="tweet" />}
-          <p>{e.created_at}</p>
+        <div>
+          {timeLineContent}
         </div>
       );
-    });
-
-    return (
-      <div>
-        {timeLineContent}
-      </div>
-    );
-  };
+    };
+  */
+  const timeline = useTimeline(user, content);
 
   return (
     <>
       <button onClick={getContents}>更新</button>
-      <TimeLine />
+      {timeline}
     </>
   );
 }
