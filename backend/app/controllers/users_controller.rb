@@ -72,8 +72,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "ユーザー情報を削除いたしました"
-    redirect_to users_path
+    render json: { message: "ユーザーアカウントを削除しました"}
   end
 
   def following

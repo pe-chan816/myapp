@@ -1,12 +1,14 @@
 import { useState, useContext } from "react";
 import axios from "axios";
 
+import { LoginStateContext } from "App";
 import { CurrentUserContext } from "App";
 import { MessageContext } from "App";
 
 
 const UpdateUserSettings = () => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { setLoginState } = useContext(LoginStateContext);
   const { setMessage } = useContext(MessageContext);
 
   const [name, setName] = useState(currentUser.name);
@@ -39,6 +41,20 @@ const UpdateUserSettings = () => {
 
     e.preventDefault();
   }
+
+  const deleteAccount = () => {
+    const confirm = window.confirm(`本当に ${currentUser.name} のアカウントを削除しますか？`);
+    if (confirm) {
+      const url = `http://localhost:3000/users/${currentUser.id}`;
+      const config = { withCredentials: true };
+      axios.delete(url, config).then(res => {
+        console.log(res)
+        setCurrentUser({});
+        setLoginState(false);
+        window.location.replace(`http://localhost:8000`)
+      });
+    };
+  };
 
   const imageData = async () => {
     const fd = new FormData();
@@ -110,6 +126,8 @@ const UpdateUserSettings = () => {
         </div>
         <button type="submit">編集</button>
       </form>
+
+      <button onClick={deleteAccount}>アカウント削除</button>
     </div>
   );
 }
