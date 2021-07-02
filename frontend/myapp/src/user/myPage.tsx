@@ -50,7 +50,7 @@ const MyPage = (props: any) => {
   useEffect(getData, [props.location.pathname]);
 
   const targetUser: Partial<UserType>[] = Array(user);
-  const timeline = useTimeline(targetUser, tweet);
+  const Timeline = useTimeline(targetUser, tweet);
 
   const MypageContent = () => {
 
@@ -105,7 +105,7 @@ const MyPage = (props: any) => {
         <p>フォロワー : <Link to={followersPage}>{followersNumber}</Link></p>
 
         {user.id !== currentUser.id && <FollowButton />}
-        {timeline}
+        {Timeline}
       </div >
     );
   };

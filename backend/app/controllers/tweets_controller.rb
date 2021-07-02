@@ -17,9 +17,24 @@ class TweetsController < ApplicationController
     redirect_to request.referrer || root_path
   end
 
+  def show
+    tweet = Tweet.find(params[:id])
+    user = tweet.user
+    favorite_count = tweet.favorites.count
+    favorite_or_not = tweet.favorited?(current_user)
+    render json: {tweet: tweet,
+                  user: user,
+                  favorite_count: favorite_count,
+                  favorite_or_not: favorite_or_not}
+  end
+
   def favorite
     tweet = Tweet.find(params[:id])
-    @favorited_users = tweet.user_favorited
+    favorited_users = tweet.user_favorited
+    favorite_count = favorited_users.count
+
+    render json: {favorited_users: favorited_users,
+                  favorite_count: favorite_count}
   end
 
   private

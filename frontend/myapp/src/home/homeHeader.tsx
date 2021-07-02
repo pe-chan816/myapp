@@ -11,6 +11,7 @@ import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
 import UserRelationship from 'user/followings';
+import TweetDetail from 'tweet/tweetDetail';
 
 
 const HomeHeader = () => {
@@ -48,6 +49,8 @@ const HomeHeader = () => {
 
         <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
         <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
+
+        <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
         <Route><h1>404 NOT FOUND</h1></Route>
       </Switch>
 
