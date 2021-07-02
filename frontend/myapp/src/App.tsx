@@ -2,6 +2,8 @@ import { useState, createContext, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 
+import { UserType } from 'types/typeList';
+
 import ModalField from 'common/modalField';
 import HomeBase from 'home/homeBase';
 
@@ -17,26 +19,16 @@ export const LoginStateContext = createContext({} as {
   setLoginState: any
 });
 
-
-// ログインユーザーが誰かを共有
-type currentUserType = {
-  admin: boolean;
-  email: string;
-  gueat: boolean;
-  id: number;
-  name: string;
-  profile_image: {
-    url?: string
-  };
-}
 export const CurrentUserContext = createContext({} as {
-  currentUser: Partial<currentUserType>,
+  currentUser: Partial<UserType>,
+  //currentUser: Partial<currentUserType>,
   setCurrentUser: any
 });
 
 // 対象のユーザーの情報を共有
 export const UserContext = createContext({} as {
-  user: Partial<currentUserType>,
+  user: Partial<UserType>,
+  //user: Partial<currentUserType>,
   setUser: any
 });
 
@@ -56,10 +48,10 @@ export const MessageContext = createContext({} as {
 const App = () => {
   const [modalState, setModalState] = useState<boolean>(false);
   const [loginState, setLoginState] = useState<boolean>(false);
-  const [currentUser, setCurrentUser] = useState<Partial<currentUserType>>({});
+  const [currentUser, setCurrentUser] = useState<UserType | {}>({});
   const [message, setMessage] = useState<string[]>([]);
 
-  const [user, setUser] = useState<Partial<currentUserType>>({});
+  const [user, setUser] = useState<Partial<UserType>>({});
   const [followOrNot, setFollowOrNot] = useState<boolean>(false);
 
   useEffect(() => {

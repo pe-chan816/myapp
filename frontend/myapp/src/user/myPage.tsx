@@ -3,39 +3,25 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 
+import { UserType, TweetType } from 'types/typeList';
+
 import { CurrentUserContext, UserContext } from 'App';
 import { FollowOrNotContext } from 'App';
 
-type userType = {
-  email: string;
-  id: number;
-  name: string;
-  profile_image?: {
-    url: string
-  };
-}
+import useTimeline from 'hooks/useTimeline';
 
 const MyPage = (props: any) => {
   const myPageId = Object.values(useParams());
-
-  type tweetType = {
-    id: number;
-    content: string;
-    user_id: number;
-    tweet_image?: {
-      url: string
-    };
-  }
 
   const { currentUser } = useContext(CurrentUserContext);
 
   const { user, setUser } = useContext(UserContext);
   const { followOrNot, setFollowOrNot } = useContext(FollowOrNotContext);
-  const [followings, setFollowings] = useState<userType[]>([]);
+  const [followings, setFollowings] = useState<UserType[]>([]);
   const [followingsNumber, setFollowingsNumber] = useState<number>(0);
-  const [followers, setFollowers] = useState<userType[]>([]);
+  const [followers, setFollowers] = useState<UserType[]>([]);
   const [followersNumber, setFollowersNumber] = useState<number>(0);
-  const [tweet, setTweet] = useState<tweetType[]>([]);
+  const [tweet, setTweet] = useState<TweetType[]>([]);
 
   const resetData = () => {
     setUser({});
@@ -53,35 +39,21 @@ const MyPage = (props: any) => {
 
       setUser(response.data.user);
       setFollowOrNot(response.data.follow_or_not);
-      response.data.followings.forEach((e: userType) => setFollowings(followings => [...followings, e]));
+      response.data.followings.forEach((e: UserType) => setFollowings(followings => [...followings, e]));
       setFollowingsNumber(response.data.followings_count);
-      response.data.followers.forEach((e: userType) => setFollowers(followers => [...followers, e]));
+      response.data.followers.forEach((e: UserType) => setFollowers(followers => [...followers, e]));
       setFollowersNumber(response.data.followers_count);
-      response.data.tweets.forEach((e: tweetType) => setTweet(tweet => [...tweet, e]));
+      response.data.tweets.forEach((e: TweetType) => setTweet(tweet => [...tweet, e]));
       console.log("fetched rails");
     })
   }
   useEffect(getData, [props.location.pathname]);
 
-  const MyPageTimeline = () => {
-
-    const tweets = tweet.map((e, i) => {
-      const imageUrl = e.tweet_image?.url;
-      const url = `http://localhost:3000/${imageUrl}`;
-      return (
-        <div key={i}>
-          <p>
-            {e.user_id} : {e.content}
-          </p>
-          {imageUrl && <img src={url} alt="tweet" />}
-        </div>
-      );
-    });
-
-    return <div>{tweets}</div>;
-  }
+  const targetUser: Partial<UserType>[] = Array(user);
+  const Timeline = useTimeline(targetUser, tweet);
 
   const MypageContent = () => {
+
     const userImage = user.profile_image?.url;
     const url = `http://localhost:3000/${user.profile_image?.url}`;
 
@@ -133,10 +105,10 @@ const MyPage = (props: any) => {
         <p>フォロワー : <Link to={followersPage}>{followersNumber}</Link></p>
 
         {user.id !== currentUser.id && <FollowButton />}
-        <MyPageTimeline />
+        {Timeline}
       </div >
     );
-  }
+  };
 
   console.log("loading.....");
   return (
@@ -144,6 +116,7 @@ const MyPage = (props: any) => {
       <MypageContent />
     </>
   );
+
 }
 
 export default MyPage;

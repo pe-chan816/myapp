@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   post '/unfollow', to:'relationships#unfollow'
 
+  post '/unfavorite', to:'favorites#destroy'
+
   get '/search', to:'searches#search'
 
   get '/hashtag/:word', to:'hashtags#show'
@@ -23,12 +25,12 @@ Rails.application.routes.draw do
       get 'following', 'followers', 'favorite'
     end
   end
-  resources :tweets, only:[:create, :destroy, :favorite] do
+  resources :tweets, only:[:create, :destroy, :show, :favorite] do
     member do
       get 'favorite'
     end
   end
   resources :relationships, only:[:create]
-  resources :favorites, only:[:create, :destroy]
+  resources :favorites, only:[:create]
   resources :hashtags, only:[:index, :edit, :update]
 end

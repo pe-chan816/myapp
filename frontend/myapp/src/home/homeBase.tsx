@@ -8,19 +8,27 @@ import NotLoginHomeHeader from './notLoginHomeHeader';
 const HomeBase = () => {
   const { loginState } = useContext(LoginStateContext);
 
-  if (loginState === true) {
-    return (
-      <>
-        <HomeHeader />
-      </>
-    );
-  } else {
-    return (
-      <>
-        <NotLoginHomeHeader />
-      </>
-    );
-  }
+  return (
+    <>
+      {loginState && <HomeHeader />}
+      {!loginState && <NotLoginHomeHeader />}
+    </>
+  );
+  /*
+    if (loginState === true) {
+      return (
+        <>
+          <HomeHeader />
+        </>
+      );
+    } else {
+      return (
+        <>
+          <NotLoginHomeHeader />
+        </>
+      );
+    }
+    */
 }
 
 export default HomeBase;

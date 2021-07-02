@@ -44,6 +44,7 @@ const UserRelationship = () => {
       {mapUserData}
     </div>
   );
+
 }
 
 export default UserRelationship;
