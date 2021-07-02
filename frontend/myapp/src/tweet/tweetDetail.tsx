@@ -56,17 +56,17 @@ const TweetDetail = () => {
   const tweetImageUrl = `http://localhost:3000/${tweet.tweet_image?.url}`;
   return (
     <div>
-      <h1>tweet detail</h1>
-
       {user.profile_image?.url && <img src={profileImageUrl} alt="user" />}
       <p>{user.name}</p>
       <p>{tweet.content}</p>
       {tweet.tweet_image?.url && <img src={tweetImageUrl} alt="tweet" />}
       <p>{tweet.created_at}</p>
 
-      <p>{count} いいね</p>
-      {!favoriteOrNot && <button onClick={clickFavoriteButton}>いいね</button>}
-      {favoriteOrNot && <button onClick={clickUnFavoriteButton}>いいね取消</button>}
+      <div>
+        <p>{count} いいね</p>
+        {!favoriteOrNot && <button onClick={clickFavoriteButton}>いいね</button>}
+        {favoriteOrNot && <button onClick={clickUnFavoriteButton}>いいね取消</button>}
+      </div>
     </div>
   );
 }
