@@ -13,8 +13,7 @@ class TweetsController < ApplicationController
 
   def destroy
     @tweet.destroy
-    flash[:success] = "ツイートを削除しました"
-    redirect_to request.referrer || root_path
+    render json: {message: "ツイート削除"}
   end
 
   def show

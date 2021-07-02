@@ -1,11 +1,15 @@
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 
 import { UserType, TweetType } from "types/typeList";
 
+import { CurrentUserContext } from "App";
+
 const TweetDetail = () => {
   const tweetId = Object.values(useParams());
+
+  const { currentUser } = useContext(CurrentUserContext);
 
   const [user, setUser] = useState<Partial<UserType>>({});
   const [tweet, setTweet] = useState<Partial<TweetType>>({});
@@ -52,6 +56,15 @@ const TweetDetail = () => {
     });
   };
 
+  const clickDeleteButton = () => {
+    const url = `http://localhost:3000/tweets/${tweet.id}`;
+    const config = { withCredentials: true };
+    axios.delete(url, config).then(res => {
+      console.log(res);
+      window.location.replace(`http://localhost:8000/user/${currentUser.id}`);
+    });
+  };
+
   const profileImageUrl = `http://localhost:3000/${user.profile_image?.url}`;
   const tweetImageUrl = `http://localhost:3000/${tweet.tweet_image?.url}`;
   return (
@@ -67,6 +80,12 @@ const TweetDetail = () => {
         {!favoriteOrNot && <button onClick={clickFavoriteButton}>いいね</button>}
         {favoriteOrNot && <button onClick={clickUnFavoriteButton}>いいね取消</button>}
       </div>
+
+      {user.id === currentUser.id &&
+        <div>
+          <button onClick={clickDeleteButton}>ツイート削除</button>
+        </div>
+      }
     </div>
   );
 }
