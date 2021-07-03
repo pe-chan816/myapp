@@ -12,6 +12,7 @@ import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
 import UserRelationship from 'user/followings';
 import TweetDetail from 'tweet/tweetDetail';
+import MyFavorite from 'favorite/myFavorite';
 
 
 const HomeHeader = () => {
@@ -36,7 +37,7 @@ const HomeHeader = () => {
         <Link to={`/user/${currentUser.id}`}>マイページ</Link>
         <Link to="/tweet">ツイート</Link>
         <Link to="">ユーザー一覧</Link>
-        <Link to="">マイいいね</Link>
+        <Link to={`/user/${currentUser.id}/favorite`}>マイいいね</Link>
         <Link to="">タグ一覧</Link>
         <Link to="/user/edit/account">アカウント設定</Link>
       </nav>
@@ -45,6 +46,7 @@ const HomeHeader = () => {
         <Route path="/" exact component={HomeContent} />
         <Route path="/user/:myPageId" exact component={MyPage} />
         <Route path="/tweet" exact component={TweetForm} />
+        <Route path="/user/:userId/favorite" exact component={MyFavorite} />
         <Route path="/user/edit/account" exact component={UpdateUserSettings} />
 
         <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
