@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   post '/unfollow', to:'relationships#unfollow'
 
   post '/unfavorite', to:'favorites#destroy'
+  get '/users/:id/myfavorite', to:'favorites#my_favorite'
 
   get '/search', to:'searches#search'
 
