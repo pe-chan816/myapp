@@ -16,6 +16,7 @@ import MyFavorite from 'favorite/myFavorite';
 
 
 const HomeHeader = () => {
+  console.log("!!HomeHeader!!");
   const { setModalState } = useContext(ModalStateContext);
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser } = useContext(CurrentUserContext);

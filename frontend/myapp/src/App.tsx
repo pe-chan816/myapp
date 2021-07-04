@@ -55,24 +55,30 @@ const App = () => {
   const [followOrNot, setFollowOrNot] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("!!useEffect!!");
     if (loginState === false) {
       checkLoginStatus();
     }
-  }, [loginState]);
+  }, []);
 
   const checkLoginStatus = () => {
-    axios.get("http://localhost:3000/check_login", { withCredentials: true }).then(response => {
-      if (response.data.logged_in === true) {
+    console.log("!!checkLoginStatus!!");
+    const url = `http://localhost:3000/check_login`;
+    const config = { withCredentials: true };
+    axios.get(url, config).then(res => {
+      if (res.data.logged_in === true) {
         setLoginState(true);
-        setCurrentUser(response.data.user);
+        setCurrentUser(res.data.user);
       } else {
         setCurrentUser({});
       }
-    }).catch(response => {
-      console.log("ログインエラー", response);
+    }).catch(res => {
+      console.log("ログインエラー", res);
     })
   }
-  console.log(loginState);
+
+  console.log("loginState->", loginState);
+  console.log("currentUser->", currentUser);
   return (
     <>
       <Router>
