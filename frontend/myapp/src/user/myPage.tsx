@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 
-import { UserType, TweetType } from 'types/typeList';
+import { UserType, TweetType, TimelineType } from 'types/typeList';
 
 import { CurrentUserContext, UserContext } from 'App';
 import { FollowOrNotContext } from 'App';
@@ -11,46 +11,48 @@ import { FollowOrNotContext } from 'App';
 import useTimeline from 'hooks/useTimeline';
 
 const MyPage = (props: any) => {
+  console.log("!!MyPage!!");
   const myPageId = Object.values(useParams());
 
   const { currentUser } = useContext(CurrentUserContext);
 
   const { user, setUser } = useContext(UserContext);
+  const [data, setData] = useState<TimelineType[]>([]);
   const { followOrNot, setFollowOrNot } = useContext(FollowOrNotContext);
   const [followings, setFollowings] = useState<UserType[]>([]);
   const [followingsNumber, setFollowingsNumber] = useState<number>(0);
   const [followers, setFollowers] = useState<UserType[]>([]);
   const [followersNumber, setFollowersNumber] = useState<number>(0);
-  const [tweet, setTweet] = useState<TweetType[]>([]);
+  //const [tweet, setTweet] = useState<TweetType[]>([]);
 
   const resetData = () => {
-    setUser({});
     setFollowings([]);
     setFollowers([]);
-    setTweet([]);
+    setData([]);
   }
 
   const getData = () => {
+    console.log("!!getData!!");
     resetData();
-
     const url = `http://localhost:3000/users/${myPageId}`;
-    axios.get(url, { withCredentials: true }).then(response => {
-      console.log(response.data);
+    const config = { withCredentials: true };
+    axios.get(url, config).then(res => {
+      console.log(res.data);
 
-      setUser(response.data.user);
-      setFollowOrNot(response.data.follow_or_not);
-      response.data.followings.forEach((e: UserType) => setFollowings(followings => [...followings, e]));
-      setFollowingsNumber(response.data.followings_count);
-      response.data.followers.forEach((e: UserType) => setFollowers(followers => [...followers, e]));
-      setFollowersNumber(response.data.followers_count);
-      response.data.tweets.forEach((e: TweetType) => setTweet(tweet => [...tweet, e]));
+      setUser(res.data.user);
+      res.data.mypage_data.forEach((e: TimelineType) => setData(data => [...data, e]));
+      setFollowOrNot(res.data.follow_or_not);
+      res.data.followings.forEach((e: UserType) => setFollowings(followings => [...followings, e]));
+      setFollowingsNumber(res.data.followings_count);
+      res.data.followers.forEach((e: UserType) => setFollowers(followers => [...followers, e]));
+      setFollowersNumber(res.data.followers_count);
+
       console.log("fetched rails");
     })
   }
   useEffect(getData, [props.location.pathname]);
 
-  const targetUser: Partial<UserType>[] = Array(user);
-  const Timeline = useTimeline(targetUser, tweet);
+  const Timeline = useTimeline(data);
 
   const MypageContent = () => {
 
@@ -70,9 +72,9 @@ const MyPage = (props: any) => {
     const FollowButton = () => {
       const clickFollow = () => {
         const url = `http://localhost:3000/relationships`;
-        const data = { followed_id: user.id };
+        const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
-        axios.post(url, data, config).then(response => {
+        axios.post(url, sendData, config).then(response => {
           console.log(response.data);
           setFollowOrNot(true);
           setFollowersNumber(response.data.number_of_followers);
@@ -80,9 +82,9 @@ const MyPage = (props: any) => {
       };
       const clickUnfollow = () => {
         const url = `http://localhost:3000/unfollow`;
-        const data = { followed_id: user.id };
+        const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
-        axios.post(url, data, config).then(response => {
+        axios.post(url, sendData, config).then(response => {
           console.log(response.data);
           setFollowOrNot(false);
           setFollowersNumber(response.data.number_of_followers);
@@ -110,13 +112,12 @@ const MyPage = (props: any) => {
     );
   };
 
-  console.log("loading.....");
   return (
     <>
       <MypageContent />
     </>
   );
 
-}
+};
 
 export default MyPage;

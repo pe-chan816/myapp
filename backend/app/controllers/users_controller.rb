@@ -49,15 +49,23 @@ class UsersController < ApplicationController
 
   def show
     user = User.find(params[:id])
+    base_data = Tweet.joins(:user).select("tweets.*, users.name, users.profile_image")\
+                                  .where("user_id = ?", user.id)
+    data = []
+    base_data.each do |d|
+      user = User.find(d.user_id)
+      d.profile_image = user.profile_image
+      data.push(d)
+    end
+
     followings = user.following
     followings_count = followings.count
     followers = user.followers
     followers_count = followers.count
-    tweet_items = user.tweets
     follow_or_not = current_user.following?(user)
 
     render json: { user: user,
-                   tweets: tweet_items,
+                   mypage_data: data,
                    followings: followings,
                    followings_count: followings_count,
                    followers: followers,
