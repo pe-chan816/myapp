@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_144723) do
+ActiveRecord::Schema.define(version: 2021_07_05_115450) do
 
   create_table "favorites", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
@@ -26,9 +26,16 @@ ActiveRecord::Schema.define(version: 2021_06_10_144723) do
     t.string "hashname"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "lat"
-    t.string "lng"
     t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
+  end
+
+  create_table "latlngs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.float "lat"
+    t.float "lng"
+    t.bigint "hashtag_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["hashtag_id"], name: "index_latlngs_on_hashtag_id"
   end
 
   create_table "recipes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -84,6 +91,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_144723) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "latlngs", "hashtags"
   add_foreign_key "recipes", "hashtags"
   add_foreign_key "tweet_hashtag_relations", "hashtags"
   add_foreign_key "tweet_hashtag_relations", "tweets"

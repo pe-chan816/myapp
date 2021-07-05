@@ -13,6 +13,8 @@ import TweetForm from 'tweet/tweetForm';
 import UserRelationship from 'user/followings';
 import TweetDetail from 'tweet/tweetDetail';
 import MyFavorite from 'favorite/myFavorite';
+import HashtagIndex from 'hashtag/hashtagIndex';
+import HashtagDetail from 'hashtag/hashtagDetail';
 
 
 const HomeHeader = () => {
@@ -28,7 +30,6 @@ const HomeHeader = () => {
     }).catch(error => console.log("ログアウトエラー", error));
   }
 
-  console.log(currentUser);
   return (
     <div className="header-banner">
       <p>ログイン中</p>
@@ -39,7 +40,7 @@ const HomeHeader = () => {
         <Link to="/tweet">ツイート</Link>
         <Link to="">ユーザー一覧</Link>
         <Link to={`/user/${currentUser.id}/favorite`}>マイいいね</Link>
-        <Link to="">タグ一覧</Link>
+        <Link to={`/hashtag/index`}>タグ一覧</Link>
         <Link to="/user/edit/account">アカウント設定</Link>
       </nav>
 
@@ -48,12 +49,15 @@ const HomeHeader = () => {
         <Route path="/user/:myPageId" exact component={MyPage} />
         <Route path="/tweet" exact component={TweetForm} />
         <Route path="/user/:userId/favorite" exact component={MyFavorite} />
+        <Route path="/hashtag/index" exact component={HashtagIndex} />
         <Route path="/user/edit/account" exact component={UpdateUserSettings} />
 
         <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
         <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
 
         <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
+
+        <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
         <Route><h1>404 NOT FOUND</h1></Route>
       </Switch>
 

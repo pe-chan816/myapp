@@ -2,15 +2,36 @@ class HashtagsController < ApplicationController
   before_action :user_must_log_in, only:[:show, :index, :edit, :update]
 
   def show
-    @hashtag = Hashtag.find_by(hashname: params[:word])
-    @recipes = @hashtag.recipes
-    @tweets = @hashtag.tweets
-    gon.hashtag_lat = @hashtag.lat.to_f # float型でカラム設計しても結局to_fを外せず、座標の都合上string型に
-    gon.hashtag_lng = @hashtag.lng.to_f # 同上
+    hashtag = Hashtag.find_by(hashname: params[:word])
+
+    tweet_id = hashtag.tweet_ids
+    base_data = Tweet.joins(:user).select("tweets.*, users.name, users.profile_image").where(id: tweet_id)
+    tweets = []
+    base_data.each do |d|
+      user = User.find(d.user_id)
+      d.profile_image = user.profile_image
+      tweets.push(d)
+    end
+
+    recipes = hashtag.recipes
+
+    latlng = hashtag.latlngs
+
+    render json: { hashtag: hashtag,
+                   tweets: tweets,
+                   recipes: recipes,
+                   latlng: latlng }
   end
 
   def index
-    @hashtags = Hashtag.all
+    data = []
+    hashtags = Hashtag.all
+    hashtags.each do |h|
+      count = h.tweets.count
+      new_h = h.attributes.merge("count" => count)
+      data.push(new_h)
+    end
+    render json: {hashtags: data}
   end
 
   def edit
