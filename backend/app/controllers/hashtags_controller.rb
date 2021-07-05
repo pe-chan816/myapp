@@ -10,7 +10,14 @@ class HashtagsController < ApplicationController
   end
 
   def index
-    @hashtags = Hashtag.all
+    data = []
+    hashtags = Hashtag.all
+    hashtags.each do |h|
+      count = h.tweets.count
+      new_h = h.attributes.merge("count" => count)
+      data.push(new_h)
+    end
+    render json: {hashtags: data}
   end
 
   def edit
