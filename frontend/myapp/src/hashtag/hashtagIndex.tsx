@@ -7,8 +7,6 @@ type hashtagType = {
   hashname: string,
   create_at: string,
   updated_at: string,
-  lat: string,
-  lng: string,
   count: number
 }
 

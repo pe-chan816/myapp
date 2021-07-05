@@ -8,9 +8,7 @@ type hashtagType = {
   id: number,
   hashname: string,
   create_at: string,
-  updated_at: string,
-  lat: string,
-  lng: string
+  updated_at: string
 };
 
 type recipeType = {
@@ -24,12 +22,18 @@ type recipeType = {
   position: number
 };
 
+type latlngType = {
+  lat: number,
+  lng: number
+}
+
 const HashtagDetail = () => {
   console.log("!!HashtagDetail!!");
   const hashname = Object.values(useParams());
   const [tagData, setTagData] = useState<hashtagType>();
   const [timelineData, setTimelineData] = useState<Partial<TimelineType[]>>([]);
   const [recipe, setRecipe] = useState<Partial<recipeType[]>>([]);
+  const [latlng, setLatlng] = useState<Partial<latlngType>>({});
 
   const resetData = () => {
     setTimelineData([]);
@@ -46,6 +50,7 @@ const HashtagDetail = () => {
       setTagData(res.data.hashtag);
       res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
       res.data.recipes.forEach((e: recipeType) => setRecipe(recipe => [...recipe, e]));
+      setLatlng(res.data.latlng);
     });
   };
 
@@ -67,6 +72,7 @@ const HashtagDetail = () => {
   console.log(tagData);
   console.log(timelineData);
   console.log(recipe);
+  console.log(latlng);
 
   return (
     <div>

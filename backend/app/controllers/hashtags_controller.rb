@@ -2,13 +2,6 @@ class HashtagsController < ApplicationController
   before_action :user_must_log_in, only:[:show, :index, :edit, :update]
 
   def show
-=begin
-    @hashtag = Hashtag.find_by(hashname: params[:word])
-    @recipes = @hashtag.recipes
-    @tweets = @hashtag.tweets
-    gon.hashtag_lat = @hashtag.lat.to_f # float型でカラム設計しても結局to_fを外せず、座標の都合上string型に
-    gon.hashtag_lng = @hashtag.lng.to_f # 同上
-=end
     hashtag = Hashtag.find_by(hashname: params[:word])
 
     tweet_id = hashtag.tweet_ids
@@ -22,9 +15,12 @@ class HashtagsController < ApplicationController
 
     recipes = hashtag.recipes
 
+    latlng = hashtag.latlngs
+
     render json: { hashtag: hashtag,
                    tweets: tweets,
-                   recipes: recipes }
+                   recipes: recipes,
+                   latlng: latlng }
   end
 
   def index
