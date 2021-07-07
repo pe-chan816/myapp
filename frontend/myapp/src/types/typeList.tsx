@@ -24,4 +24,16 @@ export type TimelineType = {
   tweet_image?: { url: string },
   updated_at: string,
   user_id: number
-}
+};
+
+export type LatlngType = {
+  lat: number,
+  lng: number
+};
+
+export type InformationType = {
+  name: string,
+  address: string,
+  phoneNumber: string,
+  openingHours: string
+};

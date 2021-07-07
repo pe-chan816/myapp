@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
 import { TimelineType } from "types/typeList";
@@ -98,6 +99,7 @@ const HashtagDetail = () => {
             <Marker position={center} />
           </GoogleMap>
         </LoadScript>
+        <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>
       </div>
     );
   };
@@ -110,8 +112,6 @@ const HashtagDetail = () => {
   console.log(timelineData);
   console.log(recipe);
   console.log(latlng);
-  console.log(latlng.lat);
-  console.log(latlng.lng);
 
   return (
     <div>

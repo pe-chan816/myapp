@@ -55,9 +55,27 @@ class HashtagsController < ApplicationController
     end
   end
 
+  def update_bar_info
+    hashtag = Hashtag.find_by(hashname: params[:word])
+    if hashtag.latlngs.exists?
+      # すでに情報がある場合の処理
+      bar_info = hashtag.latlngs.first
+      bar_info.update_attributes(bar_params)
+      render json: {result: bar_info}
+    else
+      # 初めての処理
+      new_bar_info = hashtag.latlngs.create(bar_params)
+      render json: {result: new_bar_info}
+    end
+  end
+
   private
     def hashtag_params
       params.require(:hashtag).permit(:lat, :lng, recipes_attributes:[:id, :material, :amount, :unit, :_destroy])
+    end
+
+    def bar_params
+      params.require(:latlng).permit(:lat, :lng)
     end
 
 end

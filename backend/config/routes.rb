@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get '/search', to:'searches#search'
 
   get '/hashtag/:word', to:'hashtags#show'
+  post '/hashtag/:word/edit/bar', to:'hashtags#update_bar_info'
 
   root 'home#home'
 
