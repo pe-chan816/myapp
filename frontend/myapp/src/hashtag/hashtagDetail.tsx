@@ -31,23 +31,18 @@ type latlngType = {
   lng: number
 }
 
-const defaultLatlng = {
-  lat: 35.671202,
-  lng: 139.762077
-};
-
 const HashtagDetail = () => {
   console.log("!!HashtagDetail!!");
   const hashname = Object.values(useParams());
   const [tagData, setTagData] = useState<hashtagType>();
   const [timelineData, setTimelineData] = useState<Partial<TimelineType[]>>([]);
   const [recipe, setRecipe] = useState<Partial<recipeType[]>>([]);
-  const [latlng, setLatlng] = useState<Partial<latlngType>>(defaultLatlng);
+  const [latlng, setLatlng] = useState<Partial<latlngType>>();
 
   const resetData = () => {
     setTimelineData([]);
     setRecipe([]);
-    setLatlng(defaultLatlng);
+    setLatlng(undefined);
   };
 
   const getDetailData = () => {
@@ -60,7 +55,7 @@ const HashtagDetail = () => {
       setTagData(res.data.hashtag);
       res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
       res.data.recipes.forEach((e: recipeType) => setRecipe(recipe => [...recipe, e]));
-      setLatlng(res.data.latlng[0]);
+      if (res.data.latlng[0]) { setLatlng(res.data.latlng[0]) };
     });
   };
 
@@ -77,31 +72,33 @@ const HashtagDetail = () => {
   });
 
   const barLocation = () => {
-    const containerStyle = {
-      width: '70%',
-      height: '60vh',
-      margin: '0 auto'
-    };
+    if (latlng) {
+      const containerStyle = {
+        width: '70%',
+        height: '60vh',
+        margin: '0 auto'
+      };
 
-    const center = {
-      lat: latlng.lat,
-      lng: latlng.lng
-    };
+      const center = {
+        lat: latlng.lat,
+        lng: latlng.lng
+      };
 
-    return (
-      <div>
-        <LoadScript googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={16}
-          >
-            <Marker position={center} />
-          </GoogleMap>
-        </LoadScript>
-        <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>
-      </div>
-    );
+      return (
+        <div>
+          <LoadScript googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={16}
+            >
+              <Marker position={center} />
+            </GoogleMap>
+          </LoadScript>
+          <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>
+        </div>
+      );
+    };
   };
 
   const barContent = barLocation();
