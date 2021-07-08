@@ -37,3 +37,14 @@ export type InformationType = {
   phoneNumber: string,
   openingHours: string
 };
+
+export type RecipeType = {
+  id: number,
+  material: string,
+  amount?: string,
+  unit: string,
+  created_at: string,
+  updated_at: string,
+  hashtag_id: number,
+  position: number
+};

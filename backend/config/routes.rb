@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   get '/hashtag/:word', to:'hashtags#show'
   post '/hashtag/:word/edit/bar', to:'hashtags#update_bar_info'
+  post '/hashtag/:word/edit/recipe', to:'hashtags#update_recipe'
+  delete '/hashtag/delete/recipe/:id', to:'hashtags#destroy_recipe'
 
   root 'home#home'
 
@@ -34,5 +36,5 @@ Rails.application.routes.draw do
   end
   resources :relationships, only:[:create]
   resources :favorites, only:[:create]
-  resources :hashtags, only:[:index, :edit, :update]
+  resources :hashtags, only:[:index]
 end
