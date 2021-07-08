@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { RecipeContext } from "hashtag/hashtagDetail";
 
 import { RecipeType } from "types/typeList";
@@ -9,7 +9,6 @@ const EditRecipe = () => {
   const hashname = Object.values(useParams());
 
   const { recipe, setRecipe } = useContext(RecipeContext);
-
   const [newMaterial, setNewMaterial] = useState<string>("");
   const [newAmount, setNewAmount] = useState<number>();
   const [newUnit, setNewUnit] = useState<string>("");
@@ -81,8 +80,7 @@ const EditRecipe = () => {
 
   return (
     <div>
-      <h1>#{hashname}</h1>
-      <h1>edit recipe</h1>
+      <Link to={`/hashtag/${hashname}`}><h1>#{hashname}</h1></Link>
       <div>
         {recipeList}
       </div>

@@ -31,6 +31,14 @@ export type LatlngType = {
   lng: number
 };
 
+export type HashtagType = {
+  id: number,
+  hashname: string,
+  create_at: string,
+  updated_at: string
+};
+
+
 export type InformationType = {
   name: string,
   address: string,
