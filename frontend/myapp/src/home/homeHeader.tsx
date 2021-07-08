@@ -15,6 +15,8 @@ import TweetDetail from 'tweet/tweetDetail';
 import MyFavorite from 'favorite/myFavorite';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
+import EditMap from 'hashtag/editMap';
+import EditRecipe from 'hashtag/editRecipe';
 
 
 const HomeHeader = () => {
@@ -58,6 +60,7 @@ const HomeHeader = () => {
         <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
         <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
+        <Route path="/hashtag/:hashname/edit/map" exact component={EditMap} />
         <Route><h1>404 NOT FOUND</h1></Route>
       </Switch>
 

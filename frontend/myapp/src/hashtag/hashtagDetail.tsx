@@ -1,9 +1,13 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useEffect, useState, createContext } from "react";
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Route, useParams } from "react-router";
+import { Link } from "react-router-dom";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
-import { TimelineType } from "types/typeList";
+import { LatlngType, TimelineType, RecipeType } from "types/typeList";
+
+import EditRecipe from "./editRecipe";
 
 import useTimeline from "hooks/useTimeline";
 
@@ -14,39 +18,23 @@ type hashtagType = {
   updated_at: string
 };
 
-type recipeType = {
-  id: number,
-  material: string,
-  amount?: string,
-  unit: string,
-  created_at: string,
-  updated_at: string,
-  hashtag_id: number,
-  position: number
-};
-
-type latlngType = {
-  lat: number,
-  lng: number
-}
-
-const defaultLatlng = {
-  lat: 35.671202,
-  lng: 139.762077
-};
+export const RecipeContext = createContext({} as {
+  recipe: Partial<RecipeType[]>,
+  setRecipe: any
+});
 
 const HashtagDetail = () => {
   console.log("!!HashtagDetail!!");
   const hashname = Object.values(useParams());
   const [tagData, setTagData] = useState<hashtagType>();
   const [timelineData, setTimelineData] = useState<Partial<TimelineType[]>>([]);
-  const [recipe, setRecipe] = useState<Partial<recipeType[]>>([]);
-  const [latlng, setLatlng] = useState<Partial<latlngType>>(defaultLatlng);
+  const [recipe, setRecipe] = useState<Partial<RecipeType[]>>([]);
+  const [latlng, setLatlng] = useState<Partial<LatlngType>>();
 
   const resetData = () => {
     setTimelineData([]);
     setRecipe([]);
-    setLatlng(defaultLatlng);
+    setLatlng(undefined);
   };
 
   const getDetailData = () => {
@@ -58,8 +46,8 @@ const HashtagDetail = () => {
       console.log(res);
       setTagData(res.data.hashtag);
       res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
-      res.data.recipes.forEach((e: recipeType) => setRecipe(recipe => [...recipe, e]));
-      setLatlng(res.data.latlng[0]);
+      res.data.recipes.forEach((e: RecipeType) => setRecipe(recipe => [...recipe, e]));
+      if (res.data.latlng[0]) { setLatlng(res.data.latlng[0]) };
     });
   };
 
@@ -76,30 +64,33 @@ const HashtagDetail = () => {
   });
 
   const barLocation = () => {
-    const containerStyle = {
-      width: '70%',
-      height: '60vh',
-      margin: '0 auto'
-    };
+    if (latlng) {
+      const containerStyle = {
+        width: '70%',
+        height: '60vh',
+        margin: '0 auto'
+      };
 
-    const center = {
-      lat: latlng.lat,
-      lng: latlng.lng
-    };
+      const center = {
+        lat: latlng.lat,
+        lng: latlng.lng
+      };
 
-    return (
-      <div>
-        <LoadScript googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={16}
-          >
-            <Marker position={center} />
-          </GoogleMap>
-        </LoadScript>
-      </div>
-    );
+      return (
+        <div>
+          <LoadScript googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
+            <GoogleMap
+              mapContainerStyle={containerStyle}
+              center={center}
+              zoom={16}
+            >
+              <Marker position={center} />
+            </GoogleMap>
+          </LoadScript>
+          <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>
+        </div>
+      );
+    };
   };
 
   const barContent = barLocation();
@@ -110,16 +101,20 @@ const HashtagDetail = () => {
   console.log(timelineData);
   console.log(recipe);
   console.log(latlng);
-  console.log(latlng.lat);
-  console.log(latlng.lng);
 
   return (
-    <div>
-      <h1>#{tagData?.hashname}</h1>
-      <div>{recipeList}</div>
-      <div>{barContent}</div>
-      <div>{timeline}</div>
-    </div>
+    <Router>
+      <RecipeContext.Provider value={{ recipe, setRecipe }}>
+        <div>
+          <h1>#{tagData?.hashname}</h1>
+          <div>{recipeList}</div>
+          {recipe && <Link to={`/hashtag/${hashname}/edit/recipe`}>レシピ編集</Link>}
+          <div>{barContent}</div>
+          <div>{timeline}</div>
+        </div>
+        <Route path="/hashtag/:hashname/edit/recipe" exact component={EditRecipe} />
+      </RecipeContext.Provider>
+    </Router>
   );
 };
 
