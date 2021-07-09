@@ -6,7 +6,7 @@ class Hashtag < ApplicationRecord
   has_many :tweet_hashtag_relations
   has_many :tweets, through: :tweet_hashtag_relations
 
-  has_many :latlngs, dependent: :destroy
+  has_many :bars, dependent: :destroy
 
   has_many :recipes, -> {order(position: :asc)}, inverse_of: :hashtag
   accepts_nested_attributes_for :recipes, reject_if: :all_blank, allow_destroy: true

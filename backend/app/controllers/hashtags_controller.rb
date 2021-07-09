@@ -15,12 +15,12 @@ class HashtagsController < ApplicationController
 
     recipes = hashtag.recipes
 
-    latlng = hashtag.latlngs
+    bar_info = hashtag.bars
 
     render json: { hashtag: hashtag,
                    tweets: tweets,
                    recipes: recipes,
-                   latlng: latlng }
+                   bar_info: bar_info }
   end
 
   def index
@@ -36,19 +36,26 @@ class HashtagsController < ApplicationController
 
   def update_bar_info
     hashtag = Hashtag.find_by(hashname: params[:word])
-    if hashtag.latlngs.exists? # すでに情報がある場合の処理
-      bar_info = hashtag.latlngs.first
-      bar_info.update_attributes(bar_params)
-      render json: {result: bar_info}
-    else # 初めての時の処理
-      new_bar_info = hashtag.latlngs.create(bar_params)
-      render json: {result: new_bar_info}
+    hashtag.bars.each do |b| # undefinedの部分がダブって登録されるので一旦クリアする
+      b.destroy
     end
+    new_bar_info = hashtag.bars.create(bar_params)
+
+    hashtag.recipes.each do |r| # マップとレシピは両立しないので削除
+      r.destroy
+    end
+
+    render json: {result: new_bar_info}
   end
 
   def update_recipe
     hashtag = Hashtag.find_by(hashname: params[:word])
     hashtag.recipes.create(recipe_params)
+
+    hashtag.bars.each do |b| # マップとレシピは両立しないので削除
+      b.destroy
+    end
+
     render json: { recipes: hashtag.recipes }
   end
 
@@ -62,7 +69,7 @@ class HashtagsController < ApplicationController
 
   private
     def bar_params
-      params.require(:latlng).permit(:lat, :lng)
+      params.require(:bar).permit(:name, :address, :phone_number, :lat, :lng)
     end
 
     def recipe_params

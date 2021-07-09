@@ -3,7 +3,7 @@ import { useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, useParams } from "react-router";
 
-import { HashtagType, LatlngType, TimelineType, RecipeType } from "types/typeList";
+import { HashtagType, BarInfoType, TimelineType, RecipeType } from "types/typeList";
 
 import EditRecipe from "./editRecipe";
 import EditMap from "./editMap";
@@ -22,9 +22,9 @@ export const RecipeContext = createContext({} as {
   setRecipe: any
 });
 
-export const LatlngContext = createContext({} as {
-  latlng: Partial<LatlngType>,
-  setLatlng: any
+export const BarInfoContext = createContext({} as {
+  barInfo: Partial<BarInfoType>,
+  setBarInfo: any
 });
 
 const HashtagDetail = () => {
@@ -33,12 +33,12 @@ const HashtagDetail = () => {
   const [tagData, setTagData] = useState<Partial<HashtagType>>({});
   const [timelineData, setTimelineData] = useState<Partial<TimelineType[]>>([]);
   const [recipe, setRecipe] = useState<Partial<RecipeType[]>>([]);
-  const [latlng, setLatlng] = useState<Partial<LatlngType>>({});
+  const [barInfo, setBarInfo] = useState<Partial<BarInfoType>>({});
 
   const resetData = () => {
     setTimelineData([]);
     setRecipe([]);
-    setLatlng({});
+    setBarInfo({});
   };
 
   const getDetailData = () => {
@@ -51,7 +51,7 @@ const HashtagDetail = () => {
       setTagData(res.data.hashtag);
       res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
       res.data.recipes.forEach((e: RecipeType) => setRecipe(recipe => [...recipe, e]));
-      if (res.data.latlng[0]) { setLatlng(res.data.latlng[0]) };
+      if (res.data.bar_info[0]) { setBarInfo(res.data.bar_info[0]) };
     });
   };
 
@@ -62,20 +62,20 @@ const HashtagDetail = () => {
   console.log(tagData);
   console.log(timelineData);
   console.log("recipe ->", recipe);
-  console.log("latlng ->", latlng);
+  console.log("barInfo ->", barInfo);
 
   return (
     <Router>
       <TagDataContext.Provider value={{ tagData, setTagData }}>
         <RecipeContext.Provider value={{ recipe, setRecipe }}>
-          <LatlngContext.Provider value={{ latlng, setLatlng }}>
+          <BarInfoContext.Provider value={{ barInfo, setBarInfo }}>
             <div>
               <Route path="/hashtag/:hashname" exact component={HashtagDetailContent} />
               <Route path="/hashtag/:hashname/edit/recipe" exact component={EditRecipe} />
               <Route path="/hashtag/:hashname/edit/map" exact component={EditMap} />
               <div>{timeline}</div>
             </div>
-          </LatlngContext.Provider>
+          </BarInfoContext.Provider>
         </RecipeContext.Provider>
       </TagDataContext.Provider>
     </Router>

@@ -53,7 +53,7 @@ const EditRecipe = () => {
 
     const clearText = () => {
       setNewMaterial("");
-      setNewAmount(undefined);
+      setNewAmount(Number(undefined));/////要検証//////
       setNewUnit("");
     };
     clearText();

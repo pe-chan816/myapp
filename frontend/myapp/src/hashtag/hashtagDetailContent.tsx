@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { TagDataContext, RecipeContext, LatlngContext } from "./hashtagDetail";
+import { useContext, useState } from "react";
+import { TagDataContext, RecipeContext, BarInfoContext } from "./hashtagDetail";
 import { Link } from "react-router-dom";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
@@ -7,7 +7,10 @@ const HashtagDetailContent = () => {
   console.log("!!HashtagDetailContext!!");
   const { tagData } = useContext(TagDataContext);
   const { recipe } = useContext(RecipeContext);
-  const { latlng } = useContext(LatlngContext);
+  const { barInfo } = useContext(BarInfoContext);
+  const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [showRecipeEdit, setShowRecipeEdit] = useState<boolean>(false);
+  const [showBarInfoEdit, setShowBarInfoEdit] = useState<boolean>(false);
 
   const recipeList = recipe.map((e, i) => {
     if (e) {
@@ -20,7 +23,7 @@ const HashtagDetailContent = () => {
   });
 
   const barLocation = () => {
-    if (latlng) {
+    if (barInfo) {
       const containerStyle = {
         width: '70%',
         height: '60vh',
@@ -28,8 +31,8 @@ const HashtagDetailContent = () => {
       };
 
       const center = {
-        lat: latlng.lat,
-        lng: latlng.lng
+        lat: barInfo.lat,
+        lng: barInfo.lng
       };
 
       return (
@@ -43,22 +46,52 @@ const HashtagDetailContent = () => {
               <Marker position={center} />
             </GoogleMap>
           </LoadScript>
-          <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>
+          <div>
+            <p>{barInfo.name}</p>
+            <p>{barInfo.address}</p>
+            <p>{barInfo.phone_number}</p>
+          </div>
         </div>
+
       );
     };
   };
   const barContent = barLocation();
+
+  const linkWithRadioButtonJSX = () => {
+    return (
+      <div>
+        <p>このタグがカクテルについてのものならレシピを、</p>
+        <p>BARについてのものならGooglemapを利用してお店の情報を登録してみましょう！</p>
+        <div>
+          <input
+            type="radio" name="tag"
+            onChange={() => { setShowRecipeEdit(true); setShowBarInfoEdit(false); }} />カクテル
+          <input type="radio" name="tag"
+            onChange={() => { setShowBarInfoEdit(true); setShowRecipeEdit(false); }} />BAR
+        </div>
+        {showRecipeEdit &&
+          <Link to={`/hashtag/${tagData.hashname}/edit/recipe`}>レシピ編集</Link>}
+        {showBarInfoEdit &&
+          <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>}
+      </div>
+    );
+  };
+  const linkWithRadioButton = linkWithRadioButtonJSX();
+
+  console.log(barInfo);
 
   return (
     <div>
       <h1>#{tagData?.hashname}</h1>
       {recipe.toString() !== [].toString() &&
         <div>{recipeList}</div>}
-      {recipe.toString() !== [].toString() &&
-        <Link to={`/hashtag/${tagData.hashname}/edit/recipe`}>レシピ編集</Link>}
-      {JSON.stringify(latlng) !== JSON.stringify({}) &&
+      {JSON.stringify(barInfo) !== JSON.stringify({}) &&
         <div>{barContent}</div>}
+
+      <button onClick={() => setShowEdit(!showEdit)}>タグ編集</button>
+      {showEdit &&
+        <div>{linkWithRadioButton}</div>}
     </div>
   );
 };

@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
 import { LoadScript, GoogleMap, Autocomplete, Marker } from "@react-google-maps/api";
 
-import { LatlngType, InformationType } from "types/typeList";
+import { LatlngType } from "types/typeList";
+
+import { BarInfoContext } from "./hashtagDetail";
 
 const defaultCenter = {
   lat: 35.671202,
@@ -13,9 +15,10 @@ const defaultCenter = {
 const EditMap = () => {
   console.log("!!EditMap!!");
   const hashname = Object.values(useParams());
+  const { barInfo, setBarInfo } = useContext(BarInfoContext);
   const [autocompleteResult, setAutocompleteResult] = useState<any>({});
   const [latlng, setLatlng] = useState<LatlngType>(defaultCenter);
-  const [information, setInformation] = useState<Partial<InformationType>>({});
+  // const [information, setInformation] = useState<Partial<InformationType>>({});
 
   const mapContainerStyle = {
     width: '70%',
@@ -40,21 +43,22 @@ const EditMap = () => {
       console.log(autocompleteResult.getPlace());
       const data = autocompleteResult.getPlace()
 
-      const newLat = data.geometry.location.lat();
-      const newLng = data.geometry.location.lng();
-
       const newName = data.name;
       const newAddress = data.formatted_address;
       const newPhoneNumber = data.formatted_phone_number;
-      const newOpeningHours = data.opening_hours.weekday_text;
+      //const newOpeningHours = data.opening_hours.weekday_text;
+      const newLat = data.geometry.location.lat();
+      const newLng = data.geometry.location.lng();
 
-      console.log(newName, newAddress, newPhoneNumber, newOpeningHours);
+      console.log(newName, newAddress, newPhoneNumber, newLat, newLng);
       setLatlng({ lat: newLat, lng: newLng });
-      setInformation({
+      setBarInfo({
         name: newName,
         address: newAddress,
-        phoneNumber: newPhoneNumber,
-        openingHours: newOpeningHours
+        phone_number: newPhoneNumber,
+        lat: newLat,
+        lng: newLng
+        //openingHours: newOpeningHours
       });
     } else {
       console.log('Autocomplete is not loaded yet!');
@@ -62,7 +66,7 @@ const EditMap = () => {
   };
 
   console.log(latlng);
-  console.log(information);
+  //console.log("information->", information);
 
   const mapJSX = () => {
     return (
@@ -97,9 +101,12 @@ const EditMap = () => {
   const updataBarInfomation = () => {
     const url = `http://localhost:3000/hashtag/${hashname}/edit/bar`;
     const data = {
-      latlng: {
-        lat: latlng.lat,
-        lng: latlng.lng
+      bar: {
+        name: barInfo.name,
+        address: barInfo.address,
+        phone_number: barInfo.phone_number,
+        lat: barInfo.lat,
+        lng: barInfo.lng
       }
     };
     const config = { withCredentials: true }
@@ -112,23 +119,23 @@ const EditMap = () => {
   const informationJSX = () => {
     return (
       <div>
-        <p>{information.name}</p>
-        <p>{information.address}</p>
-        <p>{information.phoneNumber}</p>
-        <button onClick={updataBarInfomation}>編集</button>
+        <p>{barInfo.name}</p>
+        <p>{barInfo.address}</p>
+        <p>{barInfo.phone_number}</p>
+        <button onClick={updataBarInfomation}>変更</button>
       </div>
     );
   };
 
   const informationComponent = informationJSX();
 
-  console.log(latlng);
+  console.log("barInfo ->", barInfo);
 
   return (
     <div>
       <h1>#{hashname} を編集する</h1>
       <div>{mapComponent}</div>
-      {information && <div>{informationComponent}</div>}
+      {barInfo && <div>{informationComponent}</div>}
     </div>
   );
 };
