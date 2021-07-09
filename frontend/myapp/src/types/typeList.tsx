@@ -26,16 +26,26 @@ export type TimelineType = {
   user_id: number
 };
 
+export type HashtagType = {
+  id: number,
+  hashname: string,
+  create_at: string,
+  updated_at: string
+};
+
 export type LatlngType = {
   lat: number,
   lng: number
 };
 
-export type InformationType = {
+
+export type BarInfoType = {
   name: string,
   address: string,
-  phoneNumber: string,
-  openingHours: string
+  phone_number: string,
+  openingHours: string,
+  lat: number,
+  lng: number
 };
 
 export type RecipeType = {

@@ -10,7 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_05_115450) do
+ActiveRecord::Schema.define(version: 2021_07_08_135256) do
+
+  create_table "bars", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "address"
+    t.string "name"
+    t.string "phone_number"
+    t.bigint "hashtag_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "lat"
+    t.float "lng"
+    t.index ["hashtag_id"], name: "index_bars_on_hashtag_id"
+  end
 
   create_table "favorites", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.integer "user_id"
@@ -91,6 +103,7 @@ ActiveRecord::Schema.define(version: 2021_07_05_115450) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "bars", "hashtags"
   add_foreign_key "latlngs", "hashtags"
   add_foreign_key "recipes", "hashtags"
   add_foreign_key "tweet_hashtag_relations", "hashtags"

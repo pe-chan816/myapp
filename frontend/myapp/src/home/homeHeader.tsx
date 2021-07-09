@@ -60,7 +60,6 @@ const HomeHeader = () => {
         <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
         <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
-        <Route path="/hashtag/:hashname/edit/map" exact component={EditMap} />
         <Route><h1>404 NOT FOUND</h1></Route>
       </Switch>
 
