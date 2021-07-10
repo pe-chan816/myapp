@@ -15,8 +15,9 @@ import TweetDetail from 'tweet/tweetDetail';
 import MyFavorite from 'favorite/myFavorite';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
-import EditMap from 'hashtag/editMap';
-import EditRecipe from 'hashtag/editRecipe';
+import SearchForm from 'search/searchForm';
+
+import SearchResult from 'search/searchResult';
 
 
 const HomeHeader = () => {
@@ -43,6 +44,7 @@ const HomeHeader = () => {
         <Link to="">ユーザー一覧</Link>
         <Link to={`/user/${currentUser.id}/favorite`}>マイいいね</Link>
         <Link to={`/hashtag/index`}>タグ一覧</Link>
+        <Link to={`/search`}>検索</Link>
         <Link to="/user/edit/account">アカウント設定</Link>
       </nav>
 
@@ -52,6 +54,7 @@ const HomeHeader = () => {
         <Route path="/tweet" exact component={TweetForm} />
         <Route path="/user/:userId/favorite" exact component={MyFavorite} />
         <Route path="/hashtag/index" exact component={HashtagIndex} />
+        <Route path="/search" component={SearchForm} />
         <Route path="/user/edit/account" exact component={UpdateUserSettings} />
 
         <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
@@ -60,8 +63,10 @@ const HomeHeader = () => {
         <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
         <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
-        <Route><h1>404 NOT FOUND</h1></Route>
+        <Route ><h3>そのページはご利用いただけません。他のページを探してみましょう。</h3></Route>
       </Switch>
+
+      <Route path="/search/:searchWord" exact component={SearchResult} />
 
       <button onClick={() => setModalState(true)}>モーダル</button>
       <button onClick={() => handleLogoutClick()}>ログアウト</button>

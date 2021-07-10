@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   post '/unfavorite', to:'favorites#destroy'
   get '/users/:id/myfavorite', to:'favorites#my_favorite'
 
-  get '/search', to:'searches#search'
+  get '/search/:search_word', to:'searches#search'
 
   get '/hashtag/:word', to:'hashtags#show'
   post '/hashtag/:word/edit/bar', to:'hashtags#update_bar_info'
