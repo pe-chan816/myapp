@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
+import { Link } from "react-router-dom";
 
 import { UserType, TweetType } from "types/typeList";
 
 import { CurrentUserContext } from "App";
+
 
 const TweetDetail = () => {
   const tweetId = Object.values(useParams());
@@ -70,7 +72,9 @@ const TweetDetail = () => {
   return (
     <div>
       {user.profile_image?.url && <img src={profileImageUrl} alt="user" />}
-      <p>{user.name}</p>
+      <Link to={`/user/${user.id}`}>
+        <p>{user.name}</p>
+      </Link>
       <p>{tweet.content}</p>
       {tweet.tweet_image?.url && <img src={tweetImageUrl} alt="tweet" />}
       <p>{tweet.created_at}</p>

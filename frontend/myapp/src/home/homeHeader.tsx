@@ -16,6 +16,8 @@ import MyFavorite from 'favorite/myFavorite';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
 import SearchForm from 'search/searchForm';
+import EditRecipe from 'hashtag/editRecipe';
+import EditMap from 'hashtag/editMap';
 
 import SearchResult from 'search/searchResult';
 
@@ -67,6 +69,7 @@ const HomeHeader = () => {
       </Switch>
 
       <Route path="/search/:searchWord" exact component={SearchResult} />
+
 
       <button onClick={() => setModalState(true)}>モーダル</button>
       <button onClick={() => handleLogoutClick()}>ログアウト</button>
