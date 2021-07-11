@@ -65,20 +65,20 @@ const HashtagDetail = () => {
   console.log("barInfo ->", barInfo);
 
   return (
-    <Router>
-      <TagDataContext.Provider value={{ tagData, setTagData }}>
-        <RecipeContext.Provider value={{ recipe, setRecipe }}>
-          <BarInfoContext.Provider value={{ barInfo, setBarInfo }}>
-            <div>
+    <TagDataContext.Provider value={{ tagData, setTagData }}>
+      <RecipeContext.Provider value={{ recipe, setRecipe }}>
+        <BarInfoContext.Provider value={{ barInfo, setBarInfo }}>
+          <div>
+            <Router>
               <Route path="/hashtag/:hashname" exact component={HashtagDetailContent} />
               <Route path="/hashtag/:hashname/edit/recipe" exact component={EditRecipe} />
               <Route path="/hashtag/:hashname/edit/map" exact component={EditMap} />
-              <div>{timeline}</div>
-            </div>
-          </BarInfoContext.Provider>
-        </RecipeContext.Provider>
-      </TagDataContext.Provider>
-    </Router>
+            </Router>
+            <div>{timeline}</div>
+          </div>
+        </BarInfoContext.Provider>
+      </RecipeContext.Provider>
+    </TagDataContext.Provider>
   );
 };
 

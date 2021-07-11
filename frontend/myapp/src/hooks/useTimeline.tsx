@@ -7,11 +7,13 @@ const useTimeline = (data: Partial<TimelineType[]>) => {
     if (e) {
       return (
         <div key={i}>
-          {e.profile_image?.url && <img src={`http://localhost:3000/${e.profile_image.url}`} alt="user" />}
-          <p>{e.name}</p>
-          <p>{e.content}</p>
-          {e.tweet_image?.url && <img src={`http://localhost:3000/${e.tweet_image.url}`} alt="tweet" />}
-          <p>{e.created_at}</p>
+          <Link to={`/tweets/${e.id}/detail`}>
+            {e.profile_image?.url && <img src={`http://localhost:3000/${e.profile_image.url}`} alt="user" />}
+            <p>{e.name}</p>
+            <p>{e.content}</p>
+            {e.tweet_image?.url && <img src={`http://localhost:3000/${e.tweet_image.url}`} alt="tweet" />}
+            <p>{e.created_at}</p>
+          </Link>
         </div>
       );
     }
