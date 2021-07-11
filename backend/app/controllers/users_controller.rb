@@ -96,8 +96,7 @@ class UsersController < ApplicationController
   def guest
     user = User.find_by(guest: true)
     log_in(user)
-    flash[:success] = "ようこそいらっしゃいました"
-    redirect_back_or user_path(user)
+    render json: { message: "ゲストユーザーとしてログイン"}
   end
 
   def favorite

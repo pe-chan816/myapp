@@ -3,6 +3,8 @@ import axios from 'axios';
 
 import { LoginStateContext } from 'App';
 
+import GuestLogin from 'login/guestLogin';
+
 const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,21 +15,21 @@ const Signup = () => {
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
-
-    axios.post("http://localhost:3000/signup", {
+    const url = `http://localhost:3000/signup`;
+    const data = {
       user: {
         name: name,
         email: email,
         password: password,
         password_confirmation: passwordConfirmation
       }
-    },
-      { withCredentials: true }
-    ).then(response => {
-      if (response.data.status === "created") {
+    };
+    const config = { withCredentials: true };
+    axios.post(url, data, config).then(res => {
+      if (res.data.status === "created") {
         setLoginState(true);
       }
-      console.log(response, "railsに値を渡しました");
+      console.log(res, "railsに値を渡しました");
     }).catch(error => [
       console.log(error, "エラーがあるよ")
     ]);
@@ -66,6 +68,8 @@ const Signup = () => {
 
         <button type="submit">!!アカウント作成!!</button>
       </form>
+
+      <GuestLogin />
     </div>
   );
 }
