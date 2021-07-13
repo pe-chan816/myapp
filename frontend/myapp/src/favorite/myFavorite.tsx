@@ -2,21 +2,15 @@ import axios from "axios";
 import { useState, useLayoutEffect } from "react";
 import { useParams } from "react-router";
 
-type DataType = {
-  content: string,
-  created_at: string,
-  id: number,
-  name: string,
-  profile_image?: { url: string },
-  tweet_image?: { url: string },
-  updated_at: string,
-  user_id: number
-}
+import { TimelineType } from "types/typeList";
+
+import useTimeline from "hooks/useTimeline";
+
 
 const MyFavorite = (props: any) => {
   console.log(props);
   const userId = Object.values(useParams());
-  const [data, setData] = useState<Partial<DataType[]>>([]);
+  const [data, setData] = useState<Partial<TimelineType[]>>([]);
 
   const getFavoriteData = () => {
     setData([]);
@@ -24,12 +18,13 @@ const MyFavorite = (props: any) => {
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
-      res.data.my_favorites.forEach((e: DataType) => setData(data => [...data, e]));
+      res.data.my_favorites.forEach((e: TimelineType) => setData(data => [...data, e]));
     });
   };
 
   useLayoutEffect(getFavoriteData, []);
 
+  /*
   const timeline = data.map((e, i) => {
     if (e) {
       return (
@@ -43,7 +38,8 @@ const MyFavorite = (props: any) => {
       );
     }
   });
-
+*/
+  const timeline = useTimeline(data);
 
   console.log(data);
   return (

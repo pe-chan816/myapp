@@ -23,7 +23,8 @@ export type TimelineType = {
   profile_image?: { url: string },
   tweet_image?: { url: string },
   updated_at: string,
-  user_id: number
+  user_id: number,
+  hashname: HashtagType[]
 };
 
 export type HashtagType = {

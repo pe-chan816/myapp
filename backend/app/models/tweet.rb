@@ -18,6 +18,8 @@ class Tweet < ApplicationRecord
     self.favorites.where(user_id: user.id).exists?
   end
 
+=begin
+  #  ツイート中にハッシュタグは埋めないことになったので不要
   after_create do
     tweet = Tweet.find(self.id)
     hashtag = self.content.scan(/[#＃][\w\p{Han}ぁ-ヶｦ-ﾟー]+/)
@@ -28,7 +30,6 @@ class Tweet < ApplicationRecord
   end
 
   # ツイート編集できる場合はこちらも
-=begin
   before_before do
     tweet = Tweet.find(self.id)
     tweet.hashtags.clear

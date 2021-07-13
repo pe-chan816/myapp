@@ -49,15 +49,18 @@ class UsersController < ApplicationController
 
   def show
     user = User.find(params[:id])
-    base_data = Tweet.joins(:user).select("tweets.*, users.name, users.profile_image")\
-                                  .where("user_id = ?", user.id)
-    data = []
+    base_data = Tweet.left_joins(:user,:hashtags)\
+                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
+                     .where("user_id = ?", user.id)
+    array_data = []
     base_data.each do |d|
       user = User.find(d.user_id)
       d.profile_image = user.profile_image
-      data.push(d)
+      d.hashname = d.hashtags
+      array_data.push(d)
     end
 
+    data = array_data.uniq
     followings = user.following
     followings_count = followings.count
     followers = user.followers
