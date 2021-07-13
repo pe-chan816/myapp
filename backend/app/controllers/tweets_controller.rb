@@ -3,8 +3,15 @@ class TweetsController < ApplicationController
   before_action :correct_user, only:[:destroy]
 
   def create
-    @tweet = current_user.tweets.build(tweet_params)
-    if @tweet.save
+    tweet = current_user.tweets.build(tweet_params)
+    recieved_tag = params[:hashtag]
+    hashtag = recieved_tag.split(/,/) #受け取った:hashtagはstringなので配列に直す
+
+    if tweet.save
+      hashtag.uniq.map do |h| #すでにタグがあるかどうかを確認しつつリレーションシップを結んでいく
+        tag = Hashtag.find_or_create_by(hashname: h.downcase)
+        tweet.hashtags << tag
+      end
       render json: {message: "メッセージ投稿！"}
     else
       render json: {message: "メッセージ投稿失敗..."}
@@ -17,12 +24,23 @@ class TweetsController < ApplicationController
   end
 
   def show
+##
     tweet = Tweet.find(params[:id])
-    user = tweet.user
+    base_data = Tweet.left_joins(:user,:hashtags)\
+                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
+                     .where("tweets.id = ?", tweet.id)
+    array_data = []
+    base_data.each do |d|
+      user = User.find(d.user_id)
+      d.profile_image = user.profile_image
+      d.hashname = d.hashtags
+      array_data.push(d)
+    end
+    data = array_data.uniq
+##
     favorite_count = tweet.favorites.count
     favorite_or_not = tweet.favorited?(current_user)
-    render json: {tweet: tweet,
-                  user: user,
+    render json: {tweet: data,
                   favorite_count: favorite_count,
                   favorite_or_not: favorite_or_not}
   end

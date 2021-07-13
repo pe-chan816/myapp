@@ -5,6 +5,19 @@ class HashtagsController < ApplicationController
     hashtag = Hashtag.find_by(hashname: params[:word])
 
     tweet_id = hashtag.tweet_ids
+    base_data = Tweet.left_joins(:user,:hashtags)\
+                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
+                     .where(id: tweet_id)
+    array_data = []
+    base_data.each do |d|
+      user = User.find(d.user_id)
+      d.profile_image = user.profile_image
+      d.hashname = d.hashtags
+      array_data.push(d)
+    end
+    tweets = array_data.uniq
+=begin
+    tweet_id = hashtag.tweet_ids
     base_data = Tweet.joins(:user).select("tweets.*, users.name, users.profile_image").where(id: tweet_id)
     tweets = []
     base_data.each do |d|
@@ -12,7 +25,7 @@ class HashtagsController < ApplicationController
       d.profile_image = user.profile_image
       tweets.push(d)
     end
-
+=end
     recipes = hashtag.recipes
 
     bar_info = hashtag.bars

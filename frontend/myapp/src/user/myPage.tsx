@@ -51,6 +51,7 @@ const MyPage = (props: any) => {
     })
   }
   useEffect(getData, [props.location.pathname]);
+  console.log(data);
 
   const Timeline = useTimeline(data);
 
