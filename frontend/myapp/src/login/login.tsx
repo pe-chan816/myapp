@@ -1,42 +1,49 @@
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
-import { LoginStateContext } from 'App';
-import { CurrentUserContext } from 'App';
-
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { setLoginState } = useContext(LoginStateContext);
-  const { setCurrentUser } = useContext(CurrentUserContext);
+  const [email, setEmail] = useState<Partial<string>>("");
+  const [password, setPassword] = useState<Partial<string>>("");
+  const [message, setMessage] = useState<Partial<string[]>>([]);
 
   const handleSubmit = (e: any) => {
     console.log("ログインイベント発火");
+    setMessage([]);
 
-    axios.post("http://localhost:3000/login", {
+    const url = `http://localhost:3000/login`;
+    const data = {
       user: {
         email: email,
         password: password
       }
-    },
-      { withCredentials: true }
-    ).then(response => {
-      if (response.data.logged_in === true) {
-        setCurrentUser(response.data.user);
-        setLoginState(true);
-        console.log("login response: ", response);
+    };
+    const config = { withCredentials: true };
+
+    axios.post(url, data, config).then(res => {
+      if (res.data.logged_in === true) {
+        window.location.replace(`http://localhost:8000/`);
+      } else {
+        res.data.errors.forEach((e: string) => setMessage(message => [...message, e]));
+        setPassword("");
       }
-    }).catch(error => [
-      console.log(error, "エラーがあるよ")
-    ]);
+    });
 
     e.preventDefault();
-  }
+  };
+
+  const errorMessage = message.map((e, i) => {
+    return (
+      <div key={i}>
+        {e}
+      </div>
+    );
+  });
 
   return (
     <div>
       <h2>アカウントログイン</h2>
+      {message &&
+        <div>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -50,7 +57,6 @@ const Login = () => {
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)} />
-
         <button type="submit">!!ログイン!!</button>
       </form>
     </div>
