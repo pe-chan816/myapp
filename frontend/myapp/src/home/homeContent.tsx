@@ -34,7 +34,8 @@ const HomeContent = () => {
   return (
     <>
       <button onClick={getContents}>更新</button>
-      {Timeline}
+      {data.toString() !== [].toString() &&
+        Timeline}
     </>
   );
 }

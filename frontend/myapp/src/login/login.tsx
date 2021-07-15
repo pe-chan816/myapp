@@ -26,6 +26,8 @@ const Login = () => {
         res.data.errors.forEach((e: string) => setMessage(message => [...message, e]));
         setPassword("");
       }
+    }).catch(error => {
+      console.log("エラーあり ->", error);
     });
 
     e.preventDefault();
@@ -45,13 +47,17 @@ const Login = () => {
       {message &&
         <div>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
+        <label htmlFor="email_field">Email:</label>
         <input
+          id="email_field"
           type="email"
           name="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)} />
+        <label htmlFor="password_field">Password:</label>
         <input
+          id="password_firld"
           type="password"
           name="password"
           placeholder="パスワード"
