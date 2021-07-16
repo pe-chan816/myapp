@@ -10,6 +10,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [message, setMessage] = useState<Partial<string[]>>([]);
 
   const { setLoginState } = useContext(LoginStateContext);
 
@@ -28,6 +29,11 @@ const Signup = () => {
     axios.post(url, data, config).then(res => {
       if (res.data.status === "created") {
         setLoginState(true);
+        window.location.replace(`http://localhost:8000/`);
+      } else {
+        res.data.messages.forEach((e: string) => setMessage(message => [...message, e]));
+        setPassword("");
+        setPasswordConfirmation("");
       }
       console.log(res, "railsに値を渡しました");
     }).catch(error => [
@@ -36,36 +42,52 @@ const Signup = () => {
 
     e.preventDefault();
   }
+  const errorMessage = message.map((e, i) => {
+    return (
+      <div key={i}>
+        {e}
+      </div>
+    );
+  });
 
   return (
     <div>
       <h2>新規アカウント登録</h2>
+      {message &&
+        <div>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
+        <label htmlFor="name_field">Name:</label>
         <input
+          id="name_field"
           type="text"
           name="name"
-          placeholder="名前"
+          placeholder="ハンドルネーム"
           value={name}
           onChange={(e) => setName(e.target.value)} />
+        <label htmlFor="email_field">Email:</label>
         <input
+          id="email_field"
           type="email"
           name="email"
           placeholder="メールアドレス"
           value={email}
           onChange={(e) => setEmail(e.target.value)} />
+        <label htmlFor="password_field">Password:</label>
         <input
+          id="password_field"
           type="password"
           name="password"
           placeholder="パスワード"
           value={password}
           onChange={(e) => setPassword(e.target.value)} />
+        <label htmlFor="pass_confirmation_field"></label>
         <input
+          id="pass_confirmation_field"
           type="password"
           name="password_confirmation"
           placeholder="もう一度パスワードを入力してください"
           value={passwordConfirmation}
           onChange={(e) => setPasswordConfirmation(e.target.value)} />
-
         <button type="submit">!!アカウント作成!!</button>
       </form>
 
