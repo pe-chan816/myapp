@@ -76,7 +76,7 @@ const UpdateUserSettings = () => {
 
   return (
     <div>
-      <h1>UPDATE USER SETTING</h1>
+      <h3>ユーザーアカウント設定</h3>
       <form onSubmit={handleSubmit}>
         <div>
           <span>名前 : </span>
