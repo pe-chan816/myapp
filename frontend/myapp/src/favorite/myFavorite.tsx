@@ -44,7 +44,7 @@ const MyFavorite = (props: any) => {
   console.log(data);
   return (
     <div>
-      <h1>my favorite</h1>
+      <h3>いいねしたツイート</h3>
       <div>{timeline}</div>
     </div>
   );

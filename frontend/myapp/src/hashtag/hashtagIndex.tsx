@@ -40,7 +40,7 @@ const HashtagIndex = () => {
 
   return (
     <div>
-      <h1>hashtag index</h1>
+      <h3>ハッシュタグ一覧</h3>
       <div>{hashtagIndexContent}</div>
     </div>
   );

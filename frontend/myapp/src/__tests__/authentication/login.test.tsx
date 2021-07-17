@@ -39,7 +39,8 @@ describe("ログイン成功時の挙動", () => {
         user: { id: 1 }
       })
     //HomeContent用
-    mock.onGet("http://localhost:3000").reply(200);
+    mock.onGet("http://localhost:3000")
+      .reply(200);
 
     act(() => {
       render(

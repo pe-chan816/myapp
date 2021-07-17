@@ -43,7 +43,6 @@ const HomeHeader = () => {
       <nav>
         <Link to={`/user/${currentUser.id}`}>マイページ</Link>
         <Link to="/tweet">ツイート</Link>
-        <Link to="">ユーザー一覧</Link>
         <Link to={`/user/${currentUser.id}/favorite`}>マイいいね</Link>
         <Link to={`/hashtag/index`}>タグ一覧</Link>
         <Link to={`/search`}>検索</Link>

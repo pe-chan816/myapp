@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 
 const TweetForm = () => {
+  console.log("!!TweetForm!!");
+
   const [content, setContent] = useState<string>("");
   const [newTag, setNewTag] = useState<string>("");
   const [hashtag, setHashtag] = useState<string[]>([]);
