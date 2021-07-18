@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 
-import { UserType, TweetType, TimelineType } from 'types/typeList';
+import { UserType, TimelineType } from 'types/typeList';
 
 import { CurrentUserContext, UserContext } from 'App';
 import { FollowOrNotContext } from 'App';
@@ -23,7 +23,6 @@ const MyPage = (props: any) => {
   const [followingsNumber, setFollowingsNumber] = useState<number>(0);
   const [followers, setFollowers] = useState<UserType[]>([]);
   const [followersNumber, setFollowersNumber] = useState<number>(0);
-  //const [tweet, setTweet] = useState<TweetType[]>([]);
 
   const resetData = () => {
     setFollowings([]);
@@ -46,12 +45,11 @@ const MyPage = (props: any) => {
       setFollowingsNumber(res.data.followings_count);
       res.data.followers.forEach((e: UserType) => setFollowers(followers => [...followers, e]));
       setFollowersNumber(res.data.followers_count);
-
-      console.log("fetched rails");
-    })
-  }
+    }).catch(error => {
+      console.log(error);
+    });
+  };
   useEffect(getData, [props.location.pathname]);
-  console.log(data);
 
   const Timeline = useTimeline(data);
 
@@ -75,20 +73,24 @@ const MyPage = (props: any) => {
         const url = `http://localhost:3000/relationships`;
         const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
-        axios.post(url, sendData, config).then(response => {
-          console.log(response.data);
+        axios.post(url, sendData, config).then(res => {
+          console.log(res.data);
           setFollowOrNot(true);
-          setFollowersNumber(response.data.number_of_followers);
+          setFollowersNumber(res.data.number_of_followers);
+        }).catch(error => {
+          console.log(error);
         });
       };
       const clickUnfollow = () => {
         const url = `http://localhost:3000/unfollow`;
         const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
-        axios.post(url, sendData, config).then(response => {
-          console.log(response.data);
+        axios.post(url, sendData, config).then(res => {
+          console.log(res.data);
           setFollowOrNot(false);
-          setFollowersNumber(response.data.number_of_followers);
+          setFollowersNumber(res.data.number_of_followers);
+        }).catch(error => {
+          console.log(error);
         });
       };
 
