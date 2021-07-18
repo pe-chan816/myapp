@@ -22,10 +22,11 @@ const UserRelationship = () => {
   const data: userType[] = location.state;
   const { user } = useContext(UserContext);
 
+  console.log(location);
   console.log(user);
 
   const mapUserData = data.map((e: userType, i) => {
-    const imageUrl = `http://localhost:3000/${e.profile_image.url}`;
+    const imageUrl = `http://localhost:3000/${e.profile_image?.url}`;
     const userUrl = `/user/${e.id}`;
 
     return (
