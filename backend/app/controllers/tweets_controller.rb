@@ -12,9 +12,6 @@ class TweetsController < ApplicationController
         tag = Hashtag.find_or_create_by(hashname: h.downcase)
         tweet.hashtags << tag
       end
-      render json: {message: "メッセージ投稿！"}
-    else
-      render json: {message: "メッセージ投稿失敗..."}
     end
   end
 

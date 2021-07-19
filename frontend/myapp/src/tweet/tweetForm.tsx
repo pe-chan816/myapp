@@ -10,8 +10,12 @@ const TweetForm = () => {
   const [image, setImage] = useState<File>();
   const [preview, setPreview] = useState<string>("");
 
+  const [message, setMessage] = useState<string>("");
+
   const clickSubmit = async () => {
     console.log("ツイート投稿");
+
+    setMessage("");
 
     const url = `http://localhost:3000/tweets`;
     const data = await tweetData();
@@ -19,12 +23,12 @@ const TweetForm = () => {
       withCredentials: true,
       headers: { 'content-type': 'multipart/form-data' }
     };
-
-    await axios.post(url, data, config).then(response => {
-      console.log(response);
+    await axios.post(url, data, config).then(res => {
+      console.log("res=>", res);
       window.location.replace(`http://localhost:8000/`);
     }).catch(error => {
       console.log("エラーがあります", error);
+      setMessage("ツイートの中身が空のままです");
     });
   };
 
@@ -60,7 +64,6 @@ const TweetForm = () => {
 
     return (
       <div>
-        <p>ここにハッシュタグ</p>
         <div>{hashtags}</div>
         <input
           name="tag"
@@ -75,10 +78,10 @@ const TweetForm = () => {
 
   const hashtagForm = inputTag();
 
-  console.log(hashtag);
+  console.log(content);
+
   return (
     <div>
-      <h1>TWEET FORM</h1>
       <input
         name="content"
         type="text"
@@ -96,7 +99,7 @@ const TweetForm = () => {
         }} />
       {preview && <img src={preview} alt="preview" />}
       <button onClick={clickSubmit}>投稿</button>
-
+      {message && <p>{message}</p>}
     </div>
   );
 };
