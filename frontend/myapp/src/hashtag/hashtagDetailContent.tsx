@@ -65,10 +65,12 @@ const HashtagDetailContent = () => {
         <p>BARについてのものならGooglemapを利用してお店の情報を登録してみましょう！</p>
         <div>
           <input
-            type="radio" name="tag"
-            onChange={() => { setShowRecipeEdit(true); setShowBarInfoEdit(false); }} />カクテル
-          <input type="radio" name="tag"
-            onChange={() => { setShowBarInfoEdit(true); setShowRecipeEdit(false); }} />BAR
+            type="radio" name="tag" id="cocktail_radio"
+            onChange={() => { setShowRecipeEdit(true); setShowBarInfoEdit(false); }} />
+          <label htmlFor="cocktail_radio">カクテル</label>
+          <input type="radio" name="tag" id="bar_info_radio"
+            onChange={() => { setShowBarInfoEdit(true); setShowRecipeEdit(false); }} />
+          <label htmlFor="bar_info_radio">BAR</label>
         </div>
         {showRecipeEdit &&
           <Link to={`/hashtag/${tagData.hashname}/edit/recipe`}>レシピ編集</Link>}
