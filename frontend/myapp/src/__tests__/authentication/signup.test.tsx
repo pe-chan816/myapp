@@ -34,7 +34,19 @@ describe("アカウント作成成功時の挙動", () => {
         user: { id: 1 }
       })
     //HomeContent用
-    mock.onGet("http://localhost:3000").reply(200);
+    mock.onGet("http://localhost:3000")
+      .reply(200,
+        {
+          home_data: [{
+            id: 2,
+            content: "ノンアルコールでお願いします",
+            user_id: 2,
+            name: "Mr.下戸",
+            hashname: [{
+              hashname: "飲めない"
+            }]
+          }]
+        });;
 
     act(() => {
       render(
@@ -60,8 +72,7 @@ describe("アカウント作成成功時の挙動", () => {
       userEvent.click(button);
     });
 
-    // <Link>を踏むわけではないのでテスト上は空のコンテンツのURLを踏むことになる
-    expect(await screen.findByText("そのページはご利用いただけません。他のページを探してみましょう。")).toBeInTheDocument();
+    expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
   });
 });
 

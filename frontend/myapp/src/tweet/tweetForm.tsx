@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 
 const TweetForm = () => {
@@ -11,6 +12,7 @@ const TweetForm = () => {
   const [preview, setPreview] = useState<string>("");
 
   const [message, setMessage] = useState<string>("");
+  const history = useHistory();
 
   const clickSubmit = async () => {
     console.log("ツイート投稿");
@@ -25,7 +27,7 @@ const TweetForm = () => {
     };
     await axios.post(url, data, config).then(res => {
       console.log("res=>", res);
-      window.location.replace(`http://localhost:8000/`);
+      history.push("/");
     }).catch(error => {
       console.log("エラーがあります", error);
       setMessage("ツイートの中身が空のままです");

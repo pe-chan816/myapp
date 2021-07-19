@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import { LoginStateContext } from 'App';
@@ -11,8 +12,8 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [message, setMessage] = useState<Partial<string[]>>([]);
-
   const { setLoginState } = useContext(LoginStateContext);
+  const histroy = useHistory();
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
@@ -29,7 +30,8 @@ const Signup = () => {
     axios.post(url, data, config).then(res => {
       if (res.data.status === "created") {
         setLoginState(true);
-        window.location.replace(`http://localhost:8000/`);
+        histroy.push("/");
+        //window.location.replace(`http://localhost:8000/`);
       } else {
         res.data.messages.forEach((e: string) => setMessage(message => [...message, e]));
         setPassword("");
