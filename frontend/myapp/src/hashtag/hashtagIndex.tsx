@@ -2,19 +2,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-type hashtagType = {
-  id: number,
-  hashname: string,
-  create_at: string,
-  updated_at: string,
-  count: number
-}
+import { HashtagType } from "types/typeList";
 
 const HashtagIndex = () => {
   console.log("!!hashtagIndex!!");
 
-  const [data, setData] = useState<hashtagType[]>([]);
-
+  const [data, setData] = useState<HashtagType[]>([]);
 
   const getIndexData = () => {
     console.log("!!getIndexData!!");
@@ -22,10 +15,11 @@ const HashtagIndex = () => {
     const url = `http://localhost:3000/hashtags`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      res.data.hashtags.forEach((e: hashtagType) => setData(data => [...data, e]));
+      res.data.hashtags.forEach((e: HashtagType) => setData(data => [...data, e]));
+    }).catch(error => {
+      console.log("error ->", error);
     });
   };
-
   useEffect(getIndexData, []);
 
   const hashtagIndexContent = data.map((e, i) => {

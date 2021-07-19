@@ -31,7 +31,8 @@ export type HashtagType = {
   id: number,
   hashname: string,
   create_at: string,
-  updated_at: string
+  updated_at: string,
+  count?: number
 };
 
 export type LatlngType = {
