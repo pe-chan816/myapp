@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
+
+import { LoginStateContext } from 'App';
 
 const Login = () => {
   const [email, setEmail] = useState<Partial<string>>("");
   const [password, setPassword] = useState<Partial<string>>("");
   const [message, setMessage] = useState<Partial<string[]>>([]);
+  const { setLoginState } = useContext(LoginStateContext);
+  const histroy = useHistory();
 
   const handleSubmit = (e: any) => {
-    console.log("ログインイベント発火");
+    console.log("!!handleSubmit!!");
     setMessage([]);
 
     const url = `http://localhost:3000/login`;
@@ -21,7 +26,8 @@ const Login = () => {
 
     axios.post(url, data, config).then(res => {
       if (res.data.logged_in === true) {
-        window.location.replace(`http://localhost:8000/`);
+        setLoginState(true);
+        histroy.push("/");
       } else {
         res.data.errors.forEach((e: string) => setMessage(message => [...message, e]));
         setPassword("");
