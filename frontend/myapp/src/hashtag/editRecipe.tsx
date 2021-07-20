@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { RecipeContext } from "hashtag/hashtagDetail";
 
 import { RecipeType } from "types/typeList";
+import { createNoSubstitutionTemplateLiteral } from "typescript";
 
 const EditRecipe = () => {
   const hashname = Object.values(useParams());
