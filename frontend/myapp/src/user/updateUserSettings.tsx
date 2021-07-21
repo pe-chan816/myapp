@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 import { LoginStateContext } from "App";
 import { CurrentUserContext } from "App";
@@ -18,6 +19,7 @@ const UpdateUserSettings = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   const [preview, setPreview] = useState<string>("");
+  const history = useHistory();
 
   const handleSubmit = async (e: any) => {
     const url = `http://localhost:3000/users/${currentUser.id}`;
@@ -27,16 +29,16 @@ const UpdateUserSettings = () => {
       headers: { 'content-type': 'multipart/form-data' }
     };
     console.log(data);
-    axios.patch(url, data, config).then(response => {
-      if (response.data.user) {
-        setCurrentUser(response.data.user);
-        console.log(response);
+    axios.patch(url, data, config).then(res => {
+      if (res.data.user) {
+        setCurrentUser(res.data.user);
+        history.push("/user/edit/account")
       } else {
-        console.log(response);
-        response.data.messages.forEach((e: string) => setMessage((message: string[]) => [...message, e]));
+        console.log(res);
+        res.data.messages.forEach((e: string) => setMessage((message: string[]) => [...message, e]));
       }
     }).catch(error => {
-      console.log(error, "エラーがあるよ")
+      console.log("error->", error);
     });
 
     e.preventDefault();
@@ -51,7 +53,10 @@ const UpdateUserSettings = () => {
         console.log(res)
         setCurrentUser({});
         setLoginState(false);
-        window.location.replace(`http://localhost:8000`)
+        history.push("/");
+        //window.location.replace(`http://localhost:8000`);
+      }).catch(error => {
+        console.log("error->", error);
       });
     };
   };
@@ -79,16 +84,18 @@ const UpdateUserSettings = () => {
       <h3>ユーザーアカウント設定</h3>
       <form onSubmit={handleSubmit}>
         <div>
-          <span>名前 : </span>
+          <label htmlFor="setting_name">名前 : </label>
           <input
+            id="setting_name"
             name="name"
             type="text"
             placeholder={`${currentUser.name}`}
             onChange={(e) => setName(e.target.value)} />
         </div>
         <div>
-          <span>プロフィール画像 : </span>
+          <label htmlFor="setting_image">プロフィール画像 : </label>
           <input
+            id="setting_image"
             name="image"
             type="file"
             onChange={(e) => {
@@ -101,8 +108,9 @@ const UpdateUserSettings = () => {
           {preview && <img src={preview} alt="profile" />}
         </div>
         <div>
-          <span>Email : </span>
+          <label htmlFor="setting_email">Email : </label>
           <input
+            id="setting_email"
             name="email"
             type="email"
             placeholder={`${currentUser.email}`}
