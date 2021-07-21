@@ -45,7 +45,7 @@ const HomeHeader = () => {
         <Link to="/tweet">ツイート</Link>
         <Link to={`/user/${currentUser.id}/favorite`}>マイいいね</Link>
         <Link to={`/hashtag/index`}>タグ一覧</Link>
-        <Link to={`/search`}>検索</Link>
+        <Link to={`/search`}>キーワード検索</Link>
         <Link to="/user/edit/account">アカウント設定</Link>
       </nav>
 
