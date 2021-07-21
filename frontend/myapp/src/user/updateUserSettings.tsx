@@ -84,16 +84,18 @@ const UpdateUserSettings = () => {
       <h3>ユーザーアカウント設定</h3>
       <form onSubmit={handleSubmit}>
         <div>
-          <span>名前 : </span>
+          <label htmlFor="setting_name">名前 : </label>
           <input
+            id="setting_name"
             name="name"
             type="text"
             placeholder={`${currentUser.name}`}
             onChange={(e) => setName(e.target.value)} />
         </div>
         <div>
-          <span>プロフィール画像 : </span>
+          <label htmlFor="setting_image">プロフィール画像 : </label>
           <input
+            id="setting_image"
             name="image"
             type="file"
             onChange={(e) => {
@@ -106,8 +108,9 @@ const UpdateUserSettings = () => {
           {preview && <img src={preview} alt="profile" />}
         </div>
         <div>
-          <span>Email : </span>
+          <label htmlFor="setting_email">Email : </label>
           <input
+            id="setting_email"
             name="email"
             type="email"
             placeholder={`${currentUser.email}`}
