@@ -57,7 +57,7 @@ describe("ログイン時のホームヘッダー", () => {
     expect(await screen.findByText("ツイート")).toBeInTheDocument();
     expect(await screen.findByText("マイいいね")).toBeInTheDocument();
     expect(await screen.findByText("タグ一覧")).toBeInTheDocument();
-    expect(await screen.findByText("検索")).toBeInTheDocument();
+    expect(await screen.findByText("キーワード検索")).toBeInTheDocument();
     expect(await screen.findByText("アカウント設定")).toBeInTheDocument();
   });
 
@@ -97,7 +97,7 @@ describe("ログイン時のホームヘッダー", () => {
 
   it("'検索'のリンクが正常に動作する", async () => {
     renderLoginSituation();
-    const target = await screen.findByText("検索");
+    const target = await screen.findByText("キーワード検索");
     act(() => { userEvent.click(target) });
 
     expect(await screen.findByPlaceholderText("検索したいキーワード")).toBeInTheDocument();

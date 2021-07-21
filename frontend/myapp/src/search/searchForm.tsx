@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SearchForm = () => {
+  console.log("!!searchForm!!");
   const [searchWord, setSearchWord] = useState<string>("");
 
   return (
