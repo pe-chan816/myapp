@@ -12,7 +12,8 @@ class SessionsController < ApplicationController
       #redirect_back_or user_path(user)
     else
       render json: { status: 401,
-                     errors: ["認証に失敗しました", "正しいメールアドレス・パスワードを入力し直すか、新規登録を行ってください"]}
+                     errors: ["認証に失敗しました。",
+                              "正しいメールアドレス・パスワードを入力し直すか、新規登録を行ってください。"]}
       #render 'new'
     end
   end

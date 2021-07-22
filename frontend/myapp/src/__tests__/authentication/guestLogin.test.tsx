@@ -48,7 +48,7 @@ describe("ゲストログイン機能の挙動", () => {
 
     userEvent.click(screen.getByRole("link", { name: "アカウント登録" })); //アカウント登録画面に移動
 
-    const button = screen.getByRole("button", { name: "ゲストログイン" });
+    const button = screen.getByRole("button", { name: "ゲストとして利用してみる" });
     userEvent.click(button);
 
     expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();

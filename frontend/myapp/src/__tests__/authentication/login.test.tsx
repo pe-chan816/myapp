@@ -21,7 +21,7 @@ describe("ログインフォーム", () => {
     renderDOM();
     expect(screen.getByPlaceholderText("メールアドレス")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("パスワード")).toBeInTheDocument();
-    expect(screen.getByText("!!ログイン!!")).toBeInTheDocument();
+    expect(screen.getByText("ログイン")).toBeInTheDocument();
   });
 });
 
@@ -63,9 +63,10 @@ describe("ログイン成功時の挙動", () => {
 
     userEvent.click(screen.getByRole("link", { name: "ログイン" })) //ログイン画面に移動
 
-    const emailForm = screen.getByRole("textbox", { name: "Email:" });
+    //const emailForm = screen.getByRole("textbox", { name: "Email:" });
+    const emailForm = screen.getByPlaceholderText("メールアドレス");
     const passwordForm = screen.getByPlaceholderText("パスワード");
-    const button = screen.getByRole("button", { name: "!!ログイン!!" });
+    const button = screen.getByRole("button", { name: "ログイン" });
     act(() => {
       userEvent.type(emailForm, "email@email.com");
       userEvent.type(passwordForm, "password");
@@ -78,9 +79,10 @@ describe("ログイン成功時の挙動", () => {
 
 describe("ログイン失敗時の挙動", () => {
   const failLogin = () => {
-    const emailForm = screen.getByRole("textbox", { name: "Email:" });
+    //const emailForm = screen.getByRole("textbox", { name: "Email" });
+    const emailForm = screen.getByPlaceholderText("メールアドレス");
     const passwordForm = screen.getByPlaceholderText("パスワード");
-    const button = screen.getByRole("button", { name: "!!ログイン!!" });
+    const button = screen.getByRole("button", { name: "ログイン" });
     const mock = new MockAdapter(axios);
     mock.onPost("http://localhost:3000/login")
       .reply(200, { errors: ["ログイン失敗"] });
@@ -100,11 +102,12 @@ describe("ログイン失敗時の挙動", () => {
     expect(await screen.findByText("ログイン失敗")).toBeInTheDocument();
   });
 
-  it("passwordのvalueがクリアされplaceholderが表示される", async () => {
+  it("passwordのvalueがクリアされる", async () => {
     act(() => {
       renderDOM();
     });
     failLogin();
-    expect(await screen.findByPlaceholderText("パスワード")).toBeInTheDocument();
+    //expect(await screen.findByPlaceholderText("パスワード")).toBeInTheDocument();
+    expect(await screen.queryByDisplayValue("wrong_password")).not.toBeInTheDocument();
   });
 });
