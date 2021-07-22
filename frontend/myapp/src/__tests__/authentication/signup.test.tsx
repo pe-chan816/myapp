@@ -16,7 +16,7 @@ describe("アカウント登録フォーム", () => {
     expect(screen.getByPlaceholderText("ハンドルネーム")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("メールアドレス")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("パスワード")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("もう一度パスワードを入力してください")).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("もう一度パスワードを入力してください")).not.toBeInTheDocument();
   });
 });
 
@@ -54,23 +54,27 @@ describe("アカウント作成成功時の挙動", () => {
           <App />
         </Router>
       );
+
+      userEvent.click(screen.getByRole("link", { name: "アカウント登録" })) //アカウント作成画面に移動
     });
 
-    userEvent.click(screen.getByRole("link", { name: "アカウント登録" })) //アカウント作成画面に移動
-
-    const nameForm = screen.getByRole("textbox", { name: "Name:" });
-    const emailForm = screen.getByRole("textbox", { name: "Email:" });
+    const nameForm = screen.getByPlaceholderText("ハンドルネーム");
+    const emailForm = screen.getByPlaceholderText("メールアドレス");;
     const passwordForm = screen.getByPlaceholderText("パスワード");
-    const passConfForm = screen.getByPlaceholderText("もう一度パスワードを入力してください");
-    const button = screen.getByRole("button", { name: "!!アカウント作成!!" });
+    const button = screen.getByRole("button", { name: "アカウント作成" });
 
     act(() => {
       userEvent.type(nameForm, "somebody");
       userEvent.type(emailForm, "email@email.com");
       userEvent.type(passwordForm, "password");
-      userEvent.type(passConfForm, "password");
-      userEvent.click(button);
     });
+
+    act(() => {
+      const passConfForm = screen.getByPlaceholderText("もう一度パスワードを入力してください");
+      userEvent.type(passConfForm, "password");
+    });
+
+    act(() => { userEvent.click(button); });
 
     expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
   });
@@ -81,7 +85,7 @@ describe("アカウント作成失敗時の挙動", () => {
     act(() => {
       render(<Signup />);
     })
-    const button = screen.getByRole("button", { name: "!!アカウント作成!!" });
+    const button = screen.getByRole("button", { name: "アカウント作成" });
 
     const mock = new MockAdapter(axios);
     mock.onPost("http://localhost:3000/signup")
@@ -96,20 +100,20 @@ describe("アカウント作成失敗時の挙動", () => {
       render(<Signup />);
     })
     const passwordForm = screen.getByPlaceholderText("パスワード");
-    const passConfForm = screen.getByPlaceholderText("もう一度パスワードを入力してください");
-    const button = screen.getByRole("button", { name: "!!アカウント作成!!" });
+    const button = screen.getByRole("button", { name: "アカウント作成" });
 
     const mock = new MockAdapter(axios);
     mock.onPost("http://localhost:3000/signup")
       .reply(200, { messages: ["some error message"] });
 
+    act(() => { userEvent.type(passwordForm, "wrong_password"); });
     act(() => {
-      userEvent.type(passwordForm, "wrong_password");
+      const passConfForm = screen.getByPlaceholderText("もう一度パスワードを入力してください");
       userEvent.type(passConfForm, "very_wrong_password");
-      userEvent.click(button)
     });
+    act(() => { userEvent.click(button); });
 
     expect(await screen.findByPlaceholderText("パスワード")).toBeInTheDocument();
-    expect(await screen.findByPlaceholderText("もう一度パスワードを入力してください")).toBeInTheDocument();
+    expect(screen.queryByPlaceholderText("もう一度パスワードを入力してください")).not.toBeInTheDocument();
   });
 });

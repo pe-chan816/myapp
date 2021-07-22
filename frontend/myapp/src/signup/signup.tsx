@@ -1,6 +1,8 @@
+import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
+
+import { Button, makeStyles, TextField } from '@material-ui/core';
 
 import { LoginStateContext } from 'App';
 
@@ -14,6 +16,27 @@ const Signup = () => {
   const [message, setMessage] = useState<Partial<string[]>>([]);
   const { setLoginState } = useContext(LoginStateContext);
   const histroy = useHistory();
+
+  const useStyles = makeStyles({
+    button: {
+      marginTop: 10
+    },
+    error: {
+      color: "firebrick"
+    },
+    paper: {
+      alignItems: "center",
+      display: "flex",
+      flexDirection: "column",
+      margin: "0 auto",
+      width: "60%"
+    },
+    form: {
+      width: "100%",
+      marginTop: 5
+    }
+  });
+  const classes = useStyles();
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
@@ -31,66 +54,69 @@ const Signup = () => {
       if (res.data.status === "created") {
         setLoginState(true);
         histroy.push("/");
-        //window.location.replace(`http://localhost:8000/`);
       } else {
         res.data.messages.forEach((e: string) => setMessage(message => [...message, e]));
         setPassword("");
         setPasswordConfirmation("");
       }
       console.log(res, "railsに値を渡しました");
-    }).catch(error => [
-      console.log(error, "エラーがあるよ")
-    ]);
+    }).catch(error => {
+      console.log("errors ->", error);
+    });
 
     e.preventDefault();
   }
   const errorMessage = message.map((e, i) => {
     return (
-      <div key={i}>
+      <div className={classes.error} key={i}>
         {e}
       </div>
     );
   });
 
   return (
-    <div>
+    <div className={classes.paper}>
       <h2>新規アカウント登録</h2>
       {message &&
         <div>{errorMessage}</div>}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="name_field">Name:</label>
-        <input
-          id="name_field"
-          type="text"
-          name="name"
+      <form className={classes.paper} onSubmit={handleSubmit}>
+        <TextField
+          className={classes.form}
+          label="Name"
+          onChange={(e) => setName(e.target.value)}
           placeholder="ハンドルネーム"
+          type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)} />
-        <label htmlFor="email_field">Email:</label>
-        <input
-          id="email_field"
-          type="email"
-          name="email"
+        />
+        <TextField
+          className={classes.form}
+          label="Email"
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="メールアドレス"
+          type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)} />
-        <label htmlFor="password_field">Password:</label>
-        <input
-          id="password_field"
-          type="password"
-          name="password"
+        />
+        <TextField
+          className={classes.form}
+          label="Password"
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="パスワード"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)} />
-        <label htmlFor="pass_confirmation_field"></label>
-        <input
-          id="pass_confirmation_field"
           type="password"
-          name="password_confirmation"
-          placeholder="もう一度パスワードを入力してください"
-          value={passwordConfirmation}
-          onChange={(e) => setPasswordConfirmation(e.target.value)} />
-        <button type="submit">!!アカウント作成!!</button>
+          value={password}
+        />
+        {password &&
+          <TextField
+            className={classes.form}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
+            placeholder="もう一度パスワードを入力してください"
+            type="password"
+            value={passwordConfirmation}
+          />
+        }
+
+        <Button className={classes.button} color="primary" type="submit" variant="contained">
+          アカウント作成
+        </Button>
       </form>
 
       <GuestLogin />
