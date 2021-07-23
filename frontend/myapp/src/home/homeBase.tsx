@@ -14,21 +14,6 @@ const HomeBase = () => {
       {!loginState && <NotLoginHomeHeader />}
     </>
   );
-  /*
-    if (loginState === true) {
-      return (
-        <>
-          <HomeHeader />
-        </>
-      );
-    } else {
-      return (
-        <>
-          <NotLoginHomeHeader />
-        </>
-      );
-    }
-    */
 }
 
 export default HomeBase;
