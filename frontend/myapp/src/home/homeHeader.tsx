@@ -1,6 +1,9 @@
-import { useContext } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { useContext, useState } from 'react';
+import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
+
+import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } from '@material-ui/core';
+import DehazeIcon from '@material-ui/icons/Dehaze';
 
 import { LoginStateContext } from 'App';
 import { ModalStateContext } from 'App';
@@ -16,8 +19,6 @@ import MyFavorite from 'favorite/myFavorite';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
 import SearchForm from 'search/searchForm';
-import EditRecipe from 'hashtag/editRecipe';
-import EditMap from 'hashtag/editMap';
 
 import SearchResult from 'search/searchResult';
 
@@ -27,51 +28,123 @@ const HomeHeader = () => {
   const { setModalState } = useContext(ModalStateContext);
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser } = useContext(CurrentUserContext);
+  const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
+
+  const useStyles = makeStyles({
+    header: {
+      backdropFilter: "blur(20px)",
+      padding: "0 20px 0  20px",
+      position: "fixed",
+      top: 0
+    },
+    exception: {
+      fontSize: "20px",
+      textAlign: "center",
+    }
+  });
+  const classes = useStyles();
 
   const handleLogoutClick = () => {
-    axios.delete("http://localhost:3000/logout", { withCredentials: true }).then(response => {
-      console.log("ログアウト状況: ", response);
+    const url = `http://localhost:3000/logout`;
+    const config = { withCredentials: true };
+    axios.delete(url, config).then(res => {
+      console.log("ログアウト状況: ", res);
       setLoginState(false);
     }).catch(error => console.log("ログアウトエラー", error));
   }
 
+  const clickDrawer = () => {
+    setDrawerStatus(!drawerStatus);
+  };
+
   return (
     <div className="header-banner">
-      <p>ログイン中</p>
+      <Grid alignItems="center" className={classes.header} container
+        direction="row" justifyContent="space-between">
+        <Grid item>
+          <Grid alignItems="center" container
+            direction="row" justifyContent="flex-start" spacing={1}>
+            <Grid item>
+              <Link color="inherit" component={RouterLink} to="/" underline="none">
+                <h2>Insyutagram</h2>
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link color="inherit" component={RouterLink} to="/tweet">
+                ツイート
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link color="inherit" component={RouterLink} to={`/search`}>
+                キーワード検索
+              </Link>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item>
+          <Button onClick={clickDrawer}>
+            <DehazeIcon />
+          </Button>
+        </Grid>
+      </Grid>
 
-      <Link to="/"><h1>Insyutagram</h1></Link>
-      <nav>
-        <Link to={`/user/${currentUser.id}`}>マイページ</Link>
-        <Link to="/tweet">ツイート</Link>
-        <Link to={`/user/${currentUser.id}/favorite`}>マイいいね</Link>
-        <Link to={`/hashtag/index`}>タグ一覧</Link>
-        <Link to={`/search`}>キーワード検索</Link>
-        <Link to="/user/edit/account">アカウント設定</Link>
-      </nav>
+      <Drawer anchor="right" open={drawerStatus} onClose={clickDrawer}>
+        <List onClick={clickDrawer}>
+          <ListItem button divider>
+            <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}`} underline="none">
+              マイページ
+            </Link>
+          </ListItem>
+          <ListItem button divider>
+            <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}/favorite`} underline="none">
+              マイいいね
+            </Link>
+          </ListItem>
+          <ListItem button divider>
+            <Link color="inherit" component={RouterLink} to={`/hashtag/index`} underline="none">
+              タグ一覧
+            </Link>
+          </ListItem>
+          <ListItem button divider>
+            <Link color="inherit" component={RouterLink} to="/user/edit/account" underline="none">
+              アカウント設定
+            </Link>
+          </ListItem>
+          <ListItem button divider>
+            <Link color="inherit" href="/" onClick={() => handleLogoutClick()} underline="none">
+              ログアウト
+            </Link>
+          </ListItem>
+        </List>
+      </Drawer>
 
-      <Switch>
-        <Route path="/" exact component={HomeContent} />
-        <Route path="/user/:myPageId" exact component={MyPage} />
-        <Route path="/tweet" exact component={TweetForm} />
-        <Route path="/user/:userId/favorite" exact component={MyFavorite} />
-        <Route path="/hashtag/index" exact component={HashtagIndex} />
-        <Route path="/search" component={SearchForm} />
-        <Route path="/user/edit/account" exact component={UpdateUserSettings} />
+      <Container>
+        <Switch>
+          <Route path="/" exact component={HomeContent} />
+          <Route path="/user/:myPageId" exact component={MyPage} />
+          <Route path="/tweet" exact component={TweetForm} />
+          <Route path="/user/:userId/favorite" exact component={MyFavorite} />
+          <Route path="/hashtag/index" exact component={HashtagIndex} />
+          <Route path="/search" component={SearchForm} />
+          <Route path="/user/edit/account" exact component={UpdateUserSettings} />
 
-        <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
-        <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
+          <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
+          <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
 
-        <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
+          <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
-        <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
-        <Route ><h3>そのページはご利用いただけません。他のページを探してみましょう。</h3></Route>
-      </Switch>
+          <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
+          <Route >
+            <h3 className={classes.exception}>
+              そのページはご利用いただけません。他のページを探してみましょう。
+            </h3>
+          </Route>
+        </Switch>
 
-      <Route path="/search/:searchWord" exact component={SearchResult} />
+        <Route path="/search/:searchWord" exact component={SearchResult} />
 
-
-      <button onClick={() => setModalState(true)}>モーダル</button>
-      <button onClick={() => handleLogoutClick()}>ログアウト</button>
+        <button onClick={() => setModalState(true)}>モーダル</button>
+      </Container>
     </div>
   );
 }
