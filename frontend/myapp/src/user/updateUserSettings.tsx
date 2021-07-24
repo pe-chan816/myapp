@@ -2,6 +2,9 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
+import { Avatar, Button, Dialog, DialogTitle, DialogActions, Grid, makeStyles, TextField } from '@material-ui/core';
+import ImageIcon from '@material-ui/icons/Image';
+
 import { LoginStateContext } from "App";
 import { CurrentUserContext } from "App";
 import { MessageContext } from "App";
@@ -19,7 +22,26 @@ const UpdateUserSettings = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   const [preview, setPreview] = useState<string>("");
+  const [dialogState, setDialogState] = useState<boolean>(false);
   const history = useHistory();
+
+  const useStyles = makeStyles({
+    button: {
+      marginTop: 10
+    },
+    form: {
+      width: "100%",
+      marginTop: 5
+    },
+    paper: {
+      alignItems: "center",
+      display: "flex",
+      flexDirection: "column",
+      margin: "0 auto",
+      width: "60%"
+    }
+  });
+  const classes = useStyles();
 
   const handleSubmit = async (e: any) => {
     const url = `http://localhost:3000/users/${currentUser.id}`;
@@ -45,20 +67,34 @@ const UpdateUserSettings = () => {
   }
 
   const deleteAccount = () => {
-    const confirm = window.confirm(`本当に ${currentUser.name} のアカウントを削除しますか？`);
-    if (confirm) {
-      const url = `http://localhost:3000/users/${currentUser.id}`;
-      const config = { withCredentials: true };
-      axios.delete(url, config).then(res => {
-        console.log(res)
-        setCurrentUser({});
-        setLoginState(false);
-        history.push("/");
-        //window.location.replace(`http://localhost:8000`);
-      }).catch(error => {
-        console.log("error->", error);
-      });
-    };
+    const url = `http://localhost:3000/users/${currentUser.id}`;
+    const config = { withCredentials: true };
+    axios.delete(url, config).then(res => {
+      console.log(res)
+      setCurrentUser({});
+      setLoginState(false);
+      history.push("/");
+    }).catch(error => {
+      console.log("error->", error);
+    });
+  };
+
+  const AlartDialog = () => {
+    return (
+      <div>
+        <Dialog open={dialogState} onClose={() => { setDialogState(false) }}>
+          <DialogTitle>本当にアカウントを削除しますか？</DialogTitle>
+          <DialogActions>
+            <Button onClick={() => { setDialogState(false) }}>
+              キャンセル
+            </Button>
+            <Button onClick={deleteAccount}>
+              削除する
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
   };
 
   const imageData = async () => {
@@ -74,68 +110,95 @@ const UpdateUserSettings = () => {
   const currentUserImage = () => {
     if (!preview && currentUser.profile_image?.url) {
       return (
-        <img src={`http://localhost:3000/${currentUser.profile_image?.url}`} alt="profile" />
+        <Avatar alt="profile-image"
+          src={`http://localhost:3000/${currentUser.profile_image?.url}`} />
+      );
+    }
+  };
+  const newUserImage = () => {
+    if (preview) {
+      return (
+        <Avatar alt="new-profile-image" src={preview} />
       );
     }
   };
 
+  console.log("dialogState->", dialogState);
+
   return (
-    <div>
+    <div className={classes.paper}>
       <h3>ユーザーアカウント設定</h3>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="setting_name">名前 : </label>
-          <input
-            id="setting_name"
-            name="name"
-            type="text"
-            placeholder={`${currentUser.name}`}
-            onChange={(e) => setName(e.target.value)} />
-        </div>
-        <div>
-          <label htmlFor="setting_image">プロフィール画像 : </label>
-          <input
-            id="setting_image"
-            name="image"
-            type="file"
-            onChange={(e) => {
-              if (e.target.files) {
-                setImage(e.target.files[0]);
-                setPreview(window.URL.createObjectURL(e.target.files[0]));
-              }
-            }} />
-          {currentUserImage()}
-          {preview && <img src={preview} alt="profile" />}
-        </div>
-        <div>
-          <label htmlFor="setting_email">Email : </label>
-          <input
-            id="setting_email"
-            name="email"
-            type="email"
-            placeholder={`${currentUser.email}`}
-            onChange={(e) => setEmail(e.target.value)} />
-        </div>
-        <div>
-          <span>パスワード : </span>
-          <input
-            name="password"
-            type="password"
-            placeholder="新しいパスワード"
-            onChange={(e) => setPassword(e.target.value)} />
-        </div>
-        <div>
-          <span>パスワード確認 : </span>
-          <input
-            name="passwordConfirmation"
-            type="password"
+      <form className={classes.paper} onSubmit={handleSubmit}>
+
+        <Grid
+          alignItems="center"
+          container
+          direction="row"
+          justifyContent="flex-start"
+          spacing={1}
+        >
+          <Grid item>
+            {currentUserImage()}
+            {newUserImage()}
+          </Grid>
+          <Grid item>
+            <label htmlFor="image-upload">
+              <Button component="span" size="small">
+                <ImageIcon fontSize="small" />
+              </Button>
+            </label>
+            <input
+              onChange={(e) => {
+                if (e.target.files) {
+                  setImage(e.target.files[0]);
+                  setPreview(window.URL.createObjectURL(e.target.files[0]));
+                }
+              }}
+              id="image-upload"
+              hidden
+              type="file" />
+          </Grid>
+        </Grid>
+
+        <TextField
+          className={classes.form}
+          label="Name"
+          onChange={(e) => setName(e.target.value)}
+          placeholder={`${currentUser.name}`}
+          type="text"
+          value={name}
+        />
+        <TextField
+          className={classes.form}
+          label="Email"
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder={`${currentUser.email}`}
+          type="email"
+          value={email}
+        />
+        <TextField
+          className={classes.form}
+          label="Password"
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="新しいパスワード"
+          type="password"
+          value={password}
+        />
+        {password &&
+          <TextField
+            className={classes.form}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
             placeholder="パスワードをもう一度入力してください"
-            onChange={(e) => setPasswordConfirmation(e.target.value)} />
-        </div>
-        <button type="submit">編集</button>
+            type="password"
+            value={passwordConfirmation}
+          />
+        }
+
+        <Button className={classes.button} color="primary" type="submit" variant="contained">編集</Button>
       </form>
 
-      <button onClick={deleteAccount}>アカウント削除</button>
+      <Button onClick={() => { setDialogState(true) }}>アカウント削除</Button>
+      <AlartDialog />
     </div>
   );
 }
