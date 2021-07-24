@@ -57,23 +57,35 @@ describe("アカウント設定ページの挙動", () => {
     await renderLoginSituation();
 
     expect(screen.getByText("ユーザーアカウント設定")).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "名前 :" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("テストユーザー")).toBeInTheDocument();
-    expect(screen.getByText("プロフィール画像 :")).toBeInTheDocument();
-    expect(screen.getByRole("textbox", { name: "Email :" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("email@email.com")).toBeInTheDocument();
-    expect(screen.getByText("パスワード :")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("新しいパスワード")).toBeInTheDocument();
-    expect(screen.getByText("パスワード確認 :")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("パスワードをもう一度入力してください")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "編集" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "アカウント削除" })).toBeInTheDocument();
   });
 
+  it("パスワードに入力をすると確認用フォームが表示される", async () => {
+    await renderLoginSituation();
+    const target = screen.getByPlaceholderText("新しいパスワード");
+    act(() => { userEvent.type(target, "something@email.com") });
+
+    expect(await screen.findByPlaceholderText("パスワードをもう一度入力してください")).toBeInTheDocument();
+  });
+
+  it("'アカウント削除'ボタンを押すと警告ダイアログが表示される", async () => {
+    await renderLoginSituation();
+    const target = screen.getByRole("button", { name: "アカウント削除" });
+    act(() => { userEvent.click(target) });
+
+    expect(await screen.findByText("本当にアカウントを削除しますか？"));
+    expect(screen.getByRole("button", { name: "キャンセル" }));
+    expect(screen.getByRole("button", { name: "削除する" }));
+  });
+
   it("編集に成功するとプレースホルダが切り替わる", async () => {
     await renderLoginSituation();
-    const nameInputArea = screen.getByRole("textbox", { name: "名前 :" });
-    const emailInputArea = screen.getByRole("textbox", { name: "Email :" });
+    const nameInputArea = screen.getByPlaceholderText("テストユーザー");
+    const emailInputArea = screen.getByPlaceholderText("email@email.com");
     const editButton = screen.getByRole("button", { name: "編集" });
 
     await act(async () => {
@@ -85,6 +97,4 @@ describe("アカウント設定ページの挙動", () => {
     expect(await screen.findByPlaceholderText("テストユーザー改"));
     expect(screen.getByPlaceholderText("another@email.com"));
   });
-
-  // window.confirm が未実装のためアカウント削除時の挙動は現時点ではテスト不可 //
 });
