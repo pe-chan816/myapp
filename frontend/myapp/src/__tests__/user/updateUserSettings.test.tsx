@@ -45,6 +45,10 @@ describe("アカウント設定ページの挙動", () => {
       );
     })
 
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     const settingLink = await screen.findByRole("link", { name: "アカウント設定" });
     act(() => { userEvent.click(settingLink) });
   };

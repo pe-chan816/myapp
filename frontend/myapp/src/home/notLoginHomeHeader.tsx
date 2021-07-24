@@ -36,7 +36,7 @@ const NotLoginHomeHeader = () => {
   return (
     <div>
       <Grid alignItems="baseline" className={classes.header} container
-        direction="row" justifyContent="flex-start" spacing={1}>
+        direction="row" justifyContent="flex-start" spacing={2}>
         <Grid item>
           <Link color="inherit" component={RouterLink} underline="none" to="/">
             <h2>Insyutagram</h2>
