@@ -44,6 +44,10 @@ describe("ハッシュタグ一覧の挙動", () => {
 
   it("各要素が正常に表示されている", async () => {
     renderLoginSituation();
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     const tagIndexLink = await screen.findByText("タグ一覧");
     act(() => { userEvent.click(tagIndexLink) });
 

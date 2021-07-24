@@ -44,7 +44,7 @@ const HomeHeader = () => {
   });
   const classes = useStyles();
 
-  const handleLogoutClick = () => {
+  const clickLogout = () => {
     const url = `http://localhost:3000/logout`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
@@ -89,7 +89,7 @@ const HomeHeader = () => {
               <SearchForm />
             </Grid>
             <Grid item>
-              <Button onClick={clickDrawer}>
+              <Button onClick={clickDrawer} data-testid="dehaze-icon">
                 <DehazeIcon />
               </Button>
             </Grid>
@@ -115,7 +115,7 @@ const HomeHeader = () => {
             </Link>
           </ListItem>
           <ListItem button divider>
-            <Link color="inherit" href="/" onClick={() => handleLogoutClick()} underline="none">
+            <Link color="inherit" href="/" onClick={() => clickLogout()} underline="none">
               ログアウト
             </Link>
           </ListItem>

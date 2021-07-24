@@ -65,6 +65,10 @@ const renderLoginSituation = async () => {
     );
   });
 
+  await screen.findAllByText("マイページ");
+  const dehazeIcon = screen.getByTestId("dehaze-icon");
+  act(() => { userEvent.click(dehazeIcon) });
+
   const tagIndexLink = await screen.findByText("タグ一覧");
   act(() => { userEvent.click(tagIndexLink) });
 

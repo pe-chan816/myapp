@@ -54,6 +54,10 @@ describe("いいね一覧の挙動", () => {
 
   it("各要素が正常に表示されている", async () => {
     renderLoginSituation();
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     const myFavoriteLink = await screen.findByText("マイいいね");
     act(() => { userEvent.click(myFavoriteLink) });
 

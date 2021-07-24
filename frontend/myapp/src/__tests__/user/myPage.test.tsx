@@ -49,16 +49,7 @@ describe("マイページの挙動", () => {
         followers_count: 4,
         follow_or_not: false
       });
-    /*
-    // hashtagDetailContent用
-    mock.onGet(`http://localhost:3000/hashtag/ビール`)
-      .reply(200, {
-        hashtag: { hashname: "ビール" },
-        tweets: [],
-        recipes: [],
-        bar_info: [],
-      });
-    */
+
     act(() => {
       render(
         <Router history={history}>

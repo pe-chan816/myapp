@@ -48,7 +48,7 @@ describe("ツイート投稿フォームの挙動", () => {
 
   it("各要素が正常に表示されている", async () => {
     renderLoginSituation();
-    const tweetFormLink = await screen.findByText("ツイート");
+    const tweetFormLink = await screen.findByText("ポスト");
     act(() => { userEvent.click(tweetFormLink) });
 
     expect(await screen.findByPlaceholderText("何かつぶやいてみましょう")).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe("ツイート投稿フォームの挙動", () => {
 
   it("contentが空のまま投稿するとエラーメッセージが表示される", async () => {
     renderLoginSituation();
-    const tweetFormLink = await screen.findByText("ツイート");
+    const tweetFormLink = await screen.findByText("ポスト");
     act(() => { userEvent.click(tweetFormLink) });
 
     const target = await screen.findByText("投稿");
@@ -107,7 +107,7 @@ describe("ツイート投稿フォームの挙動", () => {
       );
     })
 
-    const tweetFormLink = await screen.findByText("ツイート");
+    const tweetFormLink = await screen.findByText("ポスト");
 
     act(() => { userEvent.click(tweetFormLink) });
 

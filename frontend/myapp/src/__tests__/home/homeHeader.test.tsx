@@ -1,6 +1,6 @@
 import { Router } from 'react-router-dom';
 import axios from 'axios';
-import { act, cleanup, render, screen, waitFor } from "@testing-library/react";
+import { act, cleanup, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
@@ -19,10 +19,10 @@ describe("ログイン時のホームヘッダー", () => {
         logged_in: true,
         user: { id: 1 }
       });
-    //HomeContent用
+    // HomeContent用
     mock.onGet("http://localhost:3000")
       .reply(200, { home_data: [{}] });
-    //myPage用
+    // myPage用
     mock.onGet("http://localhost:3000/users/1")
       .reply(200, {
         user: {
@@ -35,12 +35,14 @@ describe("ログイン時のホームヘッダー", () => {
         followers: [{}],
         followers_count: 50
       });
-    //myFavorite用
+    // myFavorite用
     mock.onGet("http://localhost:3000/users/1/myfavorite")
       .reply(200, { my_favorites: [{}] });
-    //hashtagIndex用
+    // hashtagIndex用
     mock.onGet("http://localhost:3000/hashtags")
       .reply(200, { hashtags: [{}] });
+    // clickLogout用
+    mock.onDelete("http://localhost:3000/logout").reply(200);
 
     act(() => {
       render(
@@ -51,33 +53,21 @@ describe("ログイン時のホームヘッダー", () => {
     })
   };
 
-  /*
-  it("'マイページ'のリンクが正常に動作する2", async () => {
-    renderLoginSituation();
-    const drawerButton = await screen.findByRole("button", { name: "Menu" });
-    act(() => { userEvent.click(drawerButton) });
-
-    const target = await screen.findByRole("button", { name: "マイページ" });
-    //expect(screen.getByRole(""));
-    act(() => { userEvent.click(target) });
-
-    expect(await screen.findByText("somebody1"));
-    expect(screen.findByText("100"));
-    expect(screen.findByText("50"));
-  });
-  */
-
   it("各要素が正しく表示されている", async () => {
     renderLoginSituation();
     expect(await screen.findByText("マイページ")).toBeInTheDocument();
-    expect(await screen.findByText("ツイート")).toBeInTheDocument();
+    expect(screen.getByText("ポスト")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("検索")).toBeInTheDocument();
+
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     expect(await screen.findByText("マイいいね")).toBeInTheDocument();
-    expect(await screen.findByText("タグ一覧")).toBeInTheDocument();
-    expect(await screen.findByText("キーワード検索")).toBeInTheDocument();
-    expect(await screen.findByText("アカウント設定")).toBeInTheDocument();
+    expect(screen.getByText("タグ一覧")).toBeInTheDocument();
+    expect(screen.getByText("アカウント設定")).toBeInTheDocument();
+    expect(screen.getByText("ログアウト")).toBeInTheDocument();
   });
 
-  /*
   it("'マイページ'のリンクが正常に動作する", async () => {
     renderLoginSituation();
     const target = await screen.findByText("マイページ");
@@ -88,9 +78,9 @@ describe("ログイン時のホームヘッダー", () => {
     expect(await screen.findByText("50"));
   });
 
-  it("'ツイート'のリンクが正常に動作する", async () => {
+  it("'ポスト'のリンクが正常に動作する", async () => {
     renderLoginSituation();
-    const target = await screen.findByText("ツイート");
+    const target = await screen.findByText("ポスト");
     act(() => { userEvent.click(target) });
 
     expect(await screen.findByPlaceholderText("何かつぶやいてみましょう"));
@@ -98,6 +88,10 @@ describe("ログイン時のホームヘッダー", () => {
 
   it("'マイいいね'のリンクが正常に動作する", async () => {
     renderLoginSituation();
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     const target = await screen.findByText("マイいいね");
     act(() => { userEvent.click(target) });
 
@@ -106,27 +100,37 @@ describe("ログイン時のホームヘッダー", () => {
 
   it("'タグ一覧表示'のリンクが正常に動作する", async () => {
     renderLoginSituation();
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     const target = await screen.findByText("タグ一覧");
     act(() => { userEvent.click(target) });
 
     expect(await screen.findByText("ハッシュタグ一覧")).toBeInTheDocument();
   });
 
-  it("'検索'のリンクが正常に動作する", async () => {
-    renderLoginSituation();
-    const target = await screen.findByText("キーワード検索");
-    act(() => { userEvent.click(target) });
-
-    expect(await screen.findByPlaceholderText("検索したいキーワード")).toBeInTheDocument();
-  });
-
   it("'アカウント設定'のリンクが正常に動作する", async () => {
     renderLoginSituation();
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
     const target = await screen.findByText("アカウント設定");
     act(() => { userEvent.click(target) });
 
     expect(await screen.findByText("ユーザーアカウント設定")).toBeInTheDocument();
   });
 
-  */
+  it("'ログアウト'ボタンが正常に作動する", async () => {
+    renderLoginSituation();
+    await screen.findAllByText("マイページ");
+    const dehazeIcon = screen.getByTestId("dehaze-icon");
+    act(() => { userEvent.click(dehazeIcon) });
+
+    const target = await screen.findByText("ログアウト");
+    act(() => { userEvent.click(target) });
+
+    expect(await screen.findByText("アカウント登録"));
+  });
 });
