@@ -63,38 +63,42 @@ const HomeHeader = () => {
         direction="row" justifyContent="space-between">
         <Grid item>
           <Grid alignItems="center" container
-            direction="row" justifyContent="flex-start" spacing={1}>
+            direction="row" justifyContent="flex-start" spacing={2}>
             <Grid item>
               <Link color="inherit" component={RouterLink} to="/" underline="none">
                 <h2>Insyutagram</h2>
               </Link>
             </Grid>
             <Grid item>
-              <Link color="inherit" component={RouterLink} to="/tweet">
-                ツイート
+              <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}`}>
+                マイページ
               </Link>
             </Grid>
             <Grid item>
-              <Link color="inherit" component={RouterLink} to={`/search`}>
-                キーワード検索
+              <Link color="inherit" component={RouterLink} to="/tweet">
+                ポスト
               </Link>
             </Grid>
           </Grid>
         </Grid>
+
         <Grid item>
-          <Button onClick={clickDrawer}>
-            <DehazeIcon />
-          </Button>
+          <Grid alignItems="center" container
+            direction="row" justifyContent="flex-end" spacing={1}>
+            <Grid item>
+              <SearchForm />
+            </Grid>
+            <Grid item>
+              <Button onClick={clickDrawer}>
+                <DehazeIcon />
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
 
       <Drawer anchor="right" open={drawerStatus} onClose={clickDrawer}>
         <List onClick={clickDrawer}>
-          <ListItem button divider>
-            <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}`} underline="none">
-              マイページ
-            </Link>
-          </ListItem>
           <ListItem button divider>
             <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}/favorite`} underline="none">
               マイいいね
@@ -125,12 +129,12 @@ const HomeHeader = () => {
           <Route path="/tweet" exact component={TweetForm} />
           <Route path="/user/:userId/favorite" exact component={MyFavorite} />
           <Route path="/hashtag/index" exact component={HashtagIndex} />
-          <Route path="/search" component={SearchForm} />
           <Route path="/user/edit/account" exact component={UpdateUserSettings} />
 
           <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
           <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
 
+          <Route path="/search/:searchWord" exact component={SearchResult} />
           <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
           <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
@@ -140,8 +144,6 @@ const HomeHeader = () => {
             </h3>
           </Route>
         </Switch>
-
-        <Route path="/search/:searchWord" exact component={SearchResult} />
 
         <button onClick={() => setModalState(true)}>モーダル</button>
       </Container>

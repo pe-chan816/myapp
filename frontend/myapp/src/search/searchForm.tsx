@@ -1,21 +1,45 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
+import { InputAdornment, TextField } from '@material-ui/core';
+import SearchIcon from '@material-ui/icons/Search';
+import CloseIcon from '@material-ui/icons/Close';
 
 const SearchForm = () => {
-  console.log("!!searchForm!!");
   const [searchWord, setSearchWord] = useState<string>("");
+  const history = useHistory();
+
+  const keyDownSearchForm = (e: any) => {
+    if (e.keyCode === 13) {
+      history.push(`/search/${searchWord}`);
+    }
+  };
+
+  const clickSearchIcon = () => {
+    history.push(`/search/${searchWord}`);
+  };
+
+  const clickDeleteWord = () => {
+    setSearchWord("");
+  }
 
   return (
-    <div>
-      <div>
-        <input
-          type="text"
-          name="search"
-          placeholder="検索したいキーワード"
-          onChange={(e) => { setSearchWord(e.target.value) }} />
-        <Link to={`/search/${searchWord}`}><button>検索</button></Link>
-      </div>
-    </div>
+    <TextField
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            <SearchIcon onClick={clickSearchIcon} />
+          </InputAdornment>
+        ),
+        endAdornment: (
+          <InputAdornment position="end">
+            <CloseIcon fontSize="small" onClick={clickDeleteWord} />
+          </InputAdornment>
+        )
+      }}
+      onChange={(e) => setSearchWord(e.target.value)} onKeyDown={keyDownSearchForm}
+      placeholder="検索" value={searchWord} variant="standard"
+    />
   );
 };
 
