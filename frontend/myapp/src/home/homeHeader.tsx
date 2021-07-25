@@ -35,7 +35,8 @@ const HomeHeader = () => {
       backdropFilter: "blur(20px)",
       padding: "0 20px 0  20px",
       position: "fixed",
-      top: 0
+      top: 0,
+      zIndex: 10
     },
     exception: {
       fontSize: "20px",
