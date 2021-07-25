@@ -51,7 +51,7 @@ const UpdateUserSettings = () => {
     axios.patch(url, data, config).then(res => {
       if (res.data.user) {
         setCurrentUser(res.data.user);
-        history.push("/user/edit/account");
+        history.push(`/user/${currentUser.id}`);
       } else {
         console.log(res);
         res.data.messages.forEach((e: string) => setMessage((message: string[]) => [...message, e]));
