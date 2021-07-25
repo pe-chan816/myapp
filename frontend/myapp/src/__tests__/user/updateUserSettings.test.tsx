@@ -35,7 +35,21 @@ describe("アカウント設定ページの挙動", () => {
           email: "another@email.com"
         }
       });
+    // アカウント削除
     mock.onDelete("http://localhost:3000/users/1").reply(200);
+    // マイページ表示
+    mock.onGet("http://localhost:3000/users/1")
+      .reply(200, {
+        user: {
+          id: 1,
+          name: "テストユーザー改",
+        },
+        mypage_data: [{}],
+        followings: [{}],
+        followings_count: 100,
+        followers: [{}],
+        followers_count: 50
+      });
 
     act(() => {
       render(
@@ -82,7 +96,7 @@ describe("アカウント設定ページの挙動", () => {
     expect(screen.getByRole("button", { name: "削除する" }));
   });
 
-  it("編集に成功するとプレースホルダが切り替わる", async () => {
+  it("編集に成功するとマイページに遷移する", async () => {
     await renderLoginSituation();
     const nameInputArea = screen.getByPlaceholderText("テストユーザー");
     const emailInputArea = screen.getByPlaceholderText("email@email.com");
@@ -94,7 +108,8 @@ describe("アカウント設定ページの挙動", () => {
     });
     act(() => { userEvent.click(editButton) });
 
-    expect(await screen.findByPlaceholderText("テストユーザー改"));
-    expect(screen.getByPlaceholderText("another@email.com"));
+    expect(await screen.findByText("テストユーザー改"));
+    expect(screen.getByText("100"));
+    expect(screen.getByText("50"));
   });
 });

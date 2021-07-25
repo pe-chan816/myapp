@@ -2,9 +2,10 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 
-import { Button, makeStyles, TextField } from '@material-ui/core';
+import { makeStyles, TextField } from '@material-ui/core';
 
 import { LoginStateContext } from 'App';
+import SubmitButton from 'common/submitButton';
 
 const Login = () => {
   const [email, setEmail] = useState<Partial<string>>("");
@@ -14,9 +15,6 @@ const Login = () => {
   const histroy = useHistory();
 
   const useStyles = makeStyles({
-    button: {
-      marginTop: 10
-    },
     error: {
       color: "firebrick"
     },
@@ -92,9 +90,8 @@ const Login = () => {
           type="password"
           value={password}
         />
-        <Button className={classes.button} color="primary" type="submit" variant="contained">
-          ログイン
-        </Button>
+
+        <SubmitButton label="ログイン" />
       </form>
     </div>
   );

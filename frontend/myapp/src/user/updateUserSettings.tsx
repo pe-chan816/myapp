@@ -2,17 +2,18 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-import { Avatar, Button, Dialog, DialogTitle, DialogActions, Grid, makeStyles, TextField } from '@material-ui/core';
+import { Avatar, Button, Grid, makeStyles, TextField } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 
-import { LoginStateContext } from "App";
+import DeleteUserAccount from "./deleteUserAccount";
+import SubmitButton from "common/submitButton";
+
 import { CurrentUserContext } from "App";
 import { MessageContext } from "App";
 
 
 const UpdateUserSettings = () => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-  const { setLoginState } = useContext(LoginStateContext);
   const { setMessage } = useContext(MessageContext);
 
   const [name, setName] = useState(currentUser.name);
@@ -22,13 +23,9 @@ const UpdateUserSettings = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
 
   const [preview, setPreview] = useState<string>("");
-  const [dialogState, setDialogState] = useState<boolean>(false);
   const history = useHistory();
 
   const useStyles = makeStyles({
-    button: {
-      marginTop: 10
-    },
     form: {
       width: "100%",
       marginTop: 5
@@ -54,7 +51,7 @@ const UpdateUserSettings = () => {
     axios.patch(url, data, config).then(res => {
       if (res.data.user) {
         setCurrentUser(res.data.user);
-        history.push("/user/edit/account")
+        history.push(`/user/${currentUser.id}`);
       } else {
         console.log(res);
         res.data.messages.forEach((e: string) => setMessage((message: string[]) => [...message, e]));
@@ -65,37 +62,6 @@ const UpdateUserSettings = () => {
 
     e.preventDefault();
   }
-
-  const deleteAccount = () => {
-    const url = `http://localhost:3000/users/${currentUser.id}`;
-    const config = { withCredentials: true };
-    axios.delete(url, config).then(res => {
-      console.log(res)
-      setCurrentUser({});
-      setLoginState(false);
-      history.push("/");
-    }).catch(error => {
-      console.log("error->", error);
-    });
-  };
-
-  const AlartDialog = () => {
-    return (
-      <div>
-        <Dialog open={dialogState} onClose={() => { setDialogState(false) }}>
-          <DialogTitle>本当にアカウントを削除しますか？</DialogTitle>
-          <DialogActions>
-            <Button onClick={() => { setDialogState(false) }}>
-              キャンセル
-            </Button>
-            <Button onClick={deleteAccount}>
-              削除する
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  };
 
   const imageData = async () => {
     const fd = new FormData();
@@ -122,8 +88,6 @@ const UpdateUserSettings = () => {
       );
     }
   };
-
-  console.log("dialogState->", dialogState);
 
   return (
     <div className={classes.paper}>
@@ -194,11 +158,10 @@ const UpdateUserSettings = () => {
           />
         }
 
-        <Button className={classes.button} color="primary" type="submit" variant="contained">編集</Button>
+        <SubmitButton label="編集" />
       </form>
 
-      <Button onClick={() => { setDialogState(true) }}>アカウント削除</Button>
-      <AlartDialog />
+      <DeleteUserAccount />
     </div>
   );
 }
