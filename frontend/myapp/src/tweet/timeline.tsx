@@ -1,9 +1,8 @@
 import { HashtagType, TimelineType } from 'types/typeList';
 import { Link } from 'react-router-dom';
 
-const useTimeline = (data: Partial<TimelineType[]>) => {
-  console.log("!!useTimeline!!");
-
+const Timeline = (props: { data: Partial<TimelineType[]> }) => {
+  const data = props.data;
   const content = data.map((e, i) => {
     if (e) {
       const hashtags = e.hashname?.map((tag: HashtagType, n: number) => {
@@ -36,4 +35,4 @@ const useTimeline = (data: Partial<TimelineType[]>) => {
   );
 };
 
-export default useTimeline;
+export default Timeline;

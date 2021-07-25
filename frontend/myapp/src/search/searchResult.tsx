@@ -4,7 +4,7 @@ import { Link, useParams } from "react-router-dom";
 
 import { TimelineType, UserType } from "types/typeList";
 
-import useTimeline from "hooks/useTimeline";
+import Timeline from "tweet/timeline";
 
 
 const SearchResult = (prop: any) => {
@@ -28,8 +28,6 @@ const SearchResult = (prop: any) => {
 
   useEffect(getSearchResult, [prop.match.params]);
 
-  const searchedTweet = useTimeline(tweetData);
-
   const searchedUser = userData.map((e, i) => {
     if (e) {
       const imageUrl = `http://localhost:3000/${e.profile_image?.url}`;
@@ -49,7 +47,7 @@ const SearchResult = (prop: any) => {
       <h3>" {keyword} " の検索結果</h3>
       {tweetData.toString() !== [].toString() &&
         <h4>↓ツイート↓</h4>}
-      <div>{searchedTweet}</div>
+      <Timeline data={tweetData} />
       {userData.toString() !== [].toString() &&
         <h4>↓ユーザー↓</h4>}
       <div>{searchedUser}</div>

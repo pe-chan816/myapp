@@ -8,7 +8,7 @@ import { UserType, TimelineType } from 'types/typeList';
 import { CurrentUserContext, UserContext } from 'App';
 import { FollowOrNotContext } from 'App';
 
-import useTimeline from 'hooks/useTimeline';
+import Timeline from "tweet/timeline";
 
 const MyPage = (props: any) => {
   console.log("!!MyPage!!");
@@ -50,8 +50,6 @@ const MyPage = (props: any) => {
     });
   };
   useEffect(getData, [props.location.pathname]);
-
-  const Timeline = useTimeline(data);
 
   const MypageContent = () => {
 
@@ -110,7 +108,8 @@ const MyPage = (props: any) => {
         <p>フォロワー : <Link to={followersPage}>{followersNumber}</Link></p>
 
         {user.id !== currentUser.id && <FollowButton />}
-        {Timeline}
+
+        <Timeline data={data} />
       </div >
     );
   };

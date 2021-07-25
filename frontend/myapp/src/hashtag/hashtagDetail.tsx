@@ -9,7 +9,7 @@ import EditRecipe from "./editRecipe";
 import EditMap from "./editMap";
 import HashtagDetailContent from "./hashtagDetailContent";
 
-import useTimeline from "hooks/useTimeline";
+import Timeline from "tweet/timeline";
 
 
 export const TagDataContext = createContext({} as {
@@ -57,8 +57,6 @@ const HashtagDetail = () => {
 
   useEffect(getDetailData, []);
 
-  const timeline = useTimeline(timelineData);
-
   console.log(tagData);
   console.log(timelineData);
   console.log("recipe ->", recipe);
@@ -74,7 +72,9 @@ const HashtagDetail = () => {
               <Route path="/hashtag/:hashname/edit/recipe" exact component={EditRecipe} />
               <Route path="/hashtag/:hashname/edit/map" exact component={EditMap} />
             </Router>
-            <div>{timeline}</div>
+
+            <Timeline data={timelineData} />
+
           </div>
         </BarInfoContext.Provider>
       </RecipeContext.Provider>

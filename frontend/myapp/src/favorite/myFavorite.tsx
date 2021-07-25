@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 
 import { TimelineType } from "types/typeList";
 
-import useTimeline from "hooks/useTimeline";
+import Timeline from "tweet/timeline";
 
 const MyFavorite = (props: any) => {
   console.log(props);
@@ -23,13 +23,11 @@ const MyFavorite = (props: any) => {
 
   useEffect(getFavoriteData, []);
 
-  const timeline = useTimeline(data);
-
   console.log(data);
   return (
     <div>
       <h3>いいねしたツイート</h3>
-      <div>{timeline}</div>
+      <Timeline data={data} />
     </div>
   );
 };
