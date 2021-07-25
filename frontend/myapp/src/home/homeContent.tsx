@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { TimelineType } from "types/typeList";
 
-import useTimeline from "hooks/useTimeline";
+import Timeline from "tweet/timeline";
 
 const HomeContent = () => {
   console.log("!!HomeContent!!");
@@ -23,13 +23,11 @@ const HomeContent = () => {
 
   useEffect(getContents, []);
 
-  const Timeline = useTimeline(data);
-
   return (
     <div>
       <button onClick={getContents}>更新</button>
       {data.toString() !== [].toString() &&
-        Timeline}
+        <Timeline data={data} />}
     </div>
   );
 }
