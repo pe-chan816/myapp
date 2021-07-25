@@ -5,6 +5,8 @@ import { useHistory } from "react-router-dom";
 import { Avatar, Button, Dialog, DialogTitle, DialogActions, Grid, makeStyles, TextField } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 
+import SubmitButton from "common/submitButton";
+
 import { LoginStateContext } from "App";
 import { CurrentUserContext } from "App";
 import { MessageContext } from "App";
@@ -26,9 +28,6 @@ const UpdateUserSettings = () => {
   const history = useHistory();
 
   const useStyles = makeStyles({
-    button: {
-      marginTop: 10
-    },
     form: {
       width: "100%",
       marginTop: 5
@@ -123,8 +122,6 @@ const UpdateUserSettings = () => {
     }
   };
 
-  console.log("dialogState->", dialogState);
-
   return (
     <div className={classes.paper}>
       <h3>ユーザーアカウント設定</h3>
@@ -194,7 +191,7 @@ const UpdateUserSettings = () => {
           />
         }
 
-        <Button className={classes.button} color="primary" type="submit" variant="contained">編集</Button>
+        <SubmitButton label="編集" />
       </form>
 
       <Button onClick={() => { setDialogState(true) }}>アカウント削除</Button>

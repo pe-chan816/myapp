@@ -2,11 +2,12 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Button, makeStyles, TextField } from '@material-ui/core';
+import { makeStyles, TextField } from '@material-ui/core';
 
 import { LoginStateContext } from 'App';
 
 import GuestLogin from 'login/guestLogin';
+import SubmitButton from 'common/submitButton';
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -18,9 +19,6 @@ const Signup = () => {
   const histroy = useHistory();
 
   const useStyles = makeStyles({
-    button: {
-      marginTop: 10
-    },
     error: {
       color: "firebrick"
     },
@@ -114,9 +112,7 @@ const Signup = () => {
           />
         }
 
-        <Button className={classes.button} color="primary" type="submit" variant="contained">
-          アカウント作成
-        </Button>
+        <SubmitButton label="アカウント作成" />
       </form>
 
       <GuestLogin />
