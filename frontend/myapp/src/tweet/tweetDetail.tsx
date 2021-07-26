@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import { TimelineType } from "types/typeList";
 

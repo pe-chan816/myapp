@@ -1,14 +1,21 @@
-import { HashtagType, TimelineType } from 'types/typeList';
+import axios from 'axios';
+import { useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, Link, makeStyles, Tooltip } from '@material-ui/core';
 
+import { HashtagType, TimelineType } from 'types/typeList';
+
+import PersonIcon from '@material-ui/icons/Person';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
   const data = props.data;
+  // いいねの再描画のためのstate //
+  const [rendering, setRendering] = useState<boolean>(false);
+  /////////////////////////////
   const history = useHistory();
   const useStyles = makeStyles({
     card: {
@@ -34,6 +41,30 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     history.push(`/hashtag/${tagName}`)
   };
 
+  const clickFavoriteButton = (tweet: TimelineType) => {
+    const url = `http://localhost:3000/favorites`;
+    const newData = { favorite_tweet_id: tweet.id };
+    const config = { withCredentials: true };
+    axios.post(url, newData, config).then(res => {
+      console.log(res);
+      tweet.fav_or_not = !(tweet.fav_or_not);
+      tweet.favorite_count += 1;
+      setRendering(!rendering);
+    });
+  };
+
+  const clickUnFavriteButton = (tweet: TimelineType) => {
+    const url = `http://localhost:3000/unfavorite`;
+    const newData = { tweet_id: tweet.id };
+    const config = { withCredentials: true };
+    axios.post(url, newData, config).then(res => {
+      console.log(res);
+      tweet.fav_or_not = !(tweet.fav_or_not);
+      tweet.favorite_count -= 1;
+      setRendering(!rendering);
+    });
+  };
+
   const content = data.map((e, i) => {
     if (e) {
 
@@ -55,7 +86,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                 <Avatar alt="user-image"
                   src={`http://localhost:3000/${e.profile_image?.url}`}
                 >
-                  {e.name}
+                  <PersonIcon color="inherit" fontSize="large" />
                 </Avatar>
               }
               className={classes.cardHeader}
@@ -89,14 +120,22 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                     justifyContent="flex-start"
                     alignItems="center">
                     <Grid item>
-                      <Tooltip title="いいね">
-                        <Button size="small">
-                          <ThumbUpIcon color="inherit" fontSize="small" />
-                        </Button>
-                      </Tooltip>
+                      {e.fav_or_not === false &&
+                        <Tooltip title="いいね">
+                          <Button onClick={() => clickFavoriteButton(e)} size="small">
+                            <ThumbUpIcon color="inherit" fontSize="small" />
+                          </Button>
+                        </Tooltip>}
+                      {e.fav_or_not === true &&
+                        <Tooltip title="いいね解除">
+                          <Button onClick={() => clickUnFavriteButton(e)} size="small">
+                            <ThumbUpOutlinedIcon color="inherit" fontSize="small" />
+                          </Button>
+                        </Tooltip>}
+
                     </Grid>
                     <Grid item>
-                      <p>いいね数</p>
+                      <p>{e.favorite_count}</p>
                     </Grid>
                   </Grid>
                 </Grid>
