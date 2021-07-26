@@ -3,6 +3,8 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { useParams } from "react-router";
 
+import { Pagination } from '@material-ui/lab';
+
 import { UserType, TimelineType } from 'types/typeList';
 
 import { CurrentUserContext, UserContext } from 'App';
@@ -23,6 +25,8 @@ const MyPage = (props: any) => {
   const [followingsNumber, setFollowingsNumber] = useState<number>(0);
   const [followers, setFollowers] = useState<UserType[]>([]);
   const [followersNumber, setFollowersNumber] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const resetData = () => {
     setFollowings([]);
@@ -45,6 +49,8 @@ const MyPage = (props: any) => {
       setFollowingsNumber(res.data.followings_count);
       res.data.followers.forEach((e: UserType) => setFollowers(followers => [...followers, e]));
       setFollowersNumber(res.data.followers_count);
+      const number = Math.ceil(res.data.mypage_data_count / 15);
+      setPageNumber(number);
     }).catch(error => {
       console.log(error);
     });
@@ -114,9 +120,33 @@ const MyPage = (props: any) => {
     );
   };
 
+  const handlePagination = (p: number) => {
+    setPage(p);
+    setData([]);
+    const url = `http://localhost:3000/users/${myPageId}?page=${p}`;
+    const config = { withCredentials: true };
+    axios.get(url, config).then(response => {
+      response.data.mypage_data.forEach((e: TimelineType) => setData(data => [...data, e]));
+    }).catch(error => {
+      console.log("There are something errors", error);
+    });
+  };
+
+  const MyPagination = () => {
+    return (
+      <Pagination color="primary"
+        count={pageNumber}
+        onChange={(e, p) => handlePagination(p)}
+        page={page}
+        variant="outlined"
+        shape="rounded" />
+    );
+  }
+
   return (
     <>
       <MypageContent />
+      <MyPagination />
     </>
   );
 

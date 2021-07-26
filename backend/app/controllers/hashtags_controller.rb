@@ -2,12 +2,15 @@ class HashtagsController < ApplicationController
   before_action :user_must_log_in, only:[:show, :index, :update_bar_info]
 
   def show
+    ## hashtag ##
     hashtag = Hashtag.find_by(hashname: params[:word])
 
+    ## tweets ##
     tweet_id = hashtag.tweet_ids
     base_data = Tweet.left_joins(:user,:hashtags)\
                      .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
                      .where(id: tweet_id)
+                     .page(params[:page] ||= 1).per(15)
     array_data = []
     base_data.each do |d|
       user = User.find(d.user_id)
@@ -24,12 +27,19 @@ class HashtagsController < ApplicationController
     end
     tweets = array_data.uniq
 
+    ## tweets_count ##
+    all_data = Tweet.where(id: tweet_id)
+    data_count = all_data.count
+
+    ## recipes ##
     recipes = hashtag.recipes
 
+    ## bar_info ##
     bar_info = hashtag.bars
 
     render json: { hashtag: hashtag,
                    tweets: tweets,
+                   tweets_count: data_count,
                    recipes: recipes,
                    bar_info: bar_info }
   end
