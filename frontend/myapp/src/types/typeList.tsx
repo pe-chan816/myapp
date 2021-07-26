@@ -18,6 +18,8 @@ export type TweetType = {
 export type TimelineType = {
   content: string,
   created_at: string,
+  favorite_count: number,
+  fav_or_not: boolean,
   id: number,
   name: string,
   profile_image?: { url: string },
