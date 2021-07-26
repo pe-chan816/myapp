@@ -3,6 +3,8 @@ import { useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, useParams } from "react-router";
 
+import { Pagination } from '@material-ui/lab';
+
 import { HashtagType, BarInfoType, TimelineType, RecipeType } from "types/typeList";
 
 import EditRecipe from "./editRecipe";
@@ -34,6 +36,8 @@ const HashtagDetail = () => {
   const [timelineData, setTimelineData] = useState<Partial<TimelineType[]>>([]);
   const [recipe, setRecipe] = useState<Partial<RecipeType[]>>([]);
   const [barInfo, setBarInfo] = useState<Partial<BarInfoType>>({});
+  const [page, setPage] = useState<number>(1);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   const resetData = () => {
     setTimelineData([]);
@@ -52,15 +56,35 @@ const HashtagDetail = () => {
       res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
       res.data.recipes.forEach((e: RecipeType) => setRecipe(recipe => [...recipe, e]));
       if (res.data.bar_info[0]) { setBarInfo(res.data.bar_info[0]) };
+      const number = Math.ceil(res.data.tweets_count / 15);
+      setPageNumber(number);
     });
   };
 
   useEffect(getDetailData, []);
 
-  console.log(tagData);
-  console.log(timelineData);
-  console.log("recipe ->", recipe);
-  console.log("barInfo ->", barInfo);
+  const handlePagination = (p: number) => {
+    setPage(p);
+    setTimelineData([]);
+    const url = `http://localhost:3000/hashtag/${hashname}?page=${p}`;
+    const config = { withCredentials: true };
+    axios.get(url, config).then(response => {
+      response.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
+    }).catch(error => {
+      console.log("There are something errors", error);
+    });
+  };
+
+  const MyPagination = () => {
+    return (
+      <Pagination color="primary"
+        count={pageNumber}
+        onChange={(e, p) => handlePagination(p)}
+        page={page}
+        variant="outlined"
+        shape="rounded" />
+    );
+  }
 
   return (
     <TagDataContext.Provider value={{ tagData, setTagData }}>
@@ -74,7 +98,7 @@ const HashtagDetail = () => {
             </Router>
 
             <Timeline data={timelineData} />
-
+            <MyPagination />
           </div>
         </BarInfoContext.Provider>
       </RecipeContext.Provider>

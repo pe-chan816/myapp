@@ -34,9 +34,17 @@ class UsersController < ApplicationController
 
   def show
     user = User.find(params[:id])
-    base_data = Tweet.left_joins(:user,:hashtags)\
-                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
+
+    ## カウント ##
+    all_data = Tweet.where("user_id = ?", user.id)
+    data_count = all_data.count
+    ############
+
+    ## 表示データ ##
+    base_data = Tweet.left_joins(:user,:hashtags)
+                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")
                      .where("user_id = ?", user.id)
+                     .page(params[:page] ||= 1).per(15)#######
     array_data = []
     base_data.each do |d|
       user = User.find(d.user_id)
@@ -59,7 +67,10 @@ class UsersController < ApplicationController
     followers_count = followers.count
     follow_or_not = current_user.following?(user)
 
-    render json: { user: user,
+    #############
+
+    render json: { mypage_data_count: data_count,
+                   user: user,
                    mypage_data: data,
                    followings: followings,
                    followings_count: followings_count,

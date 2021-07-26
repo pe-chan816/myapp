@@ -4,13 +4,14 @@ class SearchesController < ApplicationController
 
     ## ユーザー ##
     searched_user = User.where("name LIKE ?", "%#{keyword}%")
-    ############
+    #############
 
     ## ツイート ##
-    base_data = Tweet.joins(:user, :hashtags).select("tweets.*,
-                                                      hashtags.hashname,
-                                                      users.name, users.profile_image")\
-                                  .where("content LIKE ?", "%#{keyword}%")
+    base_data = Tweet.joins(:user, :hashtags)
+                     .select("tweets.*,
+                              hashtags.hashname,
+                              users.name, users.profile_image")
+                     .where("content LIKE ?", "%#{keyword}%")
     array_data = []
     base_data.each do |d|
       user = User.find(d.user_id)

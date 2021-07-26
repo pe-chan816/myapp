@@ -81,8 +81,6 @@ const HashtagDetailContent = () => {
   };
   const linkWithRadioButton = linkWithRadioButtonJSX();
 
-  console.log(barInfo);
-
   return (
     <div>
       <h1>#{tagData?.hashname}</h1>

@@ -14,12 +14,18 @@ class FavoritesController < ApplicationController
   end
 
   def my_favorite
-##
     user = User.find(params[:id])
-    base_data = Tweet.left_joins(:user, :hashtags, :favorites)\
-                     .select("tweets.*, users.name, users.profile_image,
+
+    ## my_favorites_count ##
+    all_data = user.favorited_tweets
+    data_count = all_data.count
+
+    ## my_favorites ##
+    base_data = Tweet.left_joins(:user, :hashtags, :favorites)
+                     .select("tweets.*,
+                              users.name, users.profile_image,
                               hashtags.hashname,
-                              favorites.user_id AS favorite_user_id")\
+                              favorites.user_id AS favorite_user_id")
                      .where("favorites.user_id = ?", user.id)
     array_data = []
     base_data.each do |d|
@@ -37,6 +43,7 @@ class FavoritesController < ApplicationController
     end
     data = array_data.uniq
 
-    render json: {my_favorites: data}
+    render json: { my_favorites_count: data_count,
+                   my_favorites: data}
   end
 end
