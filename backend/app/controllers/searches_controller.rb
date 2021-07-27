@@ -7,7 +7,7 @@ class SearchesController < ApplicationController
     #############
 
     ## ツイート ##
-    base_data = Tweet.joins(:user, :hashtags)
+    base_data = Tweet.left_joins(:user, :hashtags)
                      .select("tweets.*,
                               hashtags.hashname,
                               users.name, users.profile_image")
