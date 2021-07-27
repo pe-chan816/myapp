@@ -61,14 +61,14 @@ describe("マイページの挙動", () => {
 
   const myPageContents = async () => {
     expect(await screen.findAllByText("ボウモアおじさん"));
-    expect(await screen.findByText("5")); //フォロー人数
-    expect(await screen.findByText("4")); //フォロワー人数
+    expect(screen.getByText("5")); //フォロー人数
+    expect(screen.getByText("4")); //フォロワー人数
 
-    expect(await screen.findByText("アイラしか勝たん"));
-    expect(await screen.findByText("#ウイスキー"));
-    expect(await screen.findByText("#シングルモルト"));
+    expect(screen.getByText("アイラしか勝たん"));
+    expect(screen.getByText("#ウイスキー"));
+    expect(screen.getByText("#シングルモルト"));
 
-    expect(await screen.findByText("仕事終わりの一杯"));
+    expect(screen.getByText("仕事終わりの一杯"));
   };
 
   it("各要素が正常に表示されている", async () => {

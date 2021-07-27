@@ -1,9 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useParams } from "react-router";
 
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Grid, Link, makeStyles } from "@material-ui/core";
 import { Pagination } from '@material-ui/lab';
+import PersonIcon from '@material-ui/icons/Person';
 
 import { UserType, TimelineType } from 'types/typeList';
 
@@ -27,6 +29,23 @@ const MyPage = (props: any) => {
   const [followersNumber, setFollowersNumber] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const useStyles = makeStyles({
+    card: {
+      margin: "10px auto",
+      maxWidth: "800px"
+    },
+    pagination: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
+      margin: "0 auto",
+      maxWidth: "800px"
+    },
+    followFollower: {
+      margin: "0 5px"
+    }
+  });
+  const classes = useStyles();
 
   const resetData = () => {
     setFollowings([]);
@@ -58,11 +77,9 @@ const MyPage = (props: any) => {
   useEffect(getData, [props.location.pathname]);
 
   const MypageContent = () => {
-
-    const userImage = user.profile_image?.url;
     const url = `http://localhost:3000/${user.profile_image?.url}`;
-
     const myPageUrl = `/user/${user.id}`;
+
     const followingsPage = {
       pathname: `/user/${myPageId}/followings`,
       state: followings
@@ -100,22 +117,80 @@ const MyPage = (props: any) => {
 
       console.log(followOrNot);
       if (followOrNot === false) {
-        return <button onClick={clickFollow}>フォロー</button>;
+        return (
+          <Button color="primary"
+            onClick={clickFollow}
+            size="small"
+            variant="outlined">
+            フォロー
+          </Button>
+        );
       } else {
-        return <button onClick={clickUnfollow}>フォロー解除</button>;
+        return (
+          <Button color="primary"
+            onClick={clickUnfollow}
+            size="small"
+            variant="outlined">
+            フォロー解除
+          </Button>
+        );
       }
     };
 
     return (
       <div>
-        {userImage && <img src={url} alt="user" />}
-        <p>名前: <Link to={myPageUrl}>{user.name}</Link></p>
-        <p>フォロー: <Link to={followingsPage}>{followingsNumber}</Link></p>
-        <p>フォロワー : <Link to={followersPage}>{followersNumber}</Link></p>
+        <Card className={classes.card}>
+          <CardHeader
+            avatar={
+              <Avatar alt="user-image" src={url}>
+                <PersonIcon color="inherit" fontSize="large" />
+              </Avatar>
+            }
+            title={
+              <Link color="inherit" component={RouterLink}
+                to={myPageUrl} underline="none"
+              >
+                {user.name}
+              </Link>
+            }
+          />
+          <CardContent>
+            { /*ここにプロフィール文*/}
+          </CardContent>
+          <CardActions disableSpacing>
+            <Grid alignItems="flex-start"
+              container
+              direction="column"
+              justifyContent="center"
+            >
+              <Grid item>
+                <Grid container>
+                  <Grid className={classes.followFollower} item>
+                    <Link color="inherit" component={RouterLink} to={followingsPage}>
+                      <span style={{ fontWeight: "bold" }}>{followingsNumber}</span>
+                      フォロー中
+                    </Link>
+                  </Grid>
+                  <Grid className={classes.followFollower} item>
+                    <Link color="inherit" component={RouterLink} to={followersPage}>
+                      <span style={{ fontWeight: "bold" }}>{followersNumber}</span>
+                      フォロワー
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Grid>
 
-        {user.id !== currentUser.id && <FollowButton />}
+              <Grid item>
+                {user.id !== currentUser.id &&
+                  <FollowButton />}
+              </Grid>
+
+            </Grid>
+          </CardActions>
+        </Card>
 
         <Timeline data={data} />
+
       </div >
     );
   };
@@ -134,7 +209,8 @@ const MyPage = (props: any) => {
 
   const MyPagination = () => {
     return (
-      <Pagination color="primary"
+      <Pagination className={classes.pagination}
+        color="primary"
         count={pageNumber}
         onChange={(e, p) => handlePagination(p)}
         page={page}
