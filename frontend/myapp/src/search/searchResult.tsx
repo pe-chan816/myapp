@@ -21,8 +21,8 @@ const SearchResult = (prop: any) => {
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
-      res.data.searched_tweet.forEach((e: TimelineType) => setTweetData(tweetData => [...tweetData, e]));
-      res.data.searched_user.forEach((e: UserType) => setUserData(userData => [...userData, e]));
+      setTweetData(res.data.searched_tweet);
+      setUserData(res.data.searched_user);
     });
   };
 

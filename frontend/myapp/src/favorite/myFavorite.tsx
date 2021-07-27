@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 
+import { makeStyles } from "@material-ui/core";
 import { Pagination } from '@material-ui/lab';
 
 import { TimelineType } from "types/typeList";
@@ -14,6 +15,16 @@ const MyFavorite = (props: any) => {
   const [data, setData] = useState<Partial<TimelineType[]>>([]);
   const [page, setPage] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const useStyles = makeStyles({
+    pagination: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
+      margin: "0 auto",
+      maxWidth: "800px"
+    }
+  });
+  const classes = useStyles();
 
   const getFavoriteData = () => {
     setData([]);
@@ -21,7 +32,7 @@ const MyFavorite = (props: any) => {
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
-      res.data.my_favorites.forEach((e: TimelineType) => setData(data => [...data, e]));
+      setData(res.data.my_favorites);
       const number = Math.ceil(res.data.my_favorites_count / 15);
       setPageNumber(number);
     });
@@ -33,8 +44,8 @@ const MyFavorite = (props: any) => {
     setData([]);
     const url = `http://localhost:3000//users/${userId}/myfavorite?page=${p}`;
     const config = { withCredentials: true };
-    axios.get(url, config).then(response => {
-      response.data.my_favorites.forEach((e: TimelineType) => setData(data => [...data, e]));
+    axios.get(url, config).then(res => {
+      setData(res.data.my_favorites);
     }).catch(error => {
       console.log("There are something errors", error);
     });
@@ -42,7 +53,8 @@ const MyFavorite = (props: any) => {
 
   const MyPagination = () => {
     return (
-      <Pagination color="primary"
+      <Pagination className={classes.pagination}
+        color="primary"
         count={pageNumber}
         onChange={(e, p) => handlePagination(p)}
         page={page}
