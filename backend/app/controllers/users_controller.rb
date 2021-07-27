@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
     if user.save
       log_in(user)
-      render json: {status: :created}
+      render json: {status: :created, user: user}
     else
       render json: {messages: user.errors.full_messages}
     end
