@@ -1,38 +1,47 @@
 import { useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Grid, Link, makeStyles } from "@material-ui/core";
+import PersonIcon from '@material-ui/icons/Person';
+
+import { UserType } from 'types/typeList';
 
 import { UserContext } from 'App';
 
-type locationType = {
-  pathname: string;
-  state: userType[];
-}
 
-type userType = {
-  email: string;
-  id: number;
-  name: string;
-  profile_image: {
-    url?: string
-  };
+type locationType = {
+  pathname: string,
+  state: UserType[]
 }
 
 const UserRelationship = () => {
   const location: locationType = useLocation();
-  const data: userType[] = location.state;
+  const data: UserType[] = location.state;
   const { user } = useContext(UserContext);
 
   console.log(location);
   console.log(user);
 
-  const mapUserData = data.map((e: userType, i) => {
+  const mapUserData = data.map((e: UserType, i) => {
     const imageUrl = `http://localhost:3000/${e.profile_image?.url}`;
     const userUrl = `/user/${e.id}`;
 
     return (
       <div key={i}>
-        {e.profile_image?.url && <img src={imageUrl} alt="user" />}
-        <Link to={userUrl}>{e.name}</Link>
+        <Card>
+          <CardHeader
+            avatar={
+              <Avatar alt="user-image" src={imageUrl}>
+                <PersonIcon color="inherit" fontSize="large" />
+              </Avatar>
+            }
+            title={
+              <Link color="inherit" component={RouterLink} to={userUrl}>
+                {e.name}
+              </Link>
+            }
+          />
+          <CardContent>{ /* ここにプロフィール文 */}</CardContent>
+        </Card>
       </div >
     );
   });
@@ -40,9 +49,9 @@ const UserRelationship = () => {
   return (
     <div>
       <h1>followings or followers</h1>
-      {user.profile_image?.url && <img src={`http://localhost:3000/${user.profile_image.url}`} alt="user" />}
-      <Link to={`/user/${user.id}`}><p>{user.name}</p></Link>
-      {mapUserData}
+      <div>
+        {mapUserData}
+      </div>
     </div>
   );
 
