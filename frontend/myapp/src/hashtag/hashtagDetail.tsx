@@ -53,8 +53,10 @@ const HashtagDetail = () => {
     axios.get(url, config).then(res => {
       console.log(res);
       setTagData(res.data.hashtag);
-      res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
-      res.data.recipes.forEach((e: RecipeType) => setRecipe(recipe => [...recipe, e]));
+      //res.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
+      setTimelineData(res.data.tweets);
+      //res.data.recipes.forEach((e: RecipeType) => setRecipe(recipe => [...recipe, e]));
+      setRecipe(res.data.recipes);
       if (res.data.bar_info[0]) { setBarInfo(res.data.bar_info[0]) };
       const number = Math.ceil(res.data.tweets_count / 15);
       setPageNumber(number);
@@ -68,8 +70,9 @@ const HashtagDetail = () => {
     setTimelineData([]);
     const url = `http://localhost:3000/hashtag/${hashname}?page=${p}`;
     const config = { withCredentials: true };
-    axios.get(url, config).then(response => {
-      response.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
+    axios.get(url, config).then(res => {
+      //response.data.tweets.forEach((e: TimelineType) => setTimelineData(timelineData => [...timelineData, e]));
+      setTimelineData(res.data.tweets);
     }).catch(error => {
       console.log("There are something errors", error);
     });

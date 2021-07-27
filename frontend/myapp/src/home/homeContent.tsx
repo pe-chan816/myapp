@@ -38,7 +38,8 @@ const HomeContent = () => {
     const url = `http://localhost:3000`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      res.data.home_data.forEach((e: TimelineType) => setData(data => [...data, e]));
+      setData(res.data.home_data);
+
       const number = Math.ceil(res.data.home_data_count / 15);
       setPageNumber(number);
     }).catch(error => {
@@ -53,8 +54,8 @@ const HomeContent = () => {
     setData([]);
     const url = `http://localhost:3000/?page=${p}`;
     const config = { withCredentials: true };
-    axios.get(url, config).then(response => {
-      response.data.home_data.forEach((e: TimelineType) => setData(data => [...data, e]));
+    axios.get(url, config).then(res => {
+      setData(res.data.home_data);
     }).catch(error => {
       console.log("There are something errors", error);
     });

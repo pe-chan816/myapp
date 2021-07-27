@@ -10,7 +10,7 @@ const SubmitButton = (props: { label: string }) => {
 
   return (
     <>
-      <Button className={classes.button} color="primary" type="submit" variant="contained">
+      <Button className={classes.button} color="primary" fullWidth type="submit" variant="contained">
         {props.label}
       </Button>
     </>

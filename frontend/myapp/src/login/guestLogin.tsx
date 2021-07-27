@@ -4,11 +4,12 @@ import { useHistory } from "react-router-dom";
 
 import { Button, Grid, makeStyles } from '@material-ui/core';
 
-import { LoginStateContext } from "App";
+import { CurrentUserContext, LoginStateContext } from "App";
 
 const GuestLogin = () => {
   const histroy = useHistory();
   const { setLoginState } = useContext(LoginStateContext);
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const useStyles = makeStyles({
     text: {
       fontSize: 13,
@@ -24,6 +25,7 @@ const GuestLogin = () => {
     axios.get(url, config).then(res => {
       console.log(res);
       setLoginState(true);
+      setCurrentUser(res.data.user);
       histroy.push("/");
     });
   };

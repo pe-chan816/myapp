@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link as RouterLink, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
 import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } from '@material-ui/core';
@@ -27,8 +27,9 @@ const HomeHeader = () => {
   console.log("!!HomeHeader!!");
   const { setModalState } = useContext(ModalStateContext);
   const { setLoginState } = useContext(LoginStateContext);
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
+  const history = useHistory();
 
   const useStyles = makeStyles({
     header: {
@@ -48,9 +49,11 @@ const HomeHeader = () => {
   const clickLogout = () => {
     const url = `http://localhost:3000/logout`;
     const config = { withCredentials: true };
-    axios.delete(url, config).then(res => {
+    axios.delete(url, config).then(async (res) => {
       console.log("ログアウト状況: ", res);
-      setLoginState(false);
+      await setCurrentUser({});
+      await setLoginState(false);
+      history.push("/");
     }).catch(error => console.log("ログアウトエラー", error));
   }
 

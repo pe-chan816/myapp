@@ -62,12 +62,14 @@ const MyPage = (props: any) => {
       console.log(res.data);
 
       setUser(res.data.user);
-      res.data.mypage_data.forEach((e: TimelineType) => setData(data => [...data, e]));
+      setData(res.data.mypage_data);
+
       setFollowOrNot(res.data.follow_or_not);
-      res.data.followings.forEach((e: UserType) => setFollowings(followings => [...followings, e]));
+      setFollowings(res.data.followings);
       setFollowingsNumber(res.data.followings_count);
-      res.data.followers.forEach((e: UserType) => setFollowers(followers => [...followers, e]));
+      setFollowers(res.data.followers);
       setFollowersNumber(res.data.followers_count);
+
       const number = Math.ceil(res.data.mypage_data_count / 15);
       setPageNumber(number);
     }).catch(error => {
@@ -200,8 +202,8 @@ const MyPage = (props: any) => {
     setData([]);
     const url = `http://localhost:3000/users/${myPageId}?page=${p}`;
     const config = { withCredentials: true };
-    axios.get(url, config).then(response => {
-      response.data.mypage_data.forEach((e: TimelineType) => setData(data => [...data, e]));
+    axios.get(url, config).then(res => {
+      setData(res.data.mypage_data);
     }).catch(error => {
       console.log("There are something errors", error);
     });

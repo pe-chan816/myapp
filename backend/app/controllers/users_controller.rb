@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
     if user.save
       log_in(user)
-      render json: {status: :created}
+      render json: {status: :created, user: user}
     else
       render json: {messages: user.errors.full_messages}
     end
@@ -102,7 +102,7 @@ class UsersController < ApplicationController
   def guest
     user = User.find_by(guest: true)
     log_in(user)
-    render json: { message: "ゲストユーザーとしてログイン"}
+    render json: { user: user}
   end
 
   def favorite
