@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
 
 import { CurrentUserContext } from 'App';
 import { LoginStateContext } from 'App';
@@ -11,6 +11,19 @@ const DeleteUserAccount = () => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const { setLoginState } = useContext(LoginStateContext);
   const history = useHistory();
+  const useStyles = makeStyles({
+    box: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center"
+    },
+    phrase: {
+      fontSize: "13px",
+      marginTop: "70px",
+      textAlign: "center"
+    }
+  });
+  const classes = useStyles();
 
   const clickDeleteButton = () => {
     const url = `http://localhost:3000/users/${currentUser.id}`;
@@ -44,8 +57,15 @@ const DeleteUserAccount = () => {
   };
 
   return (
-    <div>
-      <Button onClick={() => { setDialogState(true) }}>アカウント削除</Button>
+    <div className={classes.box}>
+      <p className={classes.phrase}>
+        もしこのアプリにご満足いただけなかったのであれば
+        <br />
+        アカウントを削除してしまうことも可能です
+      </p>
+      <Button color="secondary" onClick={() => { setDialogState(true) }}>
+        アカウント削除
+      </Button>
       <AlartDialog />
     </div>
   );
