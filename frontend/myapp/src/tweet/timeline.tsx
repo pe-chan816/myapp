@@ -25,7 +25,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     },
     cardHeader: {
       paddingTop: "10px",
-      paddingBottom: "0px"
+      paddingBottom: "10px"
     },
     cardContent: {
       paddingTop: "0px",

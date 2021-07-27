@@ -63,13 +63,13 @@ describe("ホーム画面", () => {
 
   const assertExisting = async () => {
     expect(await screen.findByText("通りすがりのビール好き")).toBeInTheDocument();
-    expect(await screen.findByText("とりあえず生")).toBeInTheDocument();
-    expect(await screen.findByText("#ビール")).toBeInTheDocument();
-    expect(await screen.findByText("#ハートランド")).toBeInTheDocument();
+    expect(screen.getByText("とりあえず生")).toBeInTheDocument();
+    expect(screen.getByText("#ビール")).toBeInTheDocument();
+    expect(screen.getByText("#ハートランド")).toBeInTheDocument();
 
-    expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
-    expect(await screen.findByText("Mr.下戸")).toBeInTheDocument();
-    expect(await screen.findByText("#飲めない")).toBeInTheDocument();
+    expect(screen.getByText("ノンアルコールでお願いします")).toBeInTheDocument();
+    expect(screen.getByText("Mr.下戸")).toBeInTheDocument();
+    expect(screen.getByText("#飲めない")).toBeInTheDocument();
   };
 
   it("タイムラインが正しく表示される", async () => {
@@ -84,6 +84,7 @@ describe("ホーム画面", () => {
     await assertExisting();
   });
 
+  // タイムラインのテストでやるべき //
   it("ハッシュタグのリンクからその詳細ページへ飛べる", async () => {
     renderLoginSituation();
     const target = await screen.findByText("#ビール");
