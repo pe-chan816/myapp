@@ -33,6 +33,9 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     },
     cardActions: {
       fontSize: 13
+    },
+    hashtag: {
+      textTransform: "none"
     }
   });
   const classes = useStyles();
@@ -71,7 +74,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
       const hashtags = e.hashname?.map((tag: HashtagType, num: number) => {
         return (
           <div key={num}>
-            <Button color="primary" onClick={() => clickTagButton(tag.hashname)} >
+            <Button className={classes.hashtag} color="primary" onClick={() => clickTagButton(tag.hashname)} >
               #{tag.hashname}
             </Button>
           </div>
