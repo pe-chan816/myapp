@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { makeStyles, TextField } from '@material-ui/core';
 
-import { LoginStateContext } from 'App';
+import { CurrentUserContext, LoginStateContext } from 'App';
 import SubmitButton from 'common/submitButton';
 
 const Login = () => {
@@ -12,6 +12,7 @@ const Login = () => {
   const [password, setPassword] = useState<Partial<string>>("");
   const [message, setMessage] = useState<Partial<string[]>>([]);
   const { setLoginState } = useContext(LoginStateContext);
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const histroy = useHistory();
 
   const useStyles = makeStyles({
@@ -48,6 +49,7 @@ const Login = () => {
     axios.post(url, data, config).then(res => {
       if (res.data.logged_in === true) {
         setLoginState(true);
+        setCurrentUser(res.data.user);
         histroy.push("/");
       } else {
         res.data.errors.forEach((e: string) => setMessage(message => [...message, e]));

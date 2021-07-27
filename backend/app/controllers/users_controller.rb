@@ -102,7 +102,7 @@ class UsersController < ApplicationController
   def guest
     user = User.find_by(guest: true)
     log_in(user)
-    render json: { message: "ゲストユーザーとしてログイン"}
+    render json: { user: user}
   end
 
   def favorite
