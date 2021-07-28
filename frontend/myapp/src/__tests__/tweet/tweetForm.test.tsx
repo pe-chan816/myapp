@@ -10,7 +10,7 @@ import App from "App";
 afterEach(cleanup);
 
 describe("ツイート投稿フォームの挙動", () => {
-  const renderLoginSituation = () => {
+  const renderLoginSituation = async () => {
     const history = createMemoryHistory();
     const mock = new MockAdapter(axios);
     // AppのcheckLoginStatusでのログインチェック
@@ -44,33 +44,52 @@ describe("ツイート投稿フォームの挙動", () => {
         </Router>
       );
     })
+
+    const tweetFormLink = await screen.findByText("ポスト");
+    act(() => { userEvent.click(tweetFormLink) });
   };
 
   it("各要素が正常に表示されている", async () => {
-    renderLoginSituation();
-    const tweetFormLink = await screen.findByText("ポスト");
-    act(() => { userEvent.click(tweetFormLink) });
+    await renderLoginSituation();
 
     expect(await screen.findByPlaceholderText("何かつぶやいてみましょう")).toBeInTheDocument();
-    expect(await screen.findByPlaceholderText("ハッシュタグ")).toBeInTheDocument();
-    expect(await screen.findByText("追加")).toBeInTheDocument();
-    //* ファイル投稿フォームは拾えないため省略 *//
-    expect(await screen.findByText("投稿")).toBeInTheDocument();
+    expect(screen.getByTestId("ImageIcon")).toBeInTheDocument();
+    expect(screen.getByTestId("LabelIcon")).toBeInTheDocument();
+    expect(screen.getByTestId("SendIcon")).toBeInTheDocument();
+  });
+
+  it("ハッシュタグアイコンをクリックすると入力フォームが表示される", async () => {
+    await renderLoginSituation();
+    const tagIcon = await screen.findByTestId("LabelIcon");
+    act(() => { userEvent.click(tagIcon) });
+
+    expect(await screen.findByPlaceholderText("# は不要です"));
+    expect(screen.getByTestId("disAddIcon")).toBeInTheDocument();
+  });
+
+  it("ハッシュタグの入力をすると結果が表示される", async () => {
+    await renderLoginSituation();
+    const tagIcon = await screen.findByTestId("LabelIcon");
+    act(() => { userEvent.click(tagIcon) });
+
+    const inputForm = await screen.findByPlaceholderText("# は不要です");
+    act(() => { userEvent.type(inputForm, "test") });
+
+    const addButton = await screen.findByTestId("AddIcon");
+    act(() => { userEvent.click(addButton) });
+
+    expect(await screen.findByTestId("CloseIcon")).toBeInTheDocument();
   });
 
   it("contentが空のまま投稿するとエラーメッセージが表示される", async () => {
-    renderLoginSituation();
-    const tweetFormLink = await screen.findByText("ポスト");
-    act(() => { userEvent.click(tweetFormLink) });
-
-    const target = await screen.findByText("投稿");
+    await renderLoginSituation();
+    const target = await screen.findByTestId("SendIcon");
     act(() => { userEvent.click(target) });
 
     expect(await screen.findByText("ツイートの中身が空のままです")).toBeInTheDocument();
   });
 
   it("ツイート投稿に成功するとホーム画面に遷移する", async () => {
-
     const history = createMemoryHistory();
     const mock = new MockAdapter(axios);
     // AppのcheckLoginStatusでのログインチェック
@@ -108,11 +127,10 @@ describe("ツイート投稿フォームの挙動", () => {
     })
 
     const tweetFormLink = await screen.findByText("ポスト");
-
     act(() => { userEvent.click(tweetFormLink) });
 
     const inputForm = await screen.findByPlaceholderText("何かつぶやいてみましょう");
-    const submitButton = await screen.findByText("投稿");
+    const submitButton = screen.getByTestId("SendIcon");
     act(() => {
       userEvent.type(inputForm, "適当な内容");
       userEvent.click(submitButton);
