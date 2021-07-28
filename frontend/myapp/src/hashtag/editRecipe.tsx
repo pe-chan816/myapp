@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useState, useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link as RouterLink, useParams } from "react-router-dom";
 import { RecipeContext } from "hashtag/hashtagDetail";
 
-import { RecipeType } from "types/typeList";
-import { createNoSubstitutionTemplateLiteral } from "typescript";
+import { Button, FormControl, Grid, InputLabel, Link, makeStyles, MenuItem, Select, TextField } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+
 
 const EditRecipe = () => {
   const hashname = Object.values(useParams());
@@ -14,6 +15,17 @@ const EditRecipe = () => {
   const [newAmount, setNewAmount] = useState<number>();
   const [newUnit, setNewUnit] = useState<string>("");
   const [newPosition, setNewPosition] = useState<number>(0);
+  const useStyles = makeStyles({
+    base: {
+      margin: "0 auto",
+      maxWidth: "800px",
+      width: "100%"
+    },
+    button: {
+      margin: "0 8px"
+    }
+  });
+  const classes = useStyles();
 
   const addList = () => {
     // レシピのpositionの最大値を取得
@@ -49,12 +61,12 @@ const EditRecipe = () => {
     axios.post(url, data, config).then(res => {
       console.log(res);
       setRecipe([]);
-      res.data.recipes.forEach((e: RecipeType) => setRecipe((recipe: RecipeType[]) => [...recipe, e]));
+      setRecipe(res.data.recipes);
     });
 
     const clearText = () => {
       setNewMaterial("");
-      setNewAmount(Number(undefined));/////要検証//////
+      setNewAmount(undefined);
       setNewUnit("");
     };
     clearText();
@@ -69,49 +81,118 @@ const EditRecipe = () => {
         axios.delete(url, config).then(res => {
           console.log(res);
           setRecipe([]);
-          res.data.new_recipe.forEach((e: RecipeType) => setRecipe((recipe: RecipeType[]) => [...recipe, e]));
+          setRecipe(res.data.new_recipe);
         });
       };
 
       return (
-        <div key={i}>{e.material} : {e.amount} {e.unit} <button onClick={deleteList}>x</button></div>
+        <div key={i}>
+          {e.material} : {e.amount} {e.unit}
+          <Link className={classes.button}
+            color="inherit"
+            component="button"
+            data-testId={`CloseIcon${i}`}
+            onClick={deleteList}
+          >
+            <CloseIcon fontSize="small" />
+          </Link>
+        </div>
       );
     }
   });
 
+  const AddButton = () => {
+    const AbleButton = () => {
+      return (
+        <Button className={classes.button}
+          color="primary"
+          onClick={addList}
+          variant="contained"
+        >
+          追加
+        </Button >
+      );
+    };
+
+    if (newMaterial !== "" && newUnit === "適量") {
+      return (
+        <AbleButton />
+      );
+    } else if (newMaterial !== "" && newAmount !== undefined && newUnit !== "") {
+      return (
+        <AbleButton />
+      );
+    } else {
+      return (
+        <Button className={classes.button} disabled variant="contained">
+          追加
+        </Button>
+      );
+    };
+  };
+
   return (
-    <div>
-      <Link to={`/hashtag/${hashname}`}><h1>#{hashname}</h1></Link>
-      <div>
+    <Grid alignItems="center"
+      className={classes.base}
+      container
+      direction="column"
+      justifyContent="center"
+    >
+      <Grid item>
+        <Link color="inherit" component={RouterLink} to={`/hashtag/${hashname}`}>
+          <h2>#{hashname}</h2>
+        </Link>
+      </Grid>
+
+      <Grid item>
         {recipeList}
-      </div>
-      <div>
-        <p>材料</p>
-        <input
-          type="text"
-          name="material"
-          value={newMaterial}
-          placeholder="材料"
-          onChange={e => setNewMaterial(e.target.value)} />
-        {newUnit !== "適量" &&
-          <input
-            type="number"
-            name="amount"
-            value={newAmount}
-            placeholder="分量"
-            onChange={e => setNewAmount(Number(e.target.value))} />
-        }
-        <select name="unit" value={newUnit} onChange={e => setNewUnit(e.target.value)}>
-          <option value="">------</option>
-          <option value="drop">drop</option>
-          <option value="dash">dash</option>
-          <option value="tsp">tsp</option>
-          <option value="ml">ml</option>
-          <option value="適量">適量</option>
-        </select>
-        <button onClick={addList}>追加</button>
-      </div>
-    </div>
+      </Grid>
+
+      <Grid item>
+        <Grid container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <TextField label="材料"
+            placeholder="ジン, ウォッカ etc..."
+            onChange={e => setNewMaterial(e.target.value)}
+            type="text"
+            value={newMaterial} />
+
+          {newUnit !== "適量" &&
+            <TextField label="分量"
+              onChange={e => setNewAmount(Number(e.target.value))}
+              placeholder="45 etc..."
+              type="number"
+              value={newAmount} />}
+
+          <FormControl>
+            <InputLabel id="recipe-unit">単位</InputLabel>
+            <Select labelId="recipe-unit"
+              style={{ minWidth: "100px" }}
+              value={newUnit}
+              onChange={(e) => {
+                if (e.target.value === "適量") {
+                  setNewAmount(undefined);
+                }
+                setNewUnit(e.target.value as string);
+              }}
+            >
+              <MenuItem value="">------</MenuItem>
+              <MenuItem value="drop"> drop</MenuItem>
+              <MenuItem value="dash">dash</MenuItem>
+              <MenuItem value="tsp">tsp</MenuItem>
+              <MenuItem value="ml">ml</MenuItem>
+              <MenuItem value="適量">適量</MenuItem>
+            </Select>
+          </FormControl>
+
+          <AddButton />
+
+        </Grid>
+      </Grid>
+    </Grid>
   );
 };
 

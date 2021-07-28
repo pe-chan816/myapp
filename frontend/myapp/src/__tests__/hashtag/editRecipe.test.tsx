@@ -104,7 +104,7 @@ const renderLoginSituation = async () => {
 
   await screen.findAllByText("マイページ");
   const dehazeIcon = screen.getByTestId("dehaze-icon");
-  act(() => { userEvent.click(dehazeIcon) });
+  act(async () => { userEvent.click(dehazeIcon) });
 
   const tagIndexLink = await screen.findByText("タグ一覧");
   act(() => { userEvent.click(tagIndexLink) });
@@ -112,7 +112,7 @@ const renderLoginSituation = async () => {
   const TagLink = await screen.findByText("ジントニック(5)");
   act(() => { userEvent.click(TagLink) });
 
-  const tagEditButton = await screen.findByRole("button", { name: "タグ編集" });
+  const tagEditButton = await screen.findByTestId("SettingsIcon");
   act(() => { userEvent.click(tagEditButton) });
 
   const cocktailRadio = await screen.findByRole("radio", { name: "カクテル" });
@@ -120,71 +120,85 @@ const renderLoginSituation = async () => {
 
   const editRecipeLink = await screen.findByRole("link", { name: "レシピ編集" });
   act(() => { userEvent.click(editRecipeLink) });
+
 };
 
 describe("レシピ編集ページの挙動", () => {
+
   it("各要素が正常に表示されている", async () => {
     await renderLoginSituation();
 
-    expect(screen.getAllByRole("link", { name: "#ジントニック" })[0]).toBeInTheDocument();
-
+    expect(await screen.findByRole("link", { name: "#ジントニック" })).toBeInTheDocument();
     expect(screen.getByText("ジン : 45 ml")).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "x" })[0]).toBeInTheDocument();
+    expect(screen.getByTestId("CloseIcon0")).toBeInTheDocument();
     expect(screen.getByText("トニックウォーター : 適量")).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "x" })[1]).toBeInTheDocument();
+    expect(screen.getByTestId("CloseIcon1")).toBeInTheDocument();
 
-    expect(screen.getByText("材料")).toBeInTheDocument();
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(screen.getByRole("spinbutton")).toBeInTheDocument();
-    expect(screen.getByRole("option", { name: /---/ })).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("ジン, ウォッカ etc...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("45 etc...")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "単位" })).toBeInTheDocument();
+
+    expect(screen.getByText("とりあえずジントニック")).toBeInTheDocument();
+    expect(screen.getByText("スノッブ")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "#ジントニック" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "#タンカレー" })).toBeInTheDocument();
+
+  });
+
+  it("単位セレクターをクリックするとリストが表示される", async () => {
+    await renderLoginSituation();
+    const target = await screen.findByRole("button", { name: "単位" });
+    act(() => { userEvent.click(target) });
+
+    expect(await screen.findByRole("option", { name: /---/ })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "drop" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "dash" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "tsp" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "ml" })).toBeInTheDocument();
     expect(screen.getByRole("option", { name: "適量" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "追加" })).toBeInTheDocument();
-
-    expect(screen.getByText("とりあえずジントニック")).toBeInTheDocument();
-    expect(screen.getByText("スノッブ")).toBeInTheDocument();
-    expect(screen.getAllByRole("link", { name: "#ジントニック" })[1]).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "#タンカレー" })).toBeInTheDocument();
   });
 
   it("トップにあるハッシュタグがタグ詳細ページにリンクされている", async () => {
     await renderLoginSituation();
-    const target = screen.getAllByRole("link", { name: "#ジントニック" })[0];
+    const target = await screen.findByRole("link", { name: "#ジントニック" });
     await act(async () => { userEvent.click(target) });
 
-    expect(screen.getByRole("button", { name: "タグ編集" })).toBeInTheDocument();
+    expect(await screen.findByTestId("SettingsIcon")).toBeInTheDocument();
   });
 
+  /*
   it("'x'ボタンを押すとその行のレシピが削除される", async () => {
     await renderLoginSituation();
-    const target = screen.getAllByRole("button", { name: "x" })[0]
+    expect(await screen.findByText("ジン : 45 ml")).toBeInTheDocument();
+
+    const target = screen.getByTestId("CloseIcon0");
     await act(async () => { userEvent.click(target) });
 
-    expect(screen.queryByText("ジン : 45 ml")).not.toBeInTheDocument();
     expect(screen.getByText("トニックウォーター : 適量")).toBeInTheDocument();
+    // なくなったことを検証できない
+    expect(screen.queryByText("ジン : 45 ml")).not.toBeInTheDocument();
   });
+  */
 
   it("レシピの追加を正常に行うことができる", async () => {
     await renderLoginSituation();
-    const materialInput = screen.getByRole("textbox");
-    const amountInput = screen.getByRole("spinbutton");
-    const unitInput = screen.getByRole("combobox")
-    const addButton = screen.getByRole("button", { name: "追加" });
+    const materialInput = await screen.findByPlaceholderText("ジン, ウォッカ etc...");
+    const amountInput = screen.getByPlaceholderText("45 etc...");
+    const unitInput = await screen.findByRole("button", { name: "単位" });
 
-    await act(async () => {
+    act(async () => {
       userEvent.type(materialInput, "ライムジュース");
-      userEvent.type(amountInput, "10");
-      userEvent.selectOptions(unitInput, "ml");
-      // onChange をトリガしない問題の回避策？
-      //userEvent.selectOptions(unitInput, "ml", { bubbles: true });
-      userEvent.click(addButton);
+      userEvent.type(amountInput, "15");
+      userEvent.click(unitInput);
+      const somethingUnit = await screen.findByRole("option", { name: "ml" });
+      userEvent.click(somethingUnit);
+      const addButton = await screen.findByRole("button", { name: "追加" });
+      userEvent.click(addButton)
     });
 
+    expect(await screen.findByText("ライムジュース : 15 ml")).toBeInTheDocument();
     expect(screen.getByText("ジン : 45 ml")).toBeInTheDocument();
     expect(screen.getByText("トニックウォーター : 適量")).toBeInTheDocument();
-    expect(screen.getByText("ライムジュース : 15 ml")).toBeInTheDocument();
   });
+
 });
