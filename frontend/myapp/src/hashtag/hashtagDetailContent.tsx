@@ -1,7 +1,10 @@
 import { useContext, useState } from "react";
 import { TagDataContext, RecipeContext, BarInfoContext } from "./hashtagDetail";
-import { Link } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
+
+import { Dialog, DialogContentText, FormControl, FormControlLabel, Grid, Link, makeStyles, Radio, RadioGroup, Tooltip } from '@material-ui/core';
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const HashtagDetailContent = () => {
   console.log("!!HashtagDetailContext!!");
@@ -11,6 +14,23 @@ const HashtagDetailContent = () => {
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [showRecipeEdit, setShowRecipeEdit] = useState<boolean>(false);
   const [showBarInfoEdit, setShowBarInfoEdit] = useState<boolean>(false);
+  const [radioValue, setRadioValue] = useState<string>("");
+  const useStyles = makeStyles({
+    base: {
+      margin: "0 auto",
+      maxWidth: "800px"
+    },
+    dialog: {
+      margin: "20px auto",
+      maxWidth: "800px",
+      width: "80%"
+    },
+    content: {
+      textAlign: "center",
+      width: "100%"
+    }
+  });
+  const classes = useStyles();
 
   const recipeList = recipe.map((e, i) => {
     if (e) {
@@ -25,8 +45,8 @@ const HashtagDetailContent = () => {
   const barLocation = () => {
     if (barInfo) {
       const containerStyle = {
-        width: '70%',
-        height: '60vh',
+        width: '100%',
+        height: '45vh',
         margin: '0 auto'
       };
 
@@ -47,7 +67,7 @@ const HashtagDetailContent = () => {
             </GoogleMap>
           </LoadScript>
           <div>
-            <p>{barInfo.name}</p>
+            <h3>{barInfo.name}</h3>
             <p>{barInfo.address}</p>
             <p>{barInfo.phone_number}</p>
           </div>
@@ -58,41 +78,107 @@ const HashtagDetailContent = () => {
   };
   const barContent = barLocation();
 
-  const linkWithRadioButtonJSX = () => {
+  const linkWithRadioButtonContent = () => {
     return (
       <div>
-        <p>このタグがカクテルについてのものならレシピを、</p>
-        <p>BARについてのものならGooglemapを利用してお店の情報を登録してみましょう！</p>
-        <div>
-          <input
-            type="radio" name="tag" id="cocktail_radio"
-            onChange={() => { setShowRecipeEdit(true); setShowBarInfoEdit(false); }} />
-          <label htmlFor="cocktail_radio">カクテル</label>
-          <input type="radio" name="tag" id="bar_info_radio"
-            onChange={() => { setShowBarInfoEdit(true); setShowRecipeEdit(false); }} />
-          <label htmlFor="bar_info_radio">BAR</label>
-        </div>
-        {showRecipeEdit &&
-          <Link to={`/hashtag/${tagData.hashname}/edit/recipe`}>レシピ編集</Link>}
-        {showBarInfoEdit &&
-          <Link to={`/hashtag/${tagData?.hashname}/edit/map`}>マップ編集</Link>}
+        <p>このタグがカクテルについてのものならレシピを、
+          <br />
+          BARについてのものならGooglemapを利用してお店の情報を登録してみましょう！
+        </p>
+
+        <Grid container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="center"
+        >
+          <FormControl>
+            <RadioGroup row value={radioValue}
+              onChange={(e) => { setRadioValue(e.target.value) }}
+            >
+              <FormControlLabel control={<Radio color="primary" size="small" />}
+                label="カクテル"
+                onChange={() => {
+                  setShowRecipeEdit(true);
+                  setShowBarInfoEdit(false);
+                }}
+                value="cocktail" />
+              <FormControlLabel control={<Radio color="primary" size="small" />}
+                label="BAR"
+                onChange={() => {
+                  setShowRecipeEdit(false);
+                  setShowBarInfoEdit(true);
+                }}
+                value="bar" />
+            </RadioGroup>
+          </FormControl>
+
+          {showRecipeEdit &&
+            <Link component={RouterLink} to={`/hashtag/${tagData.hashname}/edit/recipe`}>
+              レシピ編集
+            </Link>}
+          {showBarInfoEdit &&
+            <Link component={RouterLink} to={`/hashtag/${tagData?.hashname}/edit/map`}>
+              マップ編集
+            </Link>}
+        </Grid>
       </div>
     );
   };
-  const linkWithRadioButton = linkWithRadioButtonJSX();
+
+  const closeDialog = () => {
+    setShowEdit(!showEdit);
+    setRadioValue("");
+    setShowRecipeEdit(false);
+    setShowBarInfoEdit(false);
+  };
+
+  const linkWithRadioButton = linkWithRadioButtonContent();
 
   return (
-    <div>
-      <h1>#{tagData?.hashname}</h1>
-      {recipe.toString() !== [].toString() &&
-        <div>{recipeList}</div>}
-      {JSON.stringify(barInfo) !== JSON.stringify({}) &&
-        <div>{barContent}</div>}
+    <Grid alignItems="center"
+      className={classes.base}
+      container
+      direction="column"
+      justifyContent="center"
+    >
+      <Grid item>
+        <Grid alignItems="center"
+          container
+          direction="row"
+          justifyContent="center"
+          spacing={2}
+        >
+          <Grid item>
+            <h2>#{tagData?.hashname}</h2>
+          </Grid>
+          <Grid item>
+            <Tooltip title="タグ編集">
+              <Link color="inherit"
+                component="button"
+                onClick={() => setShowEdit(!showEdit)}
+                data-testid="SettingsIcon"
+              >
+                <SettingsIcon />
+              </Link>
+            </Tooltip>
+          </Grid>
+        </Grid>
+      </Grid>
 
-      <button onClick={() => setShowEdit(!showEdit)}>タグ編集</button>
-      {showEdit &&
-        <div>{linkWithRadioButton}</div>}
-    </div>
+      <Grid className={classes.content} item>
+        {recipe.toString() !== [].toString() &&
+          <div>{recipeList}</div>}
+        {JSON.stringify(barInfo) !== JSON.stringify({}) &&
+          <div>{barContent}</div>}
+      </Grid>
+
+      <Dialog open={showEdit} onClose={closeDialog}>
+        <DialogContentText className={classes.dialog}>
+          {linkWithRadioButton}
+        </DialogContentText>
+      </Dialog>
+
+    </Grid>
   );
 };
 

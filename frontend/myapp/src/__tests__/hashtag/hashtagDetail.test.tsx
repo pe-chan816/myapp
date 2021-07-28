@@ -78,27 +78,38 @@ const renderLoginSituation = async () => {
 
 describe("ハッシュタグ詳細ページの挙動", () => {
   it("各要素が正常に表示されている", async () => {
-    renderLoginSituation();
-    const tagEditButton = await screen.findByRole("button", { name: "タグ編集" })
+    await renderLoginSituation();
 
-    //linkになっている#ジントニックとtextが被るため確認できない おそらくtest-idを使えばいける
-    //expect(await screen.findAllByText("#ビール")).toBeInTheDocument();
     expect(await screen.findByText("ジン : 45 ml")).toBeInTheDocument();
-    expect(await screen.findByText("トニックウォーター : 適量")).toBeInTheDocument();
-    expect(tagEditButton).toBeInTheDocument();
-    expect(await screen.findByText("とりあえずジントニック")).toBeInTheDocument();
-    expect(await screen.findByText("スノッブ")).toBeInTheDocument();
-    expect(await screen.findByRole("link", { name: "#ジントニック" })).toBeInTheDocument();
-    expect(await screen.findByRole("link", { name: "#タンカレー" })).toBeInTheDocument();
+    expect(screen.getByText("トニックウォーター : 適量")).toBeInTheDocument();
+    expect(screen.getByTestId("SettingsIcon")).toBeInTheDocument();
+    expect(screen.getByText("とりあえずジントニック")).toBeInTheDocument();
+    expect(screen.getByText("スノッブ")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "#ジントニック" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "#タンカレー" })).toBeInTheDocument();
+  });
 
+  it("タグ編集ボタンを押すと表示されるダイアログの内容が正常に表示されている", async () => {
+    await renderLoginSituation();
+    const tagEditButton = await screen.findByTestId("SettingsIcon")
     act(() => { userEvent.click(tagEditButton) });
-    expect(await screen.findByText(/カクテルについてのものなら/)).toBeInTheDocument();
-    expect(await screen.findByText(/BARについてのものなら/)).toBeInTheDocument();
 
-    const cocktailRadio = screen.getByRole("radio", { name: "カクテル" });
+    expect(await screen.findByText(/カクテルについてのものなら/)).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "カクテル" }));
+    expect(screen.getByRole("radio", { name: "BAR" }));
+  });
+
+  it("タグ編集ダイアログのラジオボタンを押すとリンクが切り替わる", async () => {
+    await renderLoginSituation();
+    const tagEditButton = await screen.findByTestId("SettingsIcon")
+    act(() => { userEvent.click(tagEditButton) });
+
+    const cocktailRadio = await screen.findByRole("radio", { name: "カクテル" });
     const barInfoRadio = screen.getByRole("radio", { name: "BAR" });
+
     act(() => { userEvent.click(cocktailRadio) });
     expect(await screen.findByRole("link", { name: "レシピ編集" }));
+
     act(() => { userEvent.click(barInfoRadio) });
     expect(await screen.findByRole("link", { name: "マップ編集" }));
   });
