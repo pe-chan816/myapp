@@ -90,7 +90,7 @@ describe("ホーム画面", () => {
     const target = await screen.findByText("#ビール");
     act(() => { userEvent.click(target) });
     expect(await screen.findByText("#ビール")).toBeInTheDocument();
-    expect(await screen.findByText("タグ編集")).toBeInTheDocument();
+    expect(screen.getByTestId("SettingsIcon")).toBeInTheDocument();
   });
 
 });
