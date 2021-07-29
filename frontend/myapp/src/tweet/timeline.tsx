@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, Link, makeStyles, Tooltip } from '@material-ui/core';
@@ -10,9 +10,12 @@ import PersonIcon from '@material-ui/icons/Person';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 
+import { CurrentUserContext } from 'App';
+
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
   const data = props.data;
+  const { currentUser } = useContext(CurrentUserContext);
   // いいねの再描画のためのstate //
   const [rendering, setRendering] = useState<boolean>(false);
   /////////////////////////////
@@ -87,6 +90,38 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
         );
       });
 
+      const FavoriteButton = () => {
+        if (e.user_id === currentUser.id) {
+          return (
+            <ThumbUpIcon color="inherit" fontSize="small" />
+          );
+        } else {
+          if (e.fav_or_not === false) {
+            return (
+              <Tooltip title="いいね">
+                <Link color="inherit"
+                  component="button"
+                  onClick={() => clickFavoriteButton(e)}
+                >
+                  <ThumbUpIcon color="inherit" fontSize="small" />
+                </Link>
+              </Tooltip>
+            );
+          } else {
+            return (
+              <Tooltip title="いいね解除">
+                <Link color="inherit"
+                  component="button"
+                  onClick={() => clickUnFavriteButton(e)}
+                >
+                  <ThumbUpOutlinedIcon color="inherit" fontSize="small" />
+                </Link>
+              </Tooltip>
+            );
+          }
+        }
+      };
+
       return (
         <div className={classes.card} key={i}>
           <Card>
@@ -103,7 +138,8 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                 <Link color="inherit" component={RouterLink} to={`/user/${e.user_id}`}>
                   {e.name}
                 </Link>
-              } />
+              }
+            />
             {e.tweet_image?.url &&
               <CardMedia component="img"
                 src={`http://localhost:3000/${e.tweet_image.url}`}
@@ -121,7 +157,6 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                 justifyContent="space-between"
                 alignItems="center"
               >
-
                 <Grid item>
                   <Grid container
                     direction="row"
@@ -129,35 +164,20 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                     alignItems="center"
                   >
                     <Grid item>
-                      {e.fav_or_not === false &&
-                        <Tooltip title="いいね">
-                          <Link color="inherit"
-                            component="button"
-                            onClick={() => clickFavoriteButton(e)}
-                          >
-                            <ThumbUpIcon color="inherit" fontSize="small" />
-                          </Link>
-                        </Tooltip>}
-                      {e.fav_or_not === true &&
-                        <Tooltip title="いいね解除">
-                          <Link color="inherit"
-                            component="button"
-                            onClick={() => clickUnFavriteButton(e)}
-                          >
-                            <ThumbUpOutlinedIcon color="inherit" fontSize="small" />
-                          </Link>
-                        </Tooltip>}
-
+                      <FavoriteButton />
                     </Grid>
+
                     <Grid className={classes.favoriteCount} item>
                       <p>{e.favorite_count}</p>
                     </Grid>
+
                   </Grid>
                 </Grid>
 
                 <Grid item>
                   <p>{e.created_at}</p>
                 </Grid>
+
               </Grid>
             </CardActions>
 
