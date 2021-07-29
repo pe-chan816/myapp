@@ -220,10 +220,6 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
               </Grid>
             </CardActions>
 
-            <Link component={RouterLink} to={`/tweets/${e.id}/detail`}>
-              <button>詳細</button>
-            </Link>
-
           </Card>
         </div>
       );

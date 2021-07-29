@@ -13,7 +13,6 @@ import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
 import UserRelationship from 'user/followings';
-import TweetDetail from 'tweet/tweetDetail';
 import MyFavorite from 'favorite/myFavorite';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
@@ -137,7 +136,6 @@ const HomeHeader = () => {
           <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
 
           <Route path="/search/:searchWord" exact component={SearchResult} />
-          <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
           <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
           <Route >
