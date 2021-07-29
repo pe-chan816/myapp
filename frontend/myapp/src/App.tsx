@@ -4,14 +4,7 @@ import axios from 'axios';
 
 import { UserType } from 'types/typeList';
 
-import ModalField from 'common/modalField';
 import HomeBase from 'home/homeBase';
-
-// モーダルを共有するためのコンテクスト
-export const ModalStateContext = createContext({} as {
-  modalState: boolean,
-  setModalState: any
-});
 
 // ログイン状態を共有
 export const LoginStateContext = createContext({} as {
@@ -46,7 +39,6 @@ export const MessageContext = createContext({} as {
 });
 
 const App = () => {
-  const [modalState, setModalState] = useState<boolean>(false);
   const [loginState, setLoginState] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<UserType | {}>({});
   const [message, setMessage] = useState<string[]>([]);
@@ -86,12 +78,9 @@ const App = () => {
           <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
             <UserContext.Provider value={{ user, setUser }}>
               <FollowOrNotContext.Provider value={{ followOrNot, setFollowOrNot }}>
-                <ModalStateContext.Provider value={{ modalState, setModalState }}>
-                  <MessageContext.Provider value={{ message, setMessage }}>
-                    <HomeBase />
-                    <ModalField />
-                  </MessageContext.Provider>
-                </ModalStateContext.Provider>
+                <MessageContext.Provider value={{ message, setMessage }}>
+                  <HomeBase />
+                </MessageContext.Provider>
               </FollowOrNotContext.Provider>
             </UserContext.Provider>
           </CurrentUserContext.Provider>

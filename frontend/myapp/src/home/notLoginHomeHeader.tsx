@@ -1,7 +1,4 @@
-import { useContext } from "react";
 import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
-
-import { ModalStateContext } from "App";
 
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
 
@@ -9,8 +6,6 @@ import Login from "login/login";
 import Signup from "signup/signup";
 
 const NotLoginHomeHeader = () => {
-  const { modalState, setModalState } = useContext(ModalStateContext);
-
   const useStyles = makeStyles({
     header: {
       backdropFilter: "blur(20px)",
@@ -62,7 +57,6 @@ const NotLoginHomeHeader = () => {
           <Route path="/signup" exact component={Signup} />
         </Switch>
 
-        <button onClick={() => setModalState(!modalState)}>モーダル</button>
       </Container>
     </div>
   );

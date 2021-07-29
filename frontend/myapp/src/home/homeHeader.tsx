@@ -6,7 +6,6 @@ import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } fro
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
 import { LoginStateContext } from 'App';
-import { ModalStateContext } from 'App';
 import { CurrentUserContext } from 'App';
 
 import HomeContent from './homeContent';
@@ -25,7 +24,6 @@ import SearchResult from 'search/searchResult';
 
 const HomeHeader = () => {
   console.log("!!HomeHeader!!");
-  const { setModalState } = useContext(ModalStateContext);
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
@@ -149,7 +147,6 @@ const HomeHeader = () => {
           </Route>
         </Switch>
 
-        <button onClick={() => setModalState(true)}>モーダル</button>
       </Container>
     </div>
   );
