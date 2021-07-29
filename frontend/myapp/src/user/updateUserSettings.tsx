@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
-import { Avatar, Button, Grid, makeStyles, TextField } from '@material-ui/core';
+import { Avatar, Button, Grid, makeStyles, TextField, Tooltip } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
 
 import DeleteUserAccount from "./deleteUserAccount";
@@ -107,9 +107,11 @@ const UpdateUserSettings = () => {
           </Grid>
           <Grid item>
             <label htmlFor="image-upload">
-              <Button component="span" size="small">
-                <ImageIcon fontSize="small" />
-              </Button>
+              <Tooltip title="プロフィール画像">
+                <Button component="span" size="small">
+                  <ImageIcon fontSize="small" />
+                </Button>
+              </Tooltip>
             </label>
             <input
               onChange={(e) => {

@@ -34,6 +34,9 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     cardActions: {
       fontSize: 13
     },
+    favoriteCount: {
+      marginLeft: "8px"
+    },
     hashtag: {
       textTransform: "none"
     }
@@ -74,7 +77,10 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
       const hashtags = e.hashname?.map((tag: HashtagType, num: number) => {
         return (
           <div key={num}>
-            <Button className={classes.hashtag} color="primary" onClick={() => clickTagButton(tag.hashname)} >
+            <Button className={classes.hashtag}
+              color="primary"
+              onClick={() => clickTagButton(tag.hashname)}
+            >
               #{tag.hashname}
             </Button>
           </div>
@@ -113,29 +119,37 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
               <Grid container
                 direction="row"
                 justifyContent="space-between"
-                alignItems="center">
+                alignItems="center"
+              >
 
                 <Grid item>
                   <Grid container
                     direction="row"
                     justifyContent="flex-start"
-                    alignItems="center">
+                    alignItems="center"
+                  >
                     <Grid item>
                       {e.fav_or_not === false &&
                         <Tooltip title="いいね">
-                          <Button onClick={() => clickFavoriteButton(e)} size="small">
+                          <Link color="inherit"
+                            component="button"
+                            onClick={() => clickFavoriteButton(e)}
+                          >
                             <ThumbUpIcon color="inherit" fontSize="small" />
-                          </Button>
+                          </Link>
                         </Tooltip>}
                       {e.fav_or_not === true &&
                         <Tooltip title="いいね解除">
-                          <Button onClick={() => clickUnFavriteButton(e)} size="small">
+                          <Link color="inherit"
+                            component="button"
+                            onClick={() => clickUnFavriteButton(e)}
+                          >
                             <ThumbUpOutlinedIcon color="inherit" fontSize="small" />
-                          </Button>
+                          </Link>
                         </Tooltip>}
 
                     </Grid>
-                    <Grid item>
+                    <Grid className={classes.favoriteCount} item>
                       <p>{e.favorite_count}</p>
                     </Grid>
                   </Grid>
