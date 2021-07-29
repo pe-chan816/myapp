@@ -6,6 +6,7 @@ import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, 
 
 import { HashtagType, TimelineType } from 'types/typeList';
 
+import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
@@ -14,13 +15,16 @@ import { CurrentUserContext } from 'App';
 
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
-  const data = props.data;
+  const [data, setData] = useState<Partial<TimelineType[]>>(props.data);
   const { currentUser } = useContext(CurrentUserContext);
   // いいねの再描画のためのstate //
   const [rendering, setRendering] = useState<boolean>(false);
   /////////////////////////////
   const history = useHistory();
   const useStyles = makeStyles({
+    deleteButton: {
+      margin: "0 8px"
+    },
     card: {
       margin: "10px auto 10px auto",
       maxWidth: "800px",
@@ -74,9 +78,19 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     });
   };
 
+  const clickDeleteButton = (tweetId: number, indexNumber: number) => {
+    const url = `http://localhost:3000/tweets/${tweetId}`;
+    const config = { withCredentials: true };
+    axios.delete(url, config).then(res => {
+      console.log(res);
+      const newData = [...data];
+      newData.splice(indexNumber, 1);
+      setData(newData);
+    });
+  };
+
   const content = data.map((e, i) => {
     if (e) {
-
       const hashtags = e.hashname?.map((tag: HashtagType, num: number) => {
         return (
           <div key={num}>
@@ -119,6 +133,24 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
               </Tooltip>
             );
           }
+        }
+      };
+
+      const DeleteButton = () => {
+        if (e.user_id === currentUser.id) {
+          return (
+            <Tooltip title="ポスト削除">
+              <Link className={classes.deleteButton}
+                color="inherit"
+                component="button"
+                onClick={() => clickDeleteButton(e.id, i)}
+              >
+                <DeleteIcon />
+              </Link>
+            </Tooltip>
+          );
+        } else {
+          return null;
         }
       };
 
@@ -175,7 +207,14 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                 </Grid>
 
                 <Grid item>
-                  <p>{e.created_at}</p>
+                  <Grid alignItems="center"
+                    container
+                    direction="row"
+                    justifyContent="flex-end"
+                  >
+                    <p>{e.created_at}</p>
+                    <DeleteButton />
+                  </Grid>
                 </Grid>
 
               </Grid>
