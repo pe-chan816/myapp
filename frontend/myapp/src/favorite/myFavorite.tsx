@@ -25,7 +25,6 @@ const MyFavorite = (props: any) => {
   const classes = useStyles();
 
   const getFavoriteData = () => {
-    setData([]);
     const url = `http://localhost:3000/users/${userId}/myfavorite`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
@@ -39,7 +38,6 @@ const MyFavorite = (props: any) => {
 
   const handlePagination = (p: number) => {
     setPage(p);
-    setData([]);
     const url = `http://localhost:3000//users/${userId}/myfavorite?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
@@ -61,7 +59,6 @@ const MyFavorite = (props: any) => {
     );
   }
 
-  console.log(data);
   return (
     <Grid container
       className={classes.base}

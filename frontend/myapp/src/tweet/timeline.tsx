@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, Link, makeStyles, Tooltip } from '@material-ui/core';
@@ -15,8 +15,10 @@ import { CurrentUserContext } from 'App';
 
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
-  const [data, setData] = useState<Partial<TimelineType[]>>(props.data);
   const { currentUser } = useContext(CurrentUserContext);
+  const [data, setData] = useState<Partial<TimelineType[]>>([]);
+  useEffect(() => { setData(props.data) }, [props.data]);
+
   // いいねの再描画のためのstate //
   const [rendering, setRendering] = useState<boolean>(false);
   /////////////////////////////
