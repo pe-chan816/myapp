@@ -95,7 +95,7 @@ describe("ログイン時のホームヘッダー", () => {
     const target = await screen.findByText("マイいいね");
     act(() => { userEvent.click(target) });
 
-    expect(await screen.findByText("いいねしたツイート")).toBeInTheDocument();
+    expect(await screen.findByText("いいねしたポスト")).toBeInTheDocument();
   });
 
   it("'タグ一覧表示'のリンクが正常に動作する", async () => {
