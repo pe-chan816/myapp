@@ -88,7 +88,21 @@ const UpdateUserSettings = () => {
       );
     }
   };
-
+  /*
+    const UpdateButton = () => {
+      if (currentUser.guest === true) {
+        return (
+          <Tooltip title="設定の変更は正式に作成したアカウントでご利用いただけます">
+            <Button disabled variant="contained">編集</Button>
+          </Tooltip>
+        );
+      } else {
+        return (
+          <SubmitButton label="編集" />
+        );
+      }
+    };
+  */
   return (
     <div className={classes.paper}>
       <h3>ユーザーアカウント設定</h3>
@@ -160,7 +174,8 @@ const UpdateUserSettings = () => {
           />
         }
 
-        <SubmitButton label="編集" />
+        <SubmitButton label="編集"
+          message="正式なアカウントを作成するとこの編集機能をご利用いただけます" />
       </form>
 
       <DeleteUserAccount />

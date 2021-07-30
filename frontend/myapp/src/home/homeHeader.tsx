@@ -5,9 +5,9 @@ import axios from 'axios';
 import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } from '@material-ui/core';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
-import { LoginStateContext } from 'App';
-import { CurrentUserContext } from 'App';
+import { CurrentUserContext, LoginStateContext } from 'App';
 
+import AlertMessage from 'common/alertMessage';
 import HomeContent from './homeContent';
 import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
@@ -124,6 +124,7 @@ const HomeHeader = () => {
       </Drawer>
 
       <Container>
+        <AlertMessage />
         <Switch>
           <Route path="/" exact component={HomeContent} />
           <Route path="/user/:myPageId" exact component={MyPage} />

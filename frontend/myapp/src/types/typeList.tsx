@@ -1,7 +1,9 @@
+export type AlertSeverityType = "error" | "info" | "success" | "warning";
+
 export type UserType = {
   admin: boolean,
   email: string,
-  gueat: boolean,
+  guest: boolean,
   id: number,
   name: string,
   profile_image?: { url: string }

@@ -1,8 +1,8 @@
-import { useState, createContext, useEffect } from 'react';
+import { useState, createContext, useEffect, SetStateAction } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 
-import { UserType } from 'types/typeList';
+import { AlertSeverityType, UserType } from 'types/typeList';
 
 import HomeBase from 'home/homeBase';
 
@@ -31,12 +31,24 @@ export const FollowOrNotContext = createContext({} as {
   setFollowOrNot: any
 });
 
+// アラートメッセージ表示管理
+export const AlertDisplayContext = createContext({} as {
+  alertDisplay: boolean,
+  setAlertDisplay: any
+});
 
-// 格納したメッセージを共有
+export const AlertSeverityContext = createContext({} as {
+  alertSeverity: AlertSeverityType,
+  setAlertSeverity: any
+});
+
+// メッセージを格納
 export const MessageContext = createContext({} as {
   message: string[],
   setMessage: any
 });
+
+
 
 const App = () => {
   const [loginState, setLoginState] = useState<boolean>(false);
@@ -46,8 +58,9 @@ const App = () => {
   const [user, setUser] = useState<Partial<UserType>>({});
   const [followOrNot, setFollowOrNot] = useState<boolean>(false);
 
+  const [alertDisplay, setAlertDisplay] = useState<boolean>(false);
+  const [alertSeverity, setAlertSeverity] = useState<AlertSeverityType>("success");
   useEffect(() => {
-    console.log("!!useEffect!!");
     if (loginState === false) {
       checkLoginStatus();
     }
@@ -79,7 +92,11 @@ const App = () => {
             <UserContext.Provider value={{ user, setUser }}>
               <FollowOrNotContext.Provider value={{ followOrNot, setFollowOrNot }}>
                 <MessageContext.Provider value={{ message, setMessage }}>
-                  <HomeBase />
+                  <AlertDisplayContext.Provider value={{ alertDisplay, setAlertDisplay }}>
+                    <AlertSeverityContext.Provider value={{ alertSeverity, setAlertSeverity }}>
+                      <HomeBase />
+                    </AlertSeverityContext.Provider>
+                  </AlertDisplayContext.Provider>
                 </MessageContext.Provider>
               </FollowOrNotContext.Provider>
             </UserContext.Provider>
