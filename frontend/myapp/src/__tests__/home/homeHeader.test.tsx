@@ -56,6 +56,7 @@ describe("ログイン時のホームヘッダー", () => {
   it("各要素が正しく表示されている", async () => {
     renderLoginSituation();
     expect(await screen.findByText("マイページ")).toBeInTheDocument();
+    expect(screen.getByText("Insyutagram")).toBeInTheDocument();
     expect(screen.getByText("ポスト")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("検索")).toBeInTheDocument();
 
