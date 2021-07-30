@@ -3,12 +3,14 @@ import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
 
-import { CurrentUserContext } from 'App';
-import { LoginStateContext } from 'App';
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, LoginStateContext, MessageContext } from "App";
 
 const DeleteUserAccount = () => {
   const [dialogState, setDialogState] = useState<boolean>(false);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
   const { setLoginState } = useContext(LoginStateContext);
   const history = useHistory();
   const useStyles = makeStyles({
@@ -38,6 +40,30 @@ const DeleteUserAccount = () => {
     });
   };
 
+  const DeleteButton = () => {
+    if (currentUser.guest === true) {
+      return (
+        <Button
+          onClick={() => {
+            setAlertDisplay(true);
+            setAlertSeverity("error");
+            setDialogState(false);
+            setMessage(["ゲストユーザーを削除することはご遠慮いただいています",
+              "ゲストユーザーとしての体験を終了する場合はログアウトしていただくようお願いいたします"]);
+          }}
+        >
+          削除する
+        </Button>
+      );
+    } else {
+      return (
+        <Button onClick={clickDeleteButton}>
+          削除する
+        </Button>
+      );
+    }
+  };
+
   const AlartDialog = () => {
     return (
       <div>
@@ -47,9 +73,7 @@ const DeleteUserAccount = () => {
             <Button onClick={() => { setDialogState(false) }}>
               キャンセル
             </Button>
-            <Button onClick={clickDeleteButton}>
-              削除する
-            </Button>
+            <DeleteButton />
           </DialogActions>
         </Dialog>
       </div>
