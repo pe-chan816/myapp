@@ -21,32 +21,37 @@ describe("アカウント登録フォーム", () => {
 });
 
 describe("アカウント作成成功時の挙動", () => {
-  it("ログイン状態になりHomeHeaderが切り替わる", async () => {
+  it("ログイン状態になりMypageに遷移する", async () => {
     const history = createMemoryHistory();
     const mock = new MockAdapter(axios);
     //アカウント作成ボタンを押したとき
     mock.onPost("http://localhost:3000/signup")
-      .reply(200, { status: "created" });
-    //"checkLoginStatus"from"App"でのログインチェック
-    mock.onGet("http://localhost:3000/check_login")
       .reply(200, {
-        logged_in: true,
-        user: { id: 1 }
-      })
-    //HomeContent用
-    mock.onGet("http://localhost:3000")
-      .reply(200,
-        {
-          home_data: [{
-            id: 2,
-            content: "ノンアルコールでお願いします",
-            user_id: 2,
-            name: "Mr.下戸",
-            hashname: [{
-              hashname: "飲めない"
-            }]
+        status: "created",
+        user: {
+          id: 1,
+          name: "somebody"
+        }
+      });
+    //myPage
+    mock.onGet("http://localhost:3000/users/1")
+      .reply(200, {
+        user: {
+          id: 1,
+          name: "somebody"
+        },
+        mypage_data: [{
+          id: 2,
+          content: "ノンアルコールでお願いします",
+          user_id: 2,
+          name: "Mr.下戸",
+          hashname: [{
+            hashname: "飲めない"
           }]
-        });;
+        }],
+        followings: 10,
+        followers: 20
+      })
 
     act(() => {
       render(
@@ -55,13 +60,13 @@ describe("アカウント作成成功時の挙動", () => {
         </Router>
       );
 
-      userEvent.click(screen.getByRole("link", { name: "アカウント登録" })) //アカウント作成画面に移動
+      userEvent.click(screen.getByRole("link", { name: "アカウント登録" }));
     });
 
-    const nameForm = screen.getByPlaceholderText("ハンドルネーム");
+    const nameForm = await screen.findByPlaceholderText("ハンドルネーム");
     const emailForm = screen.getByPlaceholderText("メールアドレス");;
     const passwordForm = screen.getByPlaceholderText("パスワード");
-    const button = screen.getByRole("button", { name: "アカウント作成" });
+    const signupButton = screen.getByRole("button", { name: "アカウント作成" });
 
     act(() => {
       userEvent.type(nameForm, "somebody");
@@ -69,14 +74,14 @@ describe("アカウント作成成功時の挙動", () => {
       userEvent.type(passwordForm, "password");
     });
 
+    const passConfForm = await screen.findByPlaceholderText("もう一度パスワードを入力してください");
     act(() => {
-      const passConfForm = screen.getByPlaceholderText("もう一度パスワードを入力してください");
       userEvent.type(passConfForm, "password");
+      userEvent.click(signupButton);
     });
 
-    act(() => { userEvent.click(button); });
-
-    expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
+    expect(await screen.findByText("somebody")).toBeInTheDocument();
+    expect(screen.getByText("ノンアルコールでお願いします")).toBeInTheDocument();
   });
 });
 

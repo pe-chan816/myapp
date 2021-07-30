@@ -27,6 +27,7 @@ class FavoritesController < ApplicationController
                               hashtags.hashname,
                               favorites.user_id AS favorite_user_id")
                      .where("favorites.user_id = ?", user.id)
+                     .page(params[:page] ||= 1).per(15)
     array_data = []
     base_data.each do |d|
       user = User.find(d.user_id)

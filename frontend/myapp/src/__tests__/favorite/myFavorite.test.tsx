@@ -25,7 +25,7 @@ describe("いいね一覧の挙動", () => {
           {
             id: 1,
             content: "とりあえず生",
-            user_id: 1,
+            user_id: 2,
             name: "通りすがりのビール好き",
             hashname: [{
               hashname: "ビール"
@@ -35,12 +35,14 @@ describe("いいね一覧の挙動", () => {
           }, {
             id: 2,
             content: "ノンアルコールでお願いします",
-            user_id: 2,
+            user_id: 3,
             name: "Mr.下戸",
             hashname: [{
               hashname: "飲めない"
             }]
-          }]
+          }
+        ],
+        my_favorite_count: 2
       });
 
     act(() => {
@@ -54,20 +56,20 @@ describe("いいね一覧の挙動", () => {
 
   it("各要素が正常に表示されている", async () => {
     renderLoginSituation();
-    await screen.findAllByText("マイページ");
+    await screen.findByText("マイページ");
     const dehazeIcon = screen.getByTestId("dehaze-icon");
     act(() => { userEvent.click(dehazeIcon) });
 
     const myFavoriteLink = await screen.findByText("マイいいね");
     act(() => { userEvent.click(myFavoriteLink) });
 
-    expect(await screen.findByText("いいねしたツイート")).toBeInTheDocument();
-    expect(await screen.findByText("とりあえず生")).toBeInTheDocument();
-    expect(await screen.findByText("通りすがりのビール好き")).toBeInTheDocument();
-    expect(await screen.findByText("#ビール")).toBeInTheDocument();
-    expect(await screen.findByText("#ハートランド")).toBeInTheDocument();
-    expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
-    expect(await screen.findByText("Mr.下戸")).toBeInTheDocument();
-    expect(await screen.findByText("#飲めない")).toBeInTheDocument();
+    expect(await screen.findByText("いいねしたポスト")).toBeInTheDocument();
+    expect(screen.getByText("とりあえず生")).toBeInTheDocument();
+    expect(screen.getByText("通りすがりのビール好き")).toBeInTheDocument();
+    expect(screen.getByText("#ビール")).toBeInTheDocument();
+    expect(screen.getByText("#ハートランド")).toBeInTheDocument();
+    expect(screen.getByText("ノンアルコールでお願いします")).toBeInTheDocument();
+    expect(screen.getByText("Mr.下戸")).toBeInTheDocument();
+    expect(screen.getByText("#飲めない")).toBeInTheDocument();
   });
 });

@@ -19,6 +19,9 @@ export type TimelineType = {
   content: string,
   created_at: string,
   favorite_count: number,
+  //
+  favorite_user_id?: number,
+  //
   fav_or_not: boolean,
   id: number,
   name: string,

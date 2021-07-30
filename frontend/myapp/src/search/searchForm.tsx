@@ -28,7 +28,7 @@ const SearchForm = () => {
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
-            <SearchIcon onClick={clickSearchIcon} />
+            <SearchIcon data-testid="SearchIcon" onClick={clickSearchIcon} />
           </InputAdornment>
         ),
         endAdornment: (

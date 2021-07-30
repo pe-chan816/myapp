@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 
-import { makeStyles } from "@material-ui/core";
+import { Grid, makeStyles } from "@material-ui/core";
 import { Pagination } from '@material-ui/lab';
 
 import { TimelineType } from "types/typeList";
@@ -16,18 +16,15 @@ const MyFavorite = (props: any) => {
   const [page, setPage] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const useStyles = makeStyles({
-    pagination: {
-      alignItems: "center",
-      display: "flex",
-      justifyContent: "center",
+    base: {
       margin: "0 auto",
-      maxWidth: "800px"
+      maxWidth: "800px",
+      width: "100%"
     }
   });
   const classes = useStyles();
 
   const getFavoriteData = () => {
-    setData([]);
     const url = `http://localhost:3000/users/${userId}/myfavorite`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
@@ -41,7 +38,6 @@ const MyFavorite = (props: any) => {
 
   const handlePagination = (p: number) => {
     setPage(p);
-    setData([]);
     const url = `http://localhost:3000//users/${userId}/myfavorite?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
@@ -53,7 +49,7 @@ const MyFavorite = (props: any) => {
 
   const MyPagination = () => {
     return (
-      <Pagination className={classes.pagination}
+      <Pagination
         color="primary"
         count={pageNumber}
         onChange={(e, p) => handlePagination(p)}
@@ -63,13 +59,26 @@ const MyFavorite = (props: any) => {
     );
   }
 
-  console.log(data);
   return (
-    <div>
-      <h3>いいねしたツイート</h3>
-      <Timeline data={data} />
-      <MyPagination />
-    </div>
+    <Grid container
+      className={classes.base}
+      direction="column"
+      justifyContent="center"
+      alignItems="center"
+    >
+      <Grid item >
+        <h3>いいねしたポスト</h3>
+      </Grid>
+
+      <Grid className={classes.base} item>
+        <Timeline data={data} />
+      </Grid>
+
+      <Grid item>
+        <MyPagination />
+      </Grid>
+
+    </Grid>
   );
 };
 

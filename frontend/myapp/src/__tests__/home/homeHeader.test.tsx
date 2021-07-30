@@ -56,6 +56,7 @@ describe("ログイン時のホームヘッダー", () => {
   it("各要素が正しく表示されている", async () => {
     renderLoginSituation();
     expect(await screen.findByText("マイページ")).toBeInTheDocument();
+    expect(screen.getByText("Insyutagram")).toBeInTheDocument();
     expect(screen.getByText("ポスト")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("検索")).toBeInTheDocument();
 
@@ -95,7 +96,7 @@ describe("ログイン時のホームヘッダー", () => {
     const target = await screen.findByText("マイいいね");
     act(() => { userEvent.click(target) });
 
-    expect(await screen.findByText("いいねしたツイート")).toBeInTheDocument();
+    expect(await screen.findByText("いいねしたポスト")).toBeInTheDocument();
   });
 
   it("'タグ一覧表示'のリンクが正常に動作する", async () => {

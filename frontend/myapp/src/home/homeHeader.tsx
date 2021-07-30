@@ -6,7 +6,6 @@ import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } fro
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
 import { LoginStateContext } from 'App';
-import { ModalStateContext } from 'App';
 import { CurrentUserContext } from 'App';
 
 import HomeContent from './homeContent';
@@ -14,7 +13,6 @@ import MyPage from 'user/myPage';
 import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
 import UserRelationship from 'user/followings';
-import TweetDetail from 'tweet/tweetDetail';
 import MyFavorite from 'favorite/myFavorite';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
@@ -25,7 +23,6 @@ import SearchResult from 'search/searchResult';
 
 const HomeHeader = () => {
   console.log("!!HomeHeader!!");
-  const { setModalState } = useContext(ModalStateContext);
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
@@ -139,7 +136,6 @@ const HomeHeader = () => {
           <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
 
           <Route path="/search/:searchWord" exact component={SearchResult} />
-          <Route path="/tweets/:tweetId/detail" exact component={TweetDetail} />
 
           <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
           <Route >
@@ -149,7 +145,6 @@ const HomeHeader = () => {
           </Route>
         </Switch>
 
-        <button onClick={() => setModalState(true)}>モーダル</button>
       </Container>
     </div>
   );

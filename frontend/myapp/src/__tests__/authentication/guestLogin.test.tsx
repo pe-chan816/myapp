@@ -16,13 +16,12 @@ describe("ゲストログイン機能の挙動", () => {
     const mock = new MockAdapter(axios);
     //ログインボタンを押したとき
     mock.onGet("http://localhost:3000/guest")
-      .reply(200);
-    //"checkLoginStatus"from"App"でのログインチェック
-    mock.onGet("http://localhost:3000/check_login")
       .reply(200, {
-        logged_in: true,
-        user: { id: 1 }
-      })
+        user: {
+          id: 1,
+          name: "somebody"
+        }
+      });
     //HomeContent用
     mock.onGet("http://localhost:3000")
       .reply(200,
@@ -46,10 +45,11 @@ describe("ゲストログイン機能の挙動", () => {
       );
     });
 
-    userEvent.click(screen.getByRole("link", { name: "アカウント登録" })); //アカウント登録画面に移動
+    const signupLink = await screen.findByRole("link", { name: "アカウント登録" });
+    act(() => { userEvent.click(signupLink) });
 
-    const button = screen.getByRole("button", { name: "ゲストとして利用してみる" });
-    userEvent.click(button);
+    const loginButton = await screen.findByRole("button", { name: "ゲストとして利用してみる" });
+    act(() => { userEvent.click(loginButton); });
 
     expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
   });
