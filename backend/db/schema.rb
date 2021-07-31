@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_08_135256) do
+ActiveRecord::Schema.define(version: 2021_07_31_154206) do
 
   create_table "bars", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "address"
@@ -100,6 +100,8 @@ ActiveRecord::Schema.define(version: 2021_07_08_135256) do
     t.boolean "admin", default: false
     t.string "profile_image"
     t.boolean "guest", default: false
+    t.string "unique_name"
+    t.text "self_introduction"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
