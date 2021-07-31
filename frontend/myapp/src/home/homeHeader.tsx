@@ -52,6 +52,10 @@ const HomeHeader = () => {
     setAlertSeverity(alertSeverity);
     setMessage(message);
   };
+  const resetAlert = () => {
+    setAlertDisplay(false);
+    setMessage([]);
+  };
 
   const clickLogout = () => {
     const url = `http://localhost:3000/logout`;
@@ -77,17 +81,17 @@ const HomeHeader = () => {
           <Grid alignItems="center" container
             direction="row" justifyContent="flex-start" spacing={2}>
             <Grid item>
-              <Link color="inherit" component={RouterLink} to="/" underline="none">
+              <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/" underline="none">
                 <h2>Insyutagram</h2>
               </Link>
             </Grid>
             <Grid item>
-              <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}`}>
+              <Link color="inherit" component={RouterLink} onClick={resetAlert} to={`/user/${currentUser.id}`}>
                 マイページ
               </Link>
             </Grid>
             <Grid item>
-              <Link color="inherit" component={RouterLink} to="/tweet">
+              <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/tweet">
                 ポスト
               </Link>
             </Grid>
@@ -112,17 +116,23 @@ const HomeHeader = () => {
       <Drawer anchor="right" open={drawerStatus} onClose={clickDrawer}>
         <List onClick={clickDrawer}>
           <ListItem button divider>
-            <Link color="inherit" component={RouterLink} to={`/user/${currentUser.id}/favorite`} underline="none">
+            <Link color="inherit" component={RouterLink}
+              onClick={resetAlert} to={`/user/${currentUser.id}/favorite`} underline="none"
+            >
               マイいいね
             </Link>
           </ListItem>
           <ListItem button divider>
-            <Link color="inherit" component={RouterLink} to={`/hashtag/index`} underline="none">
+            <Link color="inherit" component={RouterLink}
+              onClick={resetAlert} to={`/hashtag/index`} underline="none"
+            >
               タグ一覧
             </Link>
           </ListItem>
           <ListItem button divider>
-            <Link color="inherit" component={RouterLink} to="/user/edit/account" underline="none">
+            <Link color="inherit" component={RouterLink}
+              onClick={resetAlert} to="/user/edit/account" underline="none"
+            >
               アカウント設定
             </Link>
           </ListItem>

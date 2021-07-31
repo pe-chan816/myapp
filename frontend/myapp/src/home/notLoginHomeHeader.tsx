@@ -1,12 +1,17 @@
+import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
 
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
+
+import { AlertDisplayContext, MessageContext } from "App";
 
 import AlertMessage from 'common/alertMessage';
 import Login from "login/login";
 import Signup from "signup/signup";
 
 const NotLoginHomeHeader = () => {
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setMessage } = useContext(MessageContext);
   const useStyles = makeStyles({
     header: {
       backdropFilter: "blur(20px)",
@@ -22,6 +27,11 @@ const NotLoginHomeHeader = () => {
   });
   const classes = useStyles();
 
+  const resetAlert = () => {
+    setAlertDisplay(false);
+    setMessage([]);
+  };
+
   const Home = () => {
     return (
       <div className={classes.home}>
@@ -35,17 +45,17 @@ const NotLoginHomeHeader = () => {
       <Grid alignItems="baseline" className={classes.header} container
         direction="row" justifyContent="flex-start" spacing={2}>
         <Grid item>
-          <Link color="inherit" component={RouterLink} underline="none" to="/">
+          <Link color="inherit" component={RouterLink} onClick={resetAlert} underline="none" to="/">
             <h2>Insyutagram</h2>
           </Link>
         </Grid>
         <Grid item>
-          <Link color="inherit" component={RouterLink} to="/login">
+          <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/login">
             ログイン
           </Link>
         </Grid>
         <Grid item>
-          <Link color="inherit" component={RouterLink} to="/signup">
+          <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/signup">
             アカウント登録
           </Link>
         </Grid>
