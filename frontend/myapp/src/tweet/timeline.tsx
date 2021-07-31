@@ -11,13 +11,18 @@ import PersonIcon from '@material-ui/icons/Person';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 
-import { CurrentUserContext } from 'App';
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
   const { currentUser } = useContext(CurrentUserContext);
   const [data, setData] = useState<Partial<TimelineType[]>>([]);
   useEffect(() => { setData(props.data) }, [props.data]);
+
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
 
   // いいねの再描画のためのstate //
   const [rendering, setRendering] = useState<boolean>(false);
@@ -81,12 +86,18 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
   };
 
   const clickDeleteButton = (tweetId: number, indexNumber: number) => {
+    const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+      setAlertDisplay(true);
+      setAlertSeverity(alertSeverity);
+      setMessage(message);
+    };
     const url = `http://localhost:3000/tweets/${tweetId}`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
       console.log(res);
       const newData = [...data];
       newData.splice(indexNumber, 1);
+      makeAlert("success", ["ポストを削除しました"]);
       setData(newData);
     });
   };
