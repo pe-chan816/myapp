@@ -4,12 +4,21 @@ import { useHistory } from "react-router-dom";
 
 import { Button, Grid, makeStyles } from '@material-ui/core';
 
-import { CurrentUserContext, LoginStateContext } from "App";
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, LoginStateContext, MessageContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
 const GuestLogin = () => {
   const histroy = useHistory();
   const { setLoginState } = useContext(LoginStateContext);
   const { setCurrentUser } = useContext(CurrentUserContext);
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
   const useStyles = makeStyles({
     text: {
       fontSize: 13,
@@ -27,6 +36,7 @@ const GuestLogin = () => {
       setLoginState(true);
       setCurrentUser(res.data.user);
       histroy.push("/");
+      makeAlert("success", ["ようこそいらっしゃいました"]);
     });
   };
 
