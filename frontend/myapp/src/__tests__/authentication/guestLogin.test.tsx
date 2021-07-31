@@ -11,7 +11,7 @@ import App from "App";
 afterEach(cleanup);
 
 describe("ゲストログイン機能の挙動", () => {
-  it("ログインボタンを押すとログイン状態になりHomeHeaderに切り替わる", async () => {
+  const renderLogin = async () => {
     const history = createMemoryHistory();
     const mock = new MockAdapter(axios);
     //ログインボタンを押したとき
@@ -51,6 +51,15 @@ describe("ゲストログイン機能の挙動", () => {
     const loginButton = await screen.findByRole("button", { name: "ゲストとして利用してみる" });
     act(() => { userEvent.click(loginButton); });
 
+  };
+
+  it("ログインボタンを押すとログイン状態になりHomeHeaderに切り替わる", async () => {
+    renderLogin();
     expect(await screen.findByText("ノンアルコールでお願いします")).toBeInTheDocument();
+  });
+
+  it("ゲストログインするとフラッシュメッセージが表示される", async () => {
+    renderLogin();
+    expect(await screen.findByText("ようこそいらっしゃいました")).toBeInTheDocument();
   });
 });

@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'reac
 
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
 
+import AlertMessage from 'common/alertMessage';
 import Login from "login/login";
 import Signup from "signup/signup";
 
@@ -51,6 +52,8 @@ const NotLoginHomeHeader = () => {
       </Grid>
 
       <Container>
+        <AlertMessage />
+
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/login" exact component={Login} />

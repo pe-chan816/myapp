@@ -4,16 +4,25 @@ import { useHistory } from "react-router-dom";
 
 import { makeStyles, TextField } from '@material-ui/core';
 
-import { CurrentUserContext, LoginStateContext } from 'App';
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, LoginStateContext, MessageContext } from "App";
+import { AlertSeverityType } from "types/typeList";
+
 import SubmitButton from 'common/submitButton';
 
 const Login = () => {
   const [email, setEmail] = useState<Partial<string>>("");
   const [password, setPassword] = useState<Partial<string>>("");
-  const [message, setMessage] = useState<Partial<string[]>>([]);
   const { setLoginState } = useContext(LoginStateContext);
   const { setCurrentUser } = useContext(CurrentUserContext);
   const histroy = useHistory();
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
 
   const useStyles = makeStyles({
     error: {
@@ -51,8 +60,9 @@ const Login = () => {
         setLoginState(true);
         setCurrentUser(res.data.user);
         histroy.push("/");
+        makeAlert("success", [`おかえりなさいませ`]);
       } else {
-        res.data.errors.forEach((e: string) => setMessage(message => [...message, e]));
+        makeAlert("error", [res.data.errors]);
         setPassword("");
       }
     }).catch(error => {
@@ -62,19 +72,9 @@ const Login = () => {
     e.preventDefault();
   };
 
-  const errorMessage = message.map((e, i) => {
-    return (
-      <div className={classes.error} key={i}>
-        {e}
-      </div>
-    );
-  });
-
   return (
     <div className={classes.paper}>
       <h2>アカウントログイン</h2>
-      {message &&
-        <div>{errorMessage}</div>}
       <form className={classes.paper} onSubmit={handleSubmit}>
         <TextField
           className={classes.form}

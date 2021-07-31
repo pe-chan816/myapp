@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 
@@ -9,15 +9,16 @@ import LabelIcon from '@material-ui/icons/Label';
 import ImageIcon from '@material-ui/icons/Image';
 import SendIcon from '@material-ui/icons/Send';
 
-const TweetForm = () => {
-  console.log("!!TweetForm!!");
+import { AlertDisplayContext, AlertSeverityContext, MessageContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
+
+const TweetForm = () => {
   const [content, setContent] = useState<string>("");
   const [newTag, setNewTag] = useState<string>("");
   const [hashtag, setHashtag] = useState<string[]>([]);
   const [image, setImage] = useState<File>();
   const [preview, setPreview] = useState<string>("");
-  const [message, setMessage] = useState<string>("");
   const [tagDisplay, setTagDisplay] = useState<boolean>(false);
   const history = useHistory();
   const useStyles = makeStyles({
@@ -34,10 +35,17 @@ const TweetForm = () => {
   });
   const classes = useStyles();
 
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
+
   const clickSubmit = async () => {
     console.log("ツイート投稿");
-
-    setMessage("");
 
     const url = `http://localhost:3000/tweets`;
     const data = await tweetData();
@@ -46,11 +54,11 @@ const TweetForm = () => {
       headers: { 'content-type': 'multipart/form-data' }
     };
     await axios.post(url, data, config).then(res => {
-      console.log("res=>", res);
       history.push("/");
+      makeAlert("success", ["ポスト投稿完了！"]);
     }).catch(error => {
-      console.log("エラーがあります", error);
-      setMessage("ツイートの中身が空のままです");
+      console.log("error-->", error);
+      makeAlert("error", ["ポスト内容が空のままです"])
     });
   };
 
@@ -153,11 +161,6 @@ const TweetForm = () => {
           <Grid item>
             {tagDisplay &&
               hashtagForm
-            }
-          </Grid>
-          <Grid item>
-            {message &&
-              <p className={classes.error}>{message}</p>
             }
           </Grid>
           <Grid alignItems="center"

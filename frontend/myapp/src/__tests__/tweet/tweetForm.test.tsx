@@ -86,10 +86,10 @@ describe("ツイート投稿フォームの挙動", () => {
     const target = await screen.findByTestId("SendIcon");
     act(() => { userEvent.click(target) });
 
-    expect(await screen.findByText("ツイートの中身が空のままです")).toBeInTheDocument();
+    expect(await screen.findByText("ポスト内容が空のままです")).toBeInTheDocument();
   });
 
-  it("ツイート投稿に成功するとホーム画面に遷移する", async () => {
+  it("ツイート投稿に成功するとホーム画面に遷移しフラッシュメッセージが表示される", async () => {
     const history = createMemoryHistory();
     const mock = new MockAdapter(axios);
     // AppのcheckLoginStatusでのログインチェック
@@ -137,5 +137,6 @@ describe("ツイート投稿フォームの挙動", () => {
     });
 
     expect(await screen.findByText("とりあえず生")).toBeInTheDocument();
+    expect(screen.getByText("ポスト投稿完了！")).toBeInTheDocument();
   });
 });

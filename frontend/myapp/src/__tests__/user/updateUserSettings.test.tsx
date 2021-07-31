@@ -96,7 +96,7 @@ describe("アカウント設定ページの挙動", () => {
     expect(screen.getByRole("button", { name: "削除する" }));
   });
 
-  it("編集に成功するとマイページに遷移する", async () => {
+  it("編集に成功するとフラッシュメッセージが表示されマイページに遷移する", async () => {
     await renderLoginSituation();
     const nameInputArea = screen.getByPlaceholderText("テストユーザー");
     const emailInputArea = screen.getByPlaceholderText("email@email.com");
@@ -111,5 +111,6 @@ describe("アカウント設定ページの挙動", () => {
     expect(await screen.findByText("テストユーザー改"));
     expect(screen.getByText("100"));
     expect(screen.getByText("50"));
+    expect(screen.getByText("アカウント設定を変更しました"));
   });
 });

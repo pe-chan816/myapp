@@ -3,7 +3,7 @@ import { Router } from 'react-router-dom';
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { createMemoryHistory } from 'history'
 
-import NotLoginHomeHeader from "home/notLoginHomeHeader";
+import App from "App";
 
 afterEach(cleanup);
 
@@ -11,7 +11,7 @@ const renderDom = () => {
   const history = createMemoryHistory();
   render(
     <Router history={history}>
-      < NotLoginHomeHeader />
+      < App />
     </Router>
   );
 };

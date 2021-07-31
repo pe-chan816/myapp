@@ -60,11 +60,6 @@ const App = () => {
 
   const [alertDisplay, setAlertDisplay] = useState<boolean>(false);
   const [alertSeverity, setAlertSeverity] = useState<AlertSeverityType>("success");
-  useEffect(() => {
-    if (loginState === false) {
-      checkLoginStatus();
-    }
-  }, []);
 
   const checkLoginStatus = () => {
     console.log("!!checkLoginStatus!!");
@@ -80,7 +75,10 @@ const App = () => {
     }).catch(res => {
       console.log("ログインエラー", res);
     })
-  }
+  };
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   console.log("loginState->", loginState);
   console.log("currentUser->", currentUser);
