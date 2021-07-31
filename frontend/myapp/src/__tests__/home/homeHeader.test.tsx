@@ -133,5 +133,6 @@ describe("ログイン時のホームヘッダー", () => {
     act(() => { userEvent.click(target) });
 
     expect(await screen.findByText("アカウント登録"));
+    expect(screen.getByText("ログアウトが完了しました"));
   });
 });

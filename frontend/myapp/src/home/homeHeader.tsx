@@ -5,7 +5,8 @@ import axios from 'axios';
 import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } from '@material-ui/core';
 import DehazeIcon from '@material-ui/icons/Dehaze';
 
-import { CurrentUserContext, LoginStateContext } from 'App';
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext, LoginStateContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
 import AlertMessage from 'common/alertMessage';
 import HomeContent from './homeContent';
@@ -43,6 +44,15 @@ const HomeHeader = () => {
   });
   const classes = useStyles();
 
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
+
   const clickLogout = () => {
     const url = `http://localhost:3000/logout`;
     const config = { withCredentials: true };
@@ -50,6 +60,7 @@ const HomeHeader = () => {
       console.log("ログアウト状況: ", res);
       await setCurrentUser({});
       await setLoginState(false);
+      makeAlert("success", ["ログアウトが完了しました"]);
       history.push("/");
     }).catch(error => console.log("ログアウトエラー", error));
   }
@@ -116,7 +127,7 @@ const HomeHeader = () => {
             </Link>
           </ListItem>
           <ListItem button divider>
-            <Link color="inherit" href="/" onClick={() => clickLogout()} underline="none">
+            <Link color="inherit" onClick={() => clickLogout()} underline="none">
               ログアウト
             </Link>
           </ListItem>
