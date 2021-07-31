@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 import { makeStyles, TextField } from '@material-ui/core';
 
-import { CurrentUserContext, LoginStateContext } from 'App';
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext, LoginStateContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
 import GuestLogin from 'login/guestLogin';
 import SubmitButton from 'common/submitButton';
@@ -14,10 +15,18 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [message, setMessage] = useState<Partial<string[]>>([]);
   const { setLoginState } = useContext(LoginStateContext);
   const { setCurrentUser } = useContext(CurrentUserContext);
   const histroy = useHistory();
+
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
 
   const useStyles = makeStyles({
     error: {
@@ -53,32 +62,23 @@ const Signup = () => {
       if (res.data.status === "created") {
         setLoginState(true);
         setCurrentUser(res.data.user);
+        makeAlert("success", [`${name}さん ようこそいらっしゃいました！`]);
         histroy.push(`/user/${res.data.user.id}`);
       } else {
-        res.data.messages.forEach((e: string) => setMessage(message => [...message, e]));
+        makeAlert("error", [res.data.messages]);
         setPassword("");
         setPasswordConfirmation("");
       }
-      console.log(res, "railsに値を渡しました");
     }).catch(error => {
       console.log("errors ->", error);
     });
 
     e.preventDefault();
   }
-  const errorMessage = message.map((e, i) => {
-    return (
-      <div className={classes.error} key={i}>
-        {e}
-      </div>
-    );
-  });
 
   return (
     <div className={classes.paper}>
       <h2>新規アカウント登録</h2>
-      {message &&
-        <div>{errorMessage}</div>}
       <form className={classes.paper} onSubmit={handleSubmit}>
         <TextField
           className={classes.form}

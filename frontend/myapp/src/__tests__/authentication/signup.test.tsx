@@ -6,14 +6,56 @@ import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
 
 import App from "App";
-import Signup from "signup/signup";
 
 afterEach(cleanup);
 
+const renderDom = () => {
+  const history = createMemoryHistory();
+  const mock = new MockAdapter(axios);
+  //アカウント作成ボタンを押したとき
+  mock.onPost("http://localhost:3000/signup")
+    .reply(200, {
+      status: "created",
+      user: {
+        id: 1,
+        name: "somebody"
+      }
+    });
+  //myPage
+  mock.onGet("http://localhost:3000/users/1")
+    .reply(200, {
+      user: {
+        id: 1,
+        name: "somebody"
+      },
+      mypage_data: [{
+        id: 2,
+        content: "ノンアルコールでお願いします",
+        user_id: 2,
+        name: "Mr.下戸",
+        hashname: [{
+          hashname: "飲めない"
+        }]
+      }],
+      followings: 10,
+      followers: 20
+    })
+
+  act(() => {
+    render(
+      <Router history={history}>
+        <App />
+      </Router>
+    );
+
+    userEvent.click(screen.getByRole("link", { name: "アカウント登録" }));
+  });
+};
+
 describe("アカウント登録フォーム", () => {
-  it("各要素が正しく表示されている", () => {
-    render(<Signup />);
-    expect(screen.getByPlaceholderText("ハンドルネーム")).toBeInTheDocument();
+  it("各要素が正しく表示されている", async () => {
+    renderDom();
+    expect(await screen.findByPlaceholderText("ハンドルネーム")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("メールアドレス")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("パスワード")).toBeInTheDocument();
     expect(screen.queryByPlaceholderText("もう一度パスワードを入力してください")).not.toBeInTheDocument();
@@ -21,48 +63,8 @@ describe("アカウント登録フォーム", () => {
 });
 
 describe("アカウント作成成功時の挙動", () => {
-  it("ログイン状態になりMypageに遷移する", async () => {
-    const history = createMemoryHistory();
-    const mock = new MockAdapter(axios);
-    //アカウント作成ボタンを押したとき
-    mock.onPost("http://localhost:3000/signup")
-      .reply(200, {
-        status: "created",
-        user: {
-          id: 1,
-          name: "somebody"
-        }
-      });
-    //myPage
-    mock.onGet("http://localhost:3000/users/1")
-      .reply(200, {
-        user: {
-          id: 1,
-          name: "somebody"
-        },
-        mypage_data: [{
-          id: 2,
-          content: "ノンアルコールでお願いします",
-          user_id: 2,
-          name: "Mr.下戸",
-          hashname: [{
-            hashname: "飲めない"
-          }]
-        }],
-        followings: 10,
-        followers: 20
-      })
-
-    act(() => {
-      render(
-        <Router history={history}>
-          <App />
-        </Router>
-      );
-
-      userEvent.click(screen.getByRole("link", { name: "アカウント登録" }));
-    });
-
+  const renderSignup = async () => {
+    renderDom();
     const nameForm = await screen.findByPlaceholderText("ハンドルネーム");
     const emailForm = screen.getByPlaceholderText("メールアドレス");;
     const passwordForm = screen.getByPlaceholderText("パスワード");
@@ -79,18 +81,26 @@ describe("アカウント作成成功時の挙動", () => {
       userEvent.type(passConfForm, "password");
       userEvent.click(signupButton);
     });
+  };
 
+  it("ログイン状態になりMypageに遷移する", async () => {
+    await renderSignup();
     expect(await screen.findByText("somebody")).toBeInTheDocument();
     expect(screen.getByText("ノンアルコールでお願いします")).toBeInTheDocument();
+  });
+
+  it("フラッシュメッセージが表示される", async () => {
+    await renderSignup();
+
+    expect(await screen.findByText(/ようこそいらっしゃいました！/));
   });
 });
 
 describe("アカウント作成失敗時の挙動", () => {
   it("エラーメッセージが表示される", async () => {
-    act(() => {
-      render(<Signup />);
-    })
-    const button = screen.getByRole("button", { name: "アカウント作成" });
+    renderDom();
+
+    const button = await screen.findByRole("button", { name: "アカウント作成" });
 
     const mock = new MockAdapter(axios);
     mock.onPost("http://localhost:3000/signup")
@@ -101,10 +111,9 @@ describe("アカウント作成失敗時の挙動", () => {
   });
 
   it("パスワードの入力がクリアされる", async () => {
-    act(() => {
-      render(<Signup />);
-    })
-    const passwordForm = screen.getByPlaceholderText("パスワード");
+    renderDom();
+
+    const passwordForm = await screen.findByPlaceholderText("パスワード");
     const button = screen.getByRole("button", { name: "アカウント作成" });
 
     const mock = new MockAdapter(axios);
