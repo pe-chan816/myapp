@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 
 import { Avatar, Button, Grid, makeStyles, TextField, Tooltip } from '@material-ui/core';
 import ImageIcon from '@material-ui/icons/Image';
+import PersonIcon from '@material-ui/icons/Person';
 
 import DeleteUserAccount from "./deleteUserAccount";
 import SubmitButton from "common/submitButton";
@@ -82,13 +83,17 @@ const UpdateUserSettings = () => {
   };
 
   const currentUserImage = () => {
-    if (!preview && currentUser.profile_image?.url) {
+    if (!preview) {
       return (
-        <Avatar alt="profile-image"
-          src={`http://localhost:3000/${currentUser.profile_image?.url}`} />
+        <Avatar alt="user-image"
+          src={`http://localhost:3000/${currentUser.profile_image?.url}`}
+        >
+          <PersonIcon color="inherit" fontSize="large" />
+        </Avatar>
       );
-    }
+    };
   };
+
   const newUserImage = () => {
     if (preview) {
       return (
