@@ -8,13 +8,11 @@ import ImageIcon from '@material-ui/icons/Image';
 import DeleteUserAccount from "./deleteUserAccount";
 import SubmitButton from "common/submitButton";
 
-import { CurrentUserContext } from "App";
-import { MessageContext } from "App";
-
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
 const UpdateUserSettings = () => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-  const { setMessage } = useContext(MessageContext);
 
   const [name, setName] = useState(currentUser.name);
   const [image, setImage] = useState<File>();
@@ -24,6 +22,15 @@ const UpdateUserSettings = () => {
 
   const [preview, setPreview] = useState<string>("");
   const history = useHistory();
+
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
 
   const useStyles = makeStyles({
     form: {
@@ -52,9 +59,10 @@ const UpdateUserSettings = () => {
       if (res.data.user) {
         setCurrentUser(res.data.user);
         history.push(`/user/${currentUser.id}`);
+        makeAlert("success", ["アカウント設定を変更しました"]);
       } else {
         console.log(res);
-        res.data.messages.forEach((e: string) => setMessage((message: string[]) => [...message, e]));
+        makeAlert("error", [res.data.messages]);
       }
     }).catch(error => {
       console.log("error->", error);
@@ -88,21 +96,7 @@ const UpdateUserSettings = () => {
       );
     }
   };
-  /*
-    const UpdateButton = () => {
-      if (currentUser.guest === true) {
-        return (
-          <Tooltip title="設定の変更は正式に作成したアカウントでご利用いただけます">
-            <Button disabled variant="contained">編集</Button>
-          </Tooltip>
-        );
-      } else {
-        return (
-          <SubmitButton label="編集" />
-        );
-      }
-    };
-  */
+
   return (
     <div className={classes.paper}>
       <h3>ユーザーアカウント設定</h3>
