@@ -38,6 +38,9 @@ class User < ApplicationRecord
   has_secure_password
   validates :password, length: {minimum: 8}, allow_nil: true
 
+  # self_introduction バリデーション
+  validates :self_introduction, length: {maximum: 160}
+
   # 永続セッション用のトークン生成
   def User.new_token
     SecureRandom.urlsafe_base64

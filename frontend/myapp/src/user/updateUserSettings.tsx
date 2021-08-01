@@ -20,6 +20,7 @@ const UpdateUserSettings = () => {
   const [email, setEmail] = useState(currentUser.email);
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [selfIntroduction, setSelfIntroduction] = useState<string>("");
 
   const [preview, setPreview] = useState<string>("");
   const history = useHistory();
@@ -79,6 +80,7 @@ const UpdateUserSettings = () => {
     if (email) { fd.append("user[email]", email) };
     if (password) { fd.append("user[password]", password) };
     if (passwordConfirmation) { fd.append("user[password_confirmation]", passwordConfirmation) };
+    if (selfIntroduction) { fd.append("user[self_introduction]", selfIntroduction) };
     return fd;
   };
 
@@ -146,6 +148,14 @@ const UpdateUserSettings = () => {
           placeholder={`${currentUser.name}`}
           type="text"
           value={name}
+        />
+        <TextField
+          className={classes.form}
+          label="Profile"
+          onChange={(e) => setSelfIntroduction(e.target.value)}
+          placeholder={`${currentUser.self_introduction}`}
+          type="text"
+          value={selfIntroduction}
         />
         <TextField
           className={classes.form}

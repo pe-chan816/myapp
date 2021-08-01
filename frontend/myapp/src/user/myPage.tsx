@@ -157,7 +157,7 @@ const MyPage = (props: any) => {
             }
           />
           <CardContent>
-            { /*ここにプロフィール文*/}
+            <p>{user.self_introduction}</p>
           </CardContent>
           <CardActions disableSpacing>
             <Grid alignItems="flex-start"

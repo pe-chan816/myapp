@@ -6,7 +6,8 @@ export type UserType = {
   guest: boolean,
   id: number,
   name: string,
-  profile_image?: { url: string }
+  profile_image?: { url: string },
+  self_introduction?: string
 };
 
 export type TweetType = {

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Grid, Link, makeStyles } from "@material-ui/core";
+import { Avatar, Card, CardContent, CardHeader, Link } from "@material-ui/core";
 import PersonIcon from '@material-ui/icons/Person';
 
 import { UserType } from 'types/typeList';
@@ -40,7 +40,9 @@ const UserRelationship = () => {
               </Link>
             }
           />
-          <CardContent>{ /* ここにプロフィール文 */}</CardContent>
+          <CardContent>
+            {e.self_introduction}
+          </CardContent>
         </Card>
       </div >
     );
