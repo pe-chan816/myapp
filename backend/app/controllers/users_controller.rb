@@ -22,13 +22,11 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = User.find(params[:id])
-    if @user.update_attributes(user_params)
-      render json: {user: @user}
-      #redirect_to user_path(@user)
+    user = User.find(params[:id])
+    if user.update_attributes(user_params)
+      render json: {user: user}
     else
-      render json: {messages: @user.errors.full_messages}
-      #redirect_to edit_user_path(@user)
+      render json: {messages: user.errors.full_messages}
     end
   end
 
@@ -112,8 +110,13 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation,
-                                   :profile_image, :remove_profile_image)
+      params.require(:user).permit(:email,
+                                   :name,
+                                   :password,
+                                   :password_confirmation,
+                                   :profile_image,
+                                   :remove_profile_image,
+                                   :self_introduction)
     end
 
     def correct_user
