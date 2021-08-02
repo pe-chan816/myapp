@@ -23,8 +23,10 @@ class TweetsController < ApplicationController
   def show
 ##
     tweet = Tweet.find(params[:id])
-    base_data = Tweet.left_joins(:user,:hashtags)\
-                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
+    base_data = Tweet.left_joins(:user,:hashtags)
+                     .select("tweets.*,
+                              users.name, users.profile_image, users.unique_name,
+                              hashtags.hashname")
                      .where("tweets.id = ?", tweet.id)
     array_data = []
     base_data.each do |d|

@@ -149,11 +149,14 @@ const MyPage = (props: any) => {
               </Avatar>
             }
             title={
-              <Link color="inherit" component={RouterLink}
-                to={myPageUrl} underline="none"
-              >
-                {user.name}
-              </Link>
+              <div>
+                <Link color="inherit" component={RouterLink}
+                  to={myPageUrl} underline="none"
+                >
+                  {user.name}
+                </Link>
+                <p>@{user.unique_name}</p>
+              </div>
             }
           />
           <CardContent>

@@ -180,9 +180,12 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
               }
               className={classes.cardHeader}
               title={
-                <Link color="inherit" component={RouterLink} to={`/user/${e.user_id}`}>
-                  {e.name}
-                </Link>
+                <div>
+                  <Link color="inherit" component={RouterLink} to={`/user/${e.user_id}`}>
+                    {e.name}
+                  </Link>
+                  <p>@{e.unique_name}</p>
+                </div>
               }
             />
             {e.tweet_image?.url &&

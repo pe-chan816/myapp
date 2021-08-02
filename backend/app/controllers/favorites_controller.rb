@@ -23,7 +23,7 @@ class FavoritesController < ApplicationController
     ## my_favorites ##
     base_data = Tweet.left_joins(:user, :hashtags, :favorites)
                      .select("tweets.*,
-                              users.name, users.profile_image,
+                              users.name, users.profile_image, users.unique_name,
                               hashtags.hashname,
                               favorites.user_id AS favorite_user_id")
                      .where("favorites.user_id = ?", user.id)

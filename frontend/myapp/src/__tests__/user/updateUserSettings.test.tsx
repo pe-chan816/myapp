@@ -20,7 +20,8 @@ const renderLoginSituation = async (guestOrNot: boolean) => {
         id: 1,
         name: "テストユーザー",
         email: "email@email.com",
-        guest: guestOrNot
+        guest: guestOrNot,
+        unique_name: "test_user"
       }
     });
   //HomeContent用
@@ -73,6 +74,7 @@ describe("アカウント設定ページの挙動", () => {
 
     expect(screen.getByText("ユーザーアカウント設定")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("テストユーザー")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("test_user")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("email@email.com")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("新しいパスワード")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "編集" })).toBeInTheDocument();

@@ -30,7 +30,8 @@ class User < ApplicationRecord
 
   # email のバリデーション
   VALID_EMAIL_REGEX = /\A[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
-  validates :email, presence: true, length:{maximum: 255},
+  validates :email, presence: true,
+                    length:{maximum: 255},
                     format: {with: VALID_EMAIL_REGEX},
                     uniqueness: {case_sensitive: false}
 
@@ -41,6 +42,11 @@ class User < ApplicationRecord
   # self_introduction バリデーション
   validates :self_introduction, length: {maximum: 160}
 
+  # unique_name のバリデーション
+  validates :unique_name, presence: true,
+                          length: {maximum: 30},
+                          uniqueness: true
+
   # 永続セッション用のトークン生成
   def User.new_token
     SecureRandom.urlsafe_base64
@@ -49,6 +55,11 @@ class User < ApplicationRecord
   # ハッシュ値化する
   def User.remember_digest(token)
     Digest::MD5.hexdigest(token)
+  end
+
+  # unique_name の初期値作成
+  def create_unique_name
+    self.unique_name = SecureRandom.base64(9)
   end
 
   # 永続セッション用トークンをハッシュ値化して :remember_digest に保存する

@@ -21,6 +21,7 @@ const UpdateUserSettings = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [selfIntroduction, setSelfIntroduction] = useState<string>("");
+  const [uniqueName, setUniqueName] = useState<string>("");
 
   const [preview, setPreview] = useState<string>("");
   const history = useHistory();
@@ -81,6 +82,7 @@ const UpdateUserSettings = () => {
     if (password) { fd.append("user[password]", password) };
     if (passwordConfirmation) { fd.append("user[password_confirmation]", passwordConfirmation) };
     if (selfIntroduction) { fd.append("user[self_introduction]", selfIntroduction) };
+    if (uniqueName) { fd.append("user[unique_name]", uniqueName) };
     return fd;
   };
 
@@ -148,6 +150,14 @@ const UpdateUserSettings = () => {
           placeholder={`${currentUser.name}`}
           type="text"
           value={name}
+        />
+        <TextField
+          className={classes.form}
+          label="Unique Name"
+          onChange={(e) => setUniqueName(e.target.value)}
+          placeholder={`${currentUser.unique_name}`}
+          type="text"
+          value={uniqueName}
         />
         <TextField
           className={classes.form}

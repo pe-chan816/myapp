@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_31_154206) do
+ActiveRecord::Schema.define(version: 2021_08_02_003758) do
 
   create_table "bars", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "address"
@@ -103,6 +103,7 @@ ActiveRecord::Schema.define(version: 2021_07_31_154206) do
     t.string "unique_name"
     t.text "self_introduction"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["unique_name"], name: "index_users_on_unique_name", unique: true
   end
 
   add_foreign_key "bars", "hashtags"

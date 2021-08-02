@@ -37,6 +37,7 @@ const SearchResult = (prop: any) => {
         <div key={i}>
           {e.profile_image?.url && <img src={imageUrl} alt="user" />}
           <Link to={userUrl}>{e.name}</Link>
+          <p>@{e.unique_name}</p>
         </div>
       );
     }

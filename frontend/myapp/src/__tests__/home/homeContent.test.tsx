@@ -28,6 +28,7 @@ describe("ホーム画面", () => {
             content: "とりあえず生",
             user_id: 1,
             name: "通りすがりのビール好き",
+            unique_name: "beerholic",
             hashname: [{
               hashname: "ビール"
             }, {
@@ -38,6 +39,7 @@ describe("ホーム画面", () => {
             content: "ノンアルコールでお願いします",
             user_id: 2,
             name: "Mr.下戸",
+            unique_name: "nondrinker",
             hashname: [{
               hashname: "飲めない"
             }]
@@ -63,12 +65,14 @@ describe("ホーム画面", () => {
 
   const assertExisting = async () => {
     expect(await screen.findByText("通りすがりのビール好き")).toBeInTheDocument();
+    expect(screen.getByText("@beerholic")).toBeInTheDocument();
     expect(screen.getByText("とりあえず生")).toBeInTheDocument();
     expect(screen.getByText("#ビール")).toBeInTheDocument();
     expect(screen.getByText("#ハートランド")).toBeInTheDocument();
 
     expect(screen.getByText("ノンアルコールでお願いします")).toBeInTheDocument();
     expect(screen.getByText("Mr.下戸")).toBeInTheDocument();
+    expect(screen.getByText("@nondrinker")).toBeInTheDocument();
     expect(screen.getByText("#飲めない")).toBeInTheDocument();
   };
 
