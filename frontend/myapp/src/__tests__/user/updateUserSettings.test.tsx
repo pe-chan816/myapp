@@ -21,6 +21,7 @@ const renderLoginSituation = async (guestOrNot: boolean) => {
         name: "テストユーザー",
         email: "email@email.com",
         guest: guestOrNot,
+        self_introduction: "自己紹介",
         unique_name: "test_user"
       }
     });
@@ -73,8 +74,9 @@ describe("アカウント設定ページの挙動", () => {
     await renderLoginSituation(false);
 
     expect(screen.getByText("ユーザーアカウント設定")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("テストユーザー")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("test_user")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("テストユーザー")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("test_user")).toBeInTheDocument();
+    expect(screen.getByDisplayValue("自己紹介")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("email@email.com")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("新しいパスワード")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "編集" })).toBeInTheDocument();
