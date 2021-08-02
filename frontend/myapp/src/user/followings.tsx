@@ -35,9 +35,12 @@ const UserRelationship = () => {
               </Avatar>
             }
             title={
-              <Link color="inherit" component={RouterLink} to={userUrl}>
-                {e.name}
-              </Link>
+              <div>
+                <Link color="inherit" component={RouterLink} to={userUrl}>
+                  {e.name}
+                </Link>
+                <p>@{e.unique_name}</p>
+              </div>
             }
           />
           <CardContent>

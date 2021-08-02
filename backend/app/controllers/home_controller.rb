@@ -8,8 +8,10 @@ class HomeController < ApplicationController
       ############
 
       ## ツイートの中身 ##
-      base_data = Tweet.left_joins(:user,:hashtags)\
-                       .select("tweets.*, users.name, users.profile_image, hashtags.hashname")
+      base_data = Tweet.left_joins(:user,:hashtags)
+                       .select("tweets.*,
+                                users.name, users.profile_image, users.unique_name,
+                                hashtags.hashname")
                        .where("(user_id = ?) OR (user_id =?)",
                                current_user.id, current_user.following_ids.join(","))
                        .page(params[:page] ||= 1).per(15)#######

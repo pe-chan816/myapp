@@ -7,8 +7,10 @@ class HashtagsController < ApplicationController
 
     ## tweets ##
     tweet_id = hashtag.tweet_ids
-    base_data = Tweet.left_joins(:user,:hashtags)\
-                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")\
+    base_data = Tweet.left_joins(:user,:hashtags)
+                     .select("tweets.*,
+                              users.name, users.profile_image, users.unique_name,
+                              hashtags.hashname")
                      .where(id: tweet_id)
                      .page(params[:page] ||= 1).per(15)
     array_data = []

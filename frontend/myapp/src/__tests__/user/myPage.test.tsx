@@ -25,7 +25,8 @@ describe("マイページの挙動", () => {
         user: {
           id: 1,
           name: "ボウモアおじさん",
-          self_introduction: "アイラ好きの三十路です"
+          self_introduction: "アイラ好きの三十路です",
+          unique_name: "bowmore"
         },
         mypage_data: [
           {
@@ -68,6 +69,7 @@ describe("マイページの挙動", () => {
 
   const myPageContents = async () => {
     expect(await screen.findAllByText("ボウモアおじさん"))//.toBeInTheDocument();
+    expect(screen.getByText("@bowmore")).toBeInTheDocument();
     expect(screen.getByText("アイラ好きの三十路です")).toBeInTheDocument();
     expect(screen.getByText("5")).toBeInTheDocument(); //フォロー人数
     expect(screen.getByText("4")).toBeInTheDocument(); //フォロワー人数

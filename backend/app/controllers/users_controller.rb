@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 
   def create
     user = User.new(user_params)
+    user.create_unique_name
 
     if user.save
       log_in(user)
@@ -40,7 +41,9 @@ class UsersController < ApplicationController
 
     ## 表示データ ##
     base_data = Tweet.left_joins(:user,:hashtags)
-                     .select("tweets.*, users.name, users.profile_image, hashtags.hashname")
+                     .select("tweets.*,
+                              users.name, users.profile_image, users.unique_name,
+                              hashtags.hashname")
                      .where("user_id = ?", user.id)
                      .page(params[:page] ||= 1).per(15)#######
     array_data = []
@@ -116,7 +119,8 @@ class UsersController < ApplicationController
                                    :password_confirmation,
                                    :profile_image,
                                    :remove_profile_image,
-                                   :self_introduction)
+                                   :self_introduction,
+                                   :unique_name)
     end
 
     def correct_user

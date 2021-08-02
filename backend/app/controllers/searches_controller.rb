@@ -10,7 +10,7 @@ class SearchesController < ApplicationController
     base_data = Tweet.left_joins(:user, :hashtags)
                      .select("tweets.*,
                               hashtags.hashname,
-                              users.name, users.profile_image")
+                              users.name, users.profile_image, users.unique_name")
                      .where("content LIKE ?", "%#{keyword}%")
     array_data = []
     base_data.each do |d|

@@ -7,7 +7,8 @@ export type UserType = {
   id: number,
   name: string,
   profile_image?: { url: string },
-  self_introduction?: string
+  self_introduction?: string,
+  unique_name: string
 };
 
 export type TweetType = {
@@ -32,6 +33,7 @@ export type TimelineType = {
   tweet_image?: { url: string },
   updated_at: string,
   user_id: number,
+  unique_name: string,
   hashname: HashtagType[]
 };
 
