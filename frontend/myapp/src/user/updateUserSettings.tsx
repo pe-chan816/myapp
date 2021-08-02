@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -15,13 +15,13 @@ import { AlertSeverityType } from "types/typeList";
 const UpdateUserSettings = () => {
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
 
-  const [name, setName] = useState(currentUser.name);
+  const [name, setName] = useState<string | undefined>();
   const [image, setImage] = useState<File>();
-  const [email, setEmail] = useState(currentUser.email);
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
-  const [selfIntroduction, setSelfIntroduction] = useState<string>("");
-  const [uniqueName, setUniqueName] = useState<string>("");
+  const [email, setEmail] = useState<string | undefined>();
+  const [password, setPassword] = useState<string | undefined>();
+  const [passwordConfirmation, setPasswordConfirmation] = useState<string | undefined>();
+  const [selfIntroduction, setSelfIntroduction] = useState<string | undefined>();
+  const [uniqueName, setUniqueName] = useState<string | undefined>();
 
   const [preview, setPreview] = useState<string>("");
   const history = useHistory();
@@ -49,6 +49,13 @@ const UpdateUserSettings = () => {
     }
   });
   const classes = useStyles();
+
+  const setInitialValue = () => {
+    setName(currentUser.name);
+    setSelfIntroduction(currentUser.self_introduction);
+    setUniqueName(currentUser.unique_name);
+  };
+  useEffect(() => { setInitialValue() }, []);
 
   const handleSubmit = async (e: any) => {
     const url = `http://localhost:3000/users/${currentUser.id}`;
