@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-import { Button, Grid, makeStyles } from "@material-ui/core";
+import { Button, makeStyles } from "@material-ui/core";
 import { Pagination } from '@material-ui/lab';
 
 import { TimelineType } from "types/typeList";

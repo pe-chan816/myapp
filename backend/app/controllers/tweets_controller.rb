@@ -20,6 +20,40 @@ class TweetsController < ApplicationController
     render json: {message: "ツイート削除"}
   end
 
+  def favorite
+    tweet = Tweet.find(params[:id])
+    favorited_users = tweet.user_favorited
+    favorite_count = favorited_users.count
+
+    render json: {favorited_users: favorited_users,
+                  favorite_count: favorite_count}
+  end
+
+  def index
+    base_data = Tweet.left_joins(:user,:hashtags)
+                     .select("tweets.*,
+                              users.name, users.profile_image, users.unique_name,
+                              hashtags.hashname")
+                     .page(params[:page] ||= 1).per(15)
+    array_data = []
+    base_data.each do |d|
+      user = User.find(d.user_id)
+      tweet = Tweet.find(d.id)
+      d.profile_image = user.profile_image
+      d.hashname = d.hashtags
+      ##############
+      new_d = d.attributes.merge("favorite_count" => d.favorites.count,
+                                 "fav_or_not" => d.favorited?(current_user))
+      new_d2 = new_d.merge("tweet_image" => tweet.tweet_image,
+                           "created_at" => tweet.created_at.strftime("%-H:%M %Y/%m/%d"))
+      ##############
+      array_data.push(new_d2)
+    end
+
+    data = array_data.uniq
+    render json: {hot_tweet_data: data}
+  end
+
   def show
 ##
     tweet = Tweet.find(params[:id])
@@ -49,15 +83,6 @@ class TweetsController < ApplicationController
     render json: {tweet: data,
                   favorite_count: favorite_count,
                   favorite_or_not: favorite_or_not}
-  end
-
-  def favorite
-    tweet = Tweet.find(params[:id])
-    favorited_users = tweet.user_favorited
-    favorite_count = favorited_users.count
-
-    render json: {favorited_users: favorited_users,
-                  favorite_count: favorite_count}
   end
 
   private
