@@ -51,7 +51,7 @@ const MyPage = (props: any) => {
     setFollowings([]);
     setFollowers([]);
     setData([]);
-  }
+  };
 
   const getData = () => {
     console.log("!!getData!!");
@@ -76,7 +76,8 @@ const MyPage = (props: any) => {
       console.log(error);
     });
   };
-  useEffect(getData, [props.location.pathname]);
+  //useEffect(getData, [props.location.pathname]);
+  useEffect(getData, []);
 
   const MypageContent = () => {
     const url = `http://localhost:3000/${user.profile_image?.url}`;

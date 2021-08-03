@@ -1,28 +1,32 @@
 import axios from 'axios';
-import { useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Link as RouterLink, useHistory } from 'react-router-dom';
 
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Grid, Link, makeStyles, Tooltip } from '@material-ui/core';
 
 import { HashtagType, TimelineType } from 'types/typeList';
 
-import DeleteIcon from '@material-ui/icons/Delete';
 import PersonIcon from '@material-ui/icons/Person';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import ThumbUpOutlinedIcon from '@material-ui/icons/ThumbUpOutlined';
 
-import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext } from "App";
-import { AlertSeverityType } from "types/typeList";
+import { CurrentUserContext } from "App";
 
+import DeleteTweetItem from 'tweet/deleteTweetItem';
+
+export const TimelineDataContext = createContext({} as {
+  data: Partial<TimelineType[]>,
+  setData: any
+});
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
+  console.log("!!Timeline!!");
   const { currentUser } = useContext(CurrentUserContext);
   const [data, setData] = useState<Partial<TimelineType[]>>([]);
-  useEffect(() => { setData(props.data) }, [props.data]);
-
-  const { setAlertDisplay } = useContext(AlertDisplayContext);
-  const { setAlertSeverity } = useContext(AlertSeverityContext);
-  const { setMessage } = useContext(MessageContext);
+  useEffect(() => {
+    setData(props.data);
+    console.log("タイムラインデータにセット");
+  }, []);
 
   // いいねの再描画のためのstate //
   const [rendering, setRendering] = useState<boolean>(false);
@@ -85,23 +89,6 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     });
   };
 
-  const clickDeleteButton = (tweetId: number, indexNumber: number) => {
-    const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
-      setAlertDisplay(true);
-      setAlertSeverity(alertSeverity);
-      setMessage(message);
-    };
-    const url = `http://localhost:3000/tweets/${tweetId}`;
-    const config = { withCredentials: true };
-    axios.delete(url, config).then(res => {
-      console.log(res);
-      const newData = [...data];
-      newData.splice(indexNumber, 1);
-      makeAlert("success", ["ポストを削除しました"]);
-      setData(newData);
-    });
-  };
-
   const content = data.map((e, i) => {
     if (e) {
       const hashtags = e.hashname?.map((tag: HashtagType, num: number) => {
@@ -146,24 +133,6 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
               </Tooltip>
             );
           }
-        }
-      };
-
-      const DeleteButton = () => {
-        if (e.user_id === currentUser.id) {
-          return (
-            <Tooltip title="ポスト削除">
-              <Link className={classes.deleteButton}
-                color="inherit"
-                component="button"
-                onClick={() => clickDeleteButton(e.id, i)}
-              >
-                <DeleteIcon />
-              </Link>
-            </Tooltip>
-          );
-        } else {
-          return null;
         }
       };
 
@@ -229,7 +198,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
                     justifyContent="flex-end"
                   >
                     <p>{e.created_at}</p>
-                    <DeleteButton />
+                    <DeleteTweetItem indexNumber={i} item={e} />
                   </Grid>
                 </Grid>
 
@@ -244,7 +213,9 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
 
   return (
     <div>
-      {content}
+      <TimelineDataContext.Provider value={{ data, setData }}>
+        {content}
+      </TimelineDataContext.Provider>
     </div>
   );
 };

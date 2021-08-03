@@ -88,7 +88,16 @@ describe("ホーム画面", () => {
     await assertExisting();
   });
 
-  // タイムラインのテストでやるべき //
+  it("削除ボタンを押すと確認ダイアログが表示される", async () => {
+    renderLoginSituation();
+    const deleteIcon = await screen.findByTestId("DeleteIcon");
+    act(() => { userEvent.click(deleteIcon) });
+
+    expect(await screen.findByText("本当にこのポストを削除しますか？")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "キャンセル" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "削除" })).toBeInTheDocument();
+  });
+
   it("ハッシュタグのリンクからその詳細ページへ飛べる", async () => {
     renderLoginSituation();
     const target = await screen.findByText("#ビール");
@@ -96,5 +105,4 @@ describe("ホーム画面", () => {
     expect(await screen.findByText("#ビール")).toBeInTheDocument();
     expect(screen.getByTestId("SettingsIcon")).toBeInTheDocument();
   });
-
 });
