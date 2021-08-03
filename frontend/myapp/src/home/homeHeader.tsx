@@ -15,6 +15,7 @@ import UpdateUserSettings from 'user/updateUserSettings';
 import TweetForm from 'tweet/tweetForm';
 import UserRelationship from 'user/followings';
 import MyFavorite from 'favorite/myFavorite';
+import HotTweet from 'tweet/hotTweet';
 import HashtagIndex from 'hashtag/hashtagIndex';
 import HashtagDetail from 'hashtag/hashtagDetail';
 import SearchForm from 'search/searchForm';
@@ -124,6 +125,13 @@ const HomeHeader = () => {
           </ListItem>
           <ListItem button divider>
             <Link color="inherit" component={RouterLink}
+              onClick={resetAlert} to={`/posts`} underline="none"
+            >
+              最新ポスト一覧
+            </Link>
+          </ListItem>
+          <ListItem button divider>
+            <Link color="inherit" component={RouterLink}
               onClick={resetAlert} to={`/hashtag/index`} underline="none"
             >
               タグ一覧
@@ -151,6 +159,7 @@ const HomeHeader = () => {
           <Route path="/user/:myPageId" exact component={MyPage} />
           <Route path="/tweet" exact component={TweetForm} />
           <Route path="/user/:userId/favorite" exact component={MyFavorite} />
+          <Route path="/posts" exact component={HotTweet} />
           <Route path="/hashtag/index" exact component={HashtagIndex} />
           <Route path="/user/edit/account" exact component={UpdateUserSettings} />
 
