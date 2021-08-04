@@ -47,11 +47,15 @@ const SearchResult = (prop: any) => {
     <div>
       <h3>" {keyword} " の検索結果</h3>
       {tweetData.toString() !== [].toString() &&
-        <h4>↓ツイート↓</h4>}
-      <Timeline data={tweetData} />
+        <>
+          <h4>↓ツイート↓</h4>
+          <Timeline data={tweetData} />
+        </>}
       {userData.toString() !== [].toString() &&
-        <h4>↓ユーザー↓</h4>}
-      <div>{searchedUser}</div>
+        <>
+          <h4>↓ユーザー↓</h4>
+          <div>{searchedUser}</div>
+        </>}
     </div>
   );
 };

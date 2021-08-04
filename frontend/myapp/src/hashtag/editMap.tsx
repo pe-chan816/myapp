@@ -19,7 +19,7 @@ const EditMap = () => {
     base: {
       margin: "0 auto",
       marginBottom: "50px",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "100%"
     },
     barInfo: {

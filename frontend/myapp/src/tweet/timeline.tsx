@@ -38,7 +38,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     },
     card: {
       margin: "10px auto 10px auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       zIndex: 1
     },
     cardHeader: {

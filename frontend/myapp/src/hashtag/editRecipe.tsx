@@ -18,7 +18,7 @@ const EditRecipe = () => {
   const useStyles = makeStyles({
     base: {
       margin: "0 auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "100%"
     },
     button: {

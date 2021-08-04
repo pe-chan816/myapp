@@ -18,11 +18,11 @@ const HashtagDetailContent = () => {
   const useStyles = makeStyles({
     base: {
       margin: "0 auto",
-      maxWidth: "800px"
+      maxWidth: "600px"
     },
     dialog: {
       margin: "20px auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "80%"
     },
     content: {
