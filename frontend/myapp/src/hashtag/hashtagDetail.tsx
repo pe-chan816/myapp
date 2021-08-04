@@ -97,8 +97,11 @@ const HashtagDetail = () => {
               <Route path="/hashtag/:hashname/edit/map" exact component={EditMap} />
             </Router>
 
-            <Timeline data={timelineData} />
-            <MyPagination />
+            {timelineData.toString() !== [].toString() &&
+              <>
+                <Timeline data={timelineData} />
+                <MyPagination />
+              </>}
           </div>
         </BarInfoContext.Provider>
       </RecipeContext.Provider>

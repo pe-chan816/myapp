@@ -18,7 +18,7 @@ const MyFavorite = (props: any) => {
   const useStyles = makeStyles({
     base: {
       margin: "0 auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "100%"
     }
   });

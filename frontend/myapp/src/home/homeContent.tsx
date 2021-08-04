@@ -18,7 +18,7 @@ const HomeContent = () => {
       alignItems: "center",
       display: "flex",
       margin: "0 auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "100%"
     },
     pagination: {
@@ -26,7 +26,7 @@ const HomeContent = () => {
       display: "flex",
       justifyContent: "center",
       margin: "0 auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
 
     }
   });

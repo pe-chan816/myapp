@@ -12,14 +12,14 @@ const HotTweet = () => {
   const useStyles = makeStyles({
     base: {
       margin: "0 auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "100%"
     },
     button: {
       alignItems: "center",
       display: "flex",
       margin: "5px auto",
-      maxWidth: "800px",
+      maxWidth: "600px",
       width: "100%"
     }
   });
@@ -80,7 +80,8 @@ const HotTweet = () => {
         </Button>
       </Grid>
       <Grid className={classes.base} item>
-        <Timeline data={data} />
+        {data.toString() !== [].toString() &&
+          <Timeline data={data} />}
       </Grid>
       <Grid item>
         {page > 1 &&

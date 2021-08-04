@@ -32,14 +32,14 @@ const MyPage = (props: any) => {
   const useStyles = makeStyles({
     card: {
       margin: "10px auto",
-      maxWidth: "800px"
+      maxWidth: "600px"
     },
     pagination: {
       alignItems: "center",
       display: "flex",
       justifyContent: "center",
       margin: "0 auto",
-      maxWidth: "800px"
+      maxWidth: "600px"
     },
     followFollower: {
       margin: "0 5px"
