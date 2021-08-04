@@ -78,7 +78,6 @@ class UsersController < ApplicationController
                    followers: followers,
                    followers_count: followers_count,
                    follow_or_not: follow_or_not}
-
   end
 
   def index

@@ -76,7 +76,6 @@ const MyPage = (props: any) => {
       console.log(error);
     });
   };
-  //useEffect(getData, [props.location.pathname]);
   useEffect(getData, []);
 
   const MypageContent = () => {
@@ -194,9 +193,6 @@ const MyPage = (props: any) => {
             </Grid>
           </CardActions>
         </Card>
-
-        <Timeline data={data} />
-
       </div >
     );
   };
@@ -228,7 +224,11 @@ const MyPage = (props: any) => {
   return (
     <>
       <MypageContent />
-      <MyPagination />
+      {data.toString() !== [].toString() &&
+        <>
+          <Timeline data={data} />
+          <MyPagination />
+        </>}
     </>
   );
 
