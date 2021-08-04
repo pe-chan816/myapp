@@ -31,6 +31,11 @@ const TweetForm = () => {
     formFieldWrapper: {
       maxWidth: "800px",
       width: "60%"
+    },
+    preview: {
+      maxWidth: "600px",
+      maxHeight: "600px",
+      width: "100%"
     }
   });
   const classes = useStyles();
@@ -206,7 +211,7 @@ const TweetForm = () => {
         </Grid>
         <Grid item>
           {preview &&
-            <img src={preview} alt="preview" />
+            <img className={classes.preview} src={preview} alt="preview" />
           }
         </Grid>
       </Grid>
