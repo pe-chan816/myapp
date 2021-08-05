@@ -76,107 +76,113 @@ const HomeHeader = () => {
 
   return (
     <div className="header-banner">
-      <Grid alignItems="center" className={classes.header} container
-        direction="row" justifyContent="space-between">
+      <Grid>
         <Grid item>
-          <Grid alignItems="center" container
-            direction="row" justifyContent="flex-start" spacing={2}>
+          <Grid alignItems="center" className={classes.header} container
+            direction="row" justifyContent="space-between">
             <Grid item>
-              <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/" underline="none">
-                <h2>Insyutagram</h2>
-              </Link>
+              <Grid alignItems="center" container
+                direction="row" justifyContent="flex-start" spacing={2}>
+                <Grid item>
+                  <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/" underline="none">
+                    <h2>Insyutagram</h2>
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link color="inherit" component={RouterLink} onClick={resetAlert} to={`/user/${currentUser.id}`}>
+                    マイページ
+                  </Link>
+                </Grid>
+                <Grid item>
+                  <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/tweet">
+                    ポスト
+                  </Link>
+                </Grid>
+              </Grid>
             </Grid>
+
             <Grid item>
-              <Link color="inherit" component={RouterLink} onClick={resetAlert} to={`/user/${currentUser.id}`}>
-                マイページ
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/tweet">
-                ポスト
-              </Link>
+              <Grid alignItems="center" container
+                direction="row" justifyContent="flex-end" spacing={1}>
+                <Grid item>
+                  <SearchForm />
+                </Grid>
+                <Grid item>
+                  <Button onClick={clickDrawer} data-testid="dehaze-icon">
+                    <DehazeIcon />
+                  </Button>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
 
+        <Drawer anchor="right" open={drawerStatus} onClose={clickDrawer}>
+          <List onClick={clickDrawer}>
+            <ListItem button divider>
+              <Link color="inherit" component={RouterLink}
+                onClick={resetAlert} to={`/user/${currentUser.id}/favorite`} underline="none"
+              >
+                マイいいね
+              </Link>
+            </ListItem>
+            <ListItem button divider>
+              <Link color="inherit" component={RouterLink}
+                onClick={resetAlert} to={`/posts`} underline="none"
+              >
+                最新ポスト一覧
+              </Link>
+            </ListItem>
+            <ListItem button divider>
+              <Link color="inherit" component={RouterLink}
+                onClick={resetAlert} to={`/hashtag/index`} underline="none"
+              >
+                タグ一覧
+              </Link>
+            </ListItem>
+            <ListItem button divider>
+              <Link color="inherit" component={RouterLink}
+                onClick={resetAlert} to="/user/edit/account" underline="none"
+              >
+                アカウント設定
+              </Link>
+            </ListItem>
+            <ListItem button divider>
+              <Link color="inherit" onClick={() => clickLogout()} underline="none">
+                ログアウト
+              </Link>
+            </ListItem>
+          </List>
+        </Drawer>
+
         <Grid item>
-          <Grid alignItems="center" container
-            direction="row" justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <SearchForm />
-            </Grid>
-            <Grid item>
-              <Button onClick={clickDrawer} data-testid="dehaze-icon">
-                <DehazeIcon />
-              </Button>
-            </Grid>
-          </Grid>
+          <Container>
+            <AlertMessage />
+            <Switch>
+              <Route path="/" exact component={HomeContent} />
+              <Route path="/user/:myPageId" exact component={MyPage} />
+              <Route path="/tweet" exact component={TweetForm} />
+              <Route path="/user/:userId/favorite" exact component={MyFavorite} />
+              <Route path="/posts" exact component={HotTweet} />
+              <Route path="/hashtag/index" exact component={HashtagIndex} />
+              <Route path="/user/edit/account" exact component={UpdateUserSettings} />
+
+              <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
+              <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
+
+              <Route path="/search/:searchWord" exact component={SearchResult} />
+
+              <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
+              <Route >
+                <h3 className={classes.exception}>
+                  そのページはご利用いただけません。他のページを探してみましょう。
+                </h3>
+              </Route>
+            </Switch>
+
+          </Container>
         </Grid>
       </Grid>
-
-      <Drawer anchor="right" open={drawerStatus} onClose={clickDrawer}>
-        <List onClick={clickDrawer}>
-          <ListItem button divider>
-            <Link color="inherit" component={RouterLink}
-              onClick={resetAlert} to={`/user/${currentUser.id}/favorite`} underline="none"
-            >
-              マイいいね
-            </Link>
-          </ListItem>
-          <ListItem button divider>
-            <Link color="inherit" component={RouterLink}
-              onClick={resetAlert} to={`/posts`} underline="none"
-            >
-              最新ポスト一覧
-            </Link>
-          </ListItem>
-          <ListItem button divider>
-            <Link color="inherit" component={RouterLink}
-              onClick={resetAlert} to={`/hashtag/index`} underline="none"
-            >
-              タグ一覧
-            </Link>
-          </ListItem>
-          <ListItem button divider>
-            <Link color="inherit" component={RouterLink}
-              onClick={resetAlert} to="/user/edit/account" underline="none"
-            >
-              アカウント設定
-            </Link>
-          </ListItem>
-          <ListItem button divider>
-            <Link color="inherit" onClick={() => clickLogout()} underline="none">
-              ログアウト
-            </Link>
-          </ListItem>
-        </List>
-      </Drawer>
-
-      <Container>
-        <AlertMessage />
-        <Switch>
-          <Route path="/" exact component={HomeContent} />
-          <Route path="/user/:myPageId" exact component={MyPage} />
-          <Route path="/tweet" exact component={TweetForm} />
-          <Route path="/user/:userId/favorite" exact component={MyFavorite} />
-          <Route path="/posts" exact component={HotTweet} />
-          <Route path="/hashtag/index" exact component={HashtagIndex} />
-          <Route path="/user/edit/account" exact component={UpdateUserSettings} />
-
-          <Route path="/user/:myPageId/followings" exact component={UserRelationship} />
-          <Route path="/user/:myPageId/followers" exact component={UserRelationship} />
-
-          <Route path="/search/:searchWord" exact component={SearchResult} />
-
-          <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
-          <Route >
-            <h3 className={classes.exception}>
-              そのページはご利用いただけません。他のページを探してみましょう。
-            </h3>
-          </Route>
-        </Switch>
-
-      </Container>
     </div>
   );
 }
