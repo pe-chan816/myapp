@@ -17,11 +17,10 @@ class SessionsController < ApplicationController
   def destroy
     if logged_in?
       log_out
-      render json: {status: 200, logged_in: false}
+      render json: {logged_out: true}
     elsif
-      render json: {message: "ログインユーザーがいません"}
+      render json: {message: ["ログインしているユーザーがいません"]}
     end
-    #redirect_to root_path
   end
 
   # reactにログイン状態を伝えるためのアクション

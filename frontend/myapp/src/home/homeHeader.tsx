@@ -62,11 +62,14 @@ const HomeHeader = () => {
     const url = `http://localhost:3000/logout`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(async (res) => {
-      console.log("ログアウト状況: ", res);
-      await setCurrentUser({});
-      await setLoginState(false);
-      makeAlert("success", ["ログアウトが完了しました"]);
-      history.push("/");
+      if (res.data.logged_out === true) {
+        await setCurrentUser({});
+        await setLoginState(false);
+        makeAlert("success", ["ログアウトが完了しました"]);
+        history.push("/");
+      } else {
+        makeAlert("warning", res.data.message)
+      }
     }).catch(error => console.log("ログアウトエラー", error));
   }
 
