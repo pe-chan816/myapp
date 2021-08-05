@@ -35,7 +35,7 @@ const HomeContent = () => {
   const getContents = () => {
     setPage(1);
     setData([]);
-    const url = `http://localhost:3000`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.home_data);
@@ -52,7 +52,7 @@ const HomeContent = () => {
   const handlePagination = (p: number) => {
     setPage(p);
     setData([]);
-    const url = `http://localhost:3000/?page=${p}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.home_data);

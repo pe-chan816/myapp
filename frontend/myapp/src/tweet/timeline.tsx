@@ -66,7 +66,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
   };
 
   const clickFavoriteButton = (tweet: TimelineType) => {
-    const url = `http://localhost:3000/favorites`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/favorites`;
     const newData = { favorite_tweet_id: tweet.id };
     const config = { withCredentials: true };
     axios.post(url, newData, config).then(res => {
@@ -78,7 +78,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
   };
 
   const clickUnFavriteButton = (tweet: TimelineType) => {
-    const url = `http://localhost:3000/unfavorite`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/unfavorite`;
     const newData = { tweet_id: tweet.id };
     const config = { withCredentials: true };
     axios.post(url, newData, config).then(res => {
@@ -142,7 +142,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
             <CardHeader
               avatar={
                 <Avatar alt="user-image"
-                  src={`http://localhost:3000/${e.profile_image?.url}`}
+                  src={`${process.env.REACT_APP_API_DOMAIN}/${e.profile_image?.url}`}
                 >
                   <PersonIcon color="inherit" fontSize="large" />
                 </Avatar>
@@ -159,7 +159,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
             />
             {e.tweet_image?.url &&
               <CardMedia component="img"
-                src={`http://localhost:3000/${e.tweet_image.url}`}
+                src={`${process.env.REACT_APP_API_DOMAIN}/${e.tweet_image.url}`}
                 title="post-image" />}
 
             <CardContent className={classes.cardContent}>

@@ -26,7 +26,7 @@ const HotTweet = () => {
   const classes = useStyles();
 
   const getHotTweetData = () => {
-    const url = `http://localhost:3000/tweets`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/tweets`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.hot_tweet_data);
@@ -37,7 +37,7 @@ const HotTweet = () => {
   const clickBack = () => {
     const previousPage = page - 1;
     setData([]);
-    const url = `http://localhost:3000/tweets?page=${previousPage}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/tweets?page=${previousPage}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.hot_tweet_data);
@@ -50,7 +50,7 @@ const HotTweet = () => {
   const clickNext = () => {
     const nextPage = page + 1;
     setData([]);
-    const url = `http://localhost:3000/tweets?page=${nextPage}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/tweets?page=${nextPage}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.hot_tweet_data);

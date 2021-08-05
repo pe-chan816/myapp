@@ -57,7 +57,7 @@ const HashtagDetailContent = () => {
 
       return (
         <div>
-          <LoadScript googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
+          <LoadScript googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}>
             <GoogleMap
               mapContainerStyle={containerStyle}
               center={center}

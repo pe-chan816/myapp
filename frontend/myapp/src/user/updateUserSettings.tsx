@@ -58,7 +58,7 @@ const UpdateUserSettings = () => {
   useEffect(() => { setInitialValue() }, []);
 
   const handleSubmit = async (e: any) => {
-    const url = `http://localhost:3000/users/${currentUser.id}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${currentUser.id}`;
     const data = await imageData();
     const config = {
       withCredentials: true,
@@ -97,7 +97,7 @@ const UpdateUserSettings = () => {
     if (!preview) {
       return (
         <Avatar alt="user-image"
-          src={`http://localhost:3000/${currentUser.profile_image?.url}`}
+          src={`${process.env.REACT_APP_API_DOMAIN}/${currentUser.profile_image?.url}`}
         >
           <PersonIcon color="inherit" fontSize="large" />
         </Avatar>

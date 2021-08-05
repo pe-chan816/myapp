@@ -28,7 +28,7 @@ const DeleteUserAccount = () => {
   const classes = useStyles();
 
   const clickDeleteButton = () => {
-    const url = `http://localhost:3000/users/${currentUser.id}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${currentUser.id}`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
       console.log(res)

@@ -30,7 +30,7 @@ const MyFavorite = (props: any) => {
   const classes = useStyles();
 
   const getFavoriteData = () => {
-    const url = `http://localhost:3000/users/${userId}/myfavorite`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${userId}/myfavorite`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
@@ -43,7 +43,7 @@ const MyFavorite = (props: any) => {
 
   const handlePagination = (p: number) => {
     setPage(p);
-    const url = `http://localhost:3000//users/${userId}/myfavorite?page=${p}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${userId}/myfavorite?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.my_favorites);

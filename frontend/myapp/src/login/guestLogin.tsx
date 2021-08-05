@@ -29,7 +29,7 @@ const GuestLogin = () => {
   const classes = useStyles();
 
   const clickGuestLoginButton = () => {
-    const url = `http://localhost:3000/guest`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/guest`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);

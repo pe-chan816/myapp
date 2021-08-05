@@ -59,7 +59,7 @@ const HomeHeader = () => {
   };
 
   const clickLogout = () => {
-    const url = `http://localhost:3000/logout`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/logout`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(async (res) => {
       if (res.data.logged_out === true) {

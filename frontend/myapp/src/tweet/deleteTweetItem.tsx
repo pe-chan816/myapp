@@ -33,7 +33,7 @@ const DeleteTweetItem = (props: { indexNumber: number, item: TimelineType }) => 
 
   const clickDeleteButton = () => {
     const newData = [...data];
-    const url = `http://localhost:3000/tweets/${itemData.id}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/tweets/${itemData.id}`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
       newData.splice(indexNumber, 1);
