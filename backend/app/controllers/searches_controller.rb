@@ -3,15 +3,19 @@ class SearchesController < ApplicationController
     keyword = params[:search_word]
 
     ## ユーザー ##
-    searched_user = User.where("name LIKE ?", "%#{keyword}%")
-    #############
+    searched_user = User.where("( name LIKE ? ) OR ( unique_name LIKE ? )",
+                               "%#{keyword}%", "%#{keyword}%")
+
+    ## ハッシュタグ ##
+    searched_tag = Hashtag.where("hashname LIKE ?", "%#{keyword}%")
 
     ## ツイート ##
     base_data = Tweet.left_joins(:user, :hashtags)
                      .select("tweets.*,
                               hashtags.hashname,
                               users.name, users.profile_image, users.unique_name")
-                     .where("content LIKE ?", "%#{keyword}%")
+                     .where("(content LIKE ?) OR (hashtags.hashname LIKE ?)",
+                            "%#{keyword}%", "%#{keyword}%")
     array_data = []
     base_data.each do |d|
       user = User.find(d.user_id)
@@ -30,6 +34,7 @@ class SearchesController < ApplicationController
     #############
 
     render json: { searched_user: searched_user,
+                   searched_tag: searched_tag,
                    searched_tweet: searched_tweet}
   end
 end
