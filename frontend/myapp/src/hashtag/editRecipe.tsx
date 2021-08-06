@@ -48,7 +48,7 @@ const EditRecipe = () => {
     /////////////////////////////
     setNewPosition(newPosition + 1);
 
-    const url = `http://localhost:3000/hashtag/${hashname}/edit/recipe`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${hashname}/edit/recipe`;
     const data = {
       recipe: {
         material: newMaterial,
@@ -76,7 +76,7 @@ const EditRecipe = () => {
     if (e) {
       const deleteList = () => {
         console.log(e);
-        const url = `http://localhost:3000/hashtag/delete/recipe/${e.id}`;
+        const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/delete/recipe/${e.id}`;
         const config = { withCredentials: true };
         axios.delete(url, config).then(res => {
           console.log(res);

@@ -66,6 +66,7 @@ describe("いいね一覧の挙動", () => {
     act(() => { userEvent.click(myFavoriteLink) });
 
     expect(await screen.findByText("いいねしたポスト")).toBeInTheDocument();
+    expect(screen.getByText("いいねしたポスト")).toBeInTheDocument();
     expect(screen.getByText("とりあえず生")).toBeInTheDocument();
     expect(screen.getByText("通りすがりのビール好き")).toBeInTheDocument();
     expect(screen.getByText("@beerholic")).toBeInTheDocument();

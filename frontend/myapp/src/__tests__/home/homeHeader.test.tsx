@@ -42,7 +42,9 @@ describe("ログイン時のホームヘッダー", () => {
     mock.onGet("http://localhost:3000/hashtags")
       .reply(200, { hashtags: [{}] });
     // clickLogout用
-    mock.onDelete("http://localhost:3000/logout").reply(200);
+    mock.onDelete("http://localhost:3000/logout").reply(200, {
+      logged_out: true
+    });
 
     act(() => {
       render(

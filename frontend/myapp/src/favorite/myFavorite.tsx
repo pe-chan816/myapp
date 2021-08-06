@@ -16,16 +16,21 @@ const MyFavorite = (props: any) => {
   const [page, setPage] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(1);
   const useStyles = makeStyles({
-    base: {
+    pagination: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
       margin: "0 auto",
-      maxWidth: "600px",
-      width: "100%"
+      maxWidth: "600px"
+    },
+    text: {
+      textAlign: "center"
     }
   });
   const classes = useStyles();
 
   const getFavoriteData = () => {
-    const url = `http://localhost:3000/users/${userId}/myfavorite`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${userId}/myfavorite`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
@@ -38,7 +43,7 @@ const MyFavorite = (props: any) => {
 
   const handlePagination = (p: number) => {
     setPage(p);
-    const url = `http://localhost:3000//users/${userId}/myfavorite?page=${p}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${userId}/myfavorite?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.my_favorites);
@@ -49,7 +54,7 @@ const MyFavorite = (props: any) => {
 
   const MyPagination = () => {
     return (
-      <Pagination
+      <Pagination className={classes.pagination}
         color="primary"
         count={pageNumber}
         onChange={(e, p) => handlePagination(p)}
@@ -60,25 +65,15 @@ const MyFavorite = (props: any) => {
   }
 
   return (
-    <Grid container
-      className={classes.base}
-      direction="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Grid item >
-        <h3>いいねしたポスト</h3>
-      </Grid>
+    <div>
+      <h3 className={classes.text}>いいねしたポスト</h3>
 
-      <Grid className={classes.base} item>
-        <Timeline data={data} />
-      </Grid>
-
-      <Grid item>
-        <MyPagination />
-      </Grid>
-
-    </Grid>
+      {data.toString() !== [].toString() &&
+        <>
+          <Timeline data={data} />
+          <MyPagination />
+        </>}
+    </div>
   );
 };
 

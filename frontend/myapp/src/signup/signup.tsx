@@ -48,7 +48,7 @@ const Signup = () => {
 
   const handleSubmit = (e: any) => {
     console.log("アカウント作成イベント発火");
-    const url = `http://localhost:3000/signup`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/signup`;
     const data = {
       user: {
         name: name,

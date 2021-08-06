@@ -52,7 +52,7 @@ const TweetForm = () => {
   const clickSubmit = async () => {
     console.log("ツイート投稿");
 
-    const url = `http://localhost:3000/tweets`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/tweets`;
     const data = await tweetData();
     const config = {
       withCredentials: true,

@@ -20,7 +20,7 @@ const SearchResult = (prop: any) => {
     setTweetData([]);
     setTagData([]);
     setUserData([]);
-    const url = `http://localhost:3000/search/${keyword}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/search/${keyword}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
@@ -44,7 +44,7 @@ const SearchResult = (prop: any) => {
 
   const searchedUser = userData.map((e, i) => {
     if (e) {
-      const imageUrl = `http://localhost:3000/${e.profile_image?.url}`;
+      const imageUrl = `${process.env.REACT_APP_API_DOMAIN}/${e.profile_image?.url}`;
       const userUrl = `/user/${e.id}`;
 
       return (

@@ -48,7 +48,7 @@ const HashtagDetail = () => {
   const getDetailData = () => {
     console.log("!!getDetailData!!");
     resetData();
-    const url = `http://localhost:3000/hashtag/${hashname}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${hashname}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res);
@@ -66,7 +66,7 @@ const HashtagDetail = () => {
   const handlePagination = (p: number) => {
     setPage(p);
     setTimelineData([]);
-    const url = `http://localhost:3000/hashtag/${hashname}?page=${p}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${hashname}?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setTimelineData(res.data.tweets);

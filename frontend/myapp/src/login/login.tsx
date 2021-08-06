@@ -46,7 +46,7 @@ const Login = () => {
     console.log("!!handleSubmit!!");
     setMessage([]);
 
-    const url = `http://localhost:3000/login`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/login`;
     const data = {
       user: {
         email: email,

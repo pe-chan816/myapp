@@ -76,7 +76,7 @@ const EditMap = () => {
     if (JSON.stringify(barInfo) !== JSON.stringify({})) {
       return (
         <>
-          <LoadScript libraries={["places"]} googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
+          <LoadScript libraries={["places"]} googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}>
             <Autocomplete
               onLoad={onLoad}
               onPlaceChanged={onPlaceChanged}
@@ -98,7 +98,7 @@ const EditMap = () => {
       return (
         <>
           <p>お店の情報を検索してみましょう</p>
-          <LoadScript libraries={["places"]} googleMapsApiKey="AIzaSyC0xBkQV6o50tS0t-svTaLzzLigR66fow8">
+          <LoadScript libraries={["places"]} googleMapsApiKey={`${process.env.REACT_APP_GOOGLE_MAP_API_KEY}`}>
             <Autocomplete
               onLoad={onLoad}
               onPlaceChanged={onPlaceChanged}
@@ -113,7 +113,7 @@ const EditMap = () => {
   const mapComponent = mapJSX();
 
   const updataBarInfomation = () => {
-    const url = `http://localhost:3000/hashtag/${hashname}/edit/bar`;
+    const url = `/${hashname}/edit/bar`;
     const data = {
       bar: {
         name: barInfo.name,
@@ -169,7 +169,7 @@ const EditMap = () => {
         <Link color="inherit"
           component={RouterLink}
           onClick={() => {
-            const url = `http://localhost:3000/hashtag/${hashname}`;
+            const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${hashname}`;
             const config = { withCredentials: true };
             axios.get(url, config).then(res => {
               if (res.data.bar_info[0]) {

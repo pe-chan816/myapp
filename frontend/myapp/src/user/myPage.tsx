@@ -56,7 +56,7 @@ const MyPage = (props: any) => {
   const getData = () => {
     console.log("!!getData!!");
     resetData();
-    const url = `http://localhost:3000/users/${myPageId}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${myPageId}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       console.log(res.data);
@@ -79,7 +79,7 @@ const MyPage = (props: any) => {
   useEffect(getData, []);
 
   const MypageContent = () => {
-    const url = `http://localhost:3000/${user.profile_image?.url}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/${user.profile_image?.url}`;
     const myPageUrl = `/user/${user.id}`;
 
     const followingsPage = {
@@ -93,7 +93,7 @@ const MyPage = (props: any) => {
 
     const FollowButton = () => {
       const clickFollow = () => {
-        const url = `http://localhost:3000/relationships`;
+        const url = `${process.env.REACT_APP_API_DOMAIN}/relationships`;
         const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
         axios.post(url, sendData, config).then(res => {
@@ -105,7 +105,7 @@ const MyPage = (props: any) => {
         });
       };
       const clickUnfollow = () => {
-        const url = `http://localhost:3000/unfollow`;
+        const url = `${process.env.REACT_APP_API_DOMAIN}/unfollow`;
         const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
         axios.post(url, sendData, config).then(res => {
@@ -200,7 +200,7 @@ const MyPage = (props: any) => {
   const handlePagination = (p: number) => {
     setPage(p);
     setData([]);
-    const url = `http://localhost:3000/users/${myPageId}?page=${p}`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${myPageId}?page=${p}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.mypage_data);

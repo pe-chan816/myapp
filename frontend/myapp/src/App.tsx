@@ -49,7 +49,6 @@ export const MessageContext = createContext({} as {
 });
 
 
-
 const App = () => {
   const [loginState, setLoginState] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<UserType | {}>({});
@@ -63,7 +62,7 @@ const App = () => {
 
   const checkLoginStatus = () => {
     console.log("!!checkLoginStatus!!");
-    const url = `http://localhost:3000/check_login`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/check_login`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       if (res.data.logged_in === true) {

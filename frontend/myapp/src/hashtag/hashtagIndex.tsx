@@ -21,7 +21,7 @@ const HashtagIndex = () => {
 
   const getIndexData = () => {
     setData([]);
-    const url = `http://localhost:3000/hashtags`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/hashtags`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.hashtags);
