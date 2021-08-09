@@ -3,6 +3,7 @@ import { useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, useParams } from "react-router";
 
+import { makeStyles } from "@material-ui/core";
 import { Pagination } from '@material-ui/lab';
 
 import { HashtagType, BarInfoType, TimelineType, RecipeType } from "types/typeList";
@@ -38,6 +39,16 @@ const HashtagDetail = () => {
   const [barInfo, setBarInfo] = useState<Partial<BarInfoType>>({});
   const [page, setPage] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const useStyles = makeStyles({
+    pagination: {
+      alignItems: "center",
+      display: "flex",
+      justifyContent: "center",
+      margin: "0 auto",
+      maxWidth: "600px",
+    }
+  });
+  const classes = useStyles();
 
   const resetData = () => {
     setTimelineData([]);
@@ -77,7 +88,8 @@ const HashtagDetail = () => {
 
   const MyPagination = () => {
     return (
-      <Pagination color="primary"
+      <Pagination className={classes.pagination}
+        color="primary"
         count={pageNumber}
         onChange={(e, p) => handlePagination(p)}
         page={page}
