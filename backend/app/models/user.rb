@@ -43,9 +43,11 @@ class User < ApplicationRecord
   validates :self_introduction, length: {maximum: 160}
 
   # unique_name のバリデーション
-  validates :unique_name, presence: true,
+  VALID_UNIQUE_NAME_REGEX = /\A[\w\/=.!*+?_~-]+\z/
+  validates :unique_name, format: {with: VALID_UNIQUE_NAME_REGEX},
                           length: {maximum: 30},
-                          uniqueness: true
+                          presence: true,
+                          uniqueness: { case_sensitive: true }
 
   # 永続セッション用のトークン生成
   def User.new_token
