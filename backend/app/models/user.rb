@@ -26,28 +26,33 @@ class User < ApplicationRecord
   mount_uploader :profile_image, ImageUploader
 
   # name のバリデーション
-  validates :name, presence: true, length:{maximum: 30}
+  validates :name, length:{ maximum: 30 },
+                   presence: true
 
   # email のバリデーション
   VALID_EMAIL_REGEX = /\A[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email, presence: true,
-                    length:{maximum: 255},
-                    format: {with: VALID_EMAIL_REGEX},
-                    uniqueness: {case_sensitive: false}
+                    length:{ maximum: 255 },
+                    format: { with: VALID_EMAIL_REGEX,
+                              message: ": 登録いただけるのは sample@sample.com のような一般的な形式のメールアドレスに限られます" },
+                    uniqueness: { case_sensitive: false }
 
   # password のバリデーション
   has_secure_password
-  validates :password, length: {minimum: 8}, allow_nil: true
+  validates :password, allow_nil: true,
+                       length: { minimum: 8 }
 
   # self_introduction バリデーション
-  validates :self_introduction, length: {maximum: 160}
+  validates :self_introduction, length: { maximum: 160 }
 
   # unique_name のバリデーション
   VALID_UNIQUE_NAME_REGEX = /\A[\w\/=.!*+?_~-]+\z/
-  validates :unique_name, format: {with: VALID_UNIQUE_NAME_REGEX},
-                          length: {maximum: 30},
+  validates :unique_name, format: { with: VALID_UNIQUE_NAME_REGEX,
+                                    message: ": 使用できるのは半角英数字、一部の記号（=.!*+?_~-）のみとなります" },
+                          length: { maximum: 30 },
                           presence: true,
-                          uniqueness: { case_sensitive: true }
+                          uniqueness: { case_sensitive: true,
+                                        message: ":'%{value}'はすでに使用されています"}
 
   # 永続セッション用のトークン生成
   def User.new_token
