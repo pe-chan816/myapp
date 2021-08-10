@@ -35,7 +35,19 @@ const NotLoginHomeHeader = () => {
   const Home = () => {
     return (
       <div className={classes.home}>
-        <h1>Welcome to my App!!</h1>
+        <h2>Insyutagram へようこそ！</h2>
+        <p>
+          お酒好きのためのSNSアプリです。
+          <br />
+          誰かがつぶやいたお酒やBARの話をアテに今夜も飲みませんか？
+          <br />
+          <br />
+          そしてあなたも
+          <br />
+          今から飲むカクテルやお店のことをつぶやいて
+          <br />
+          みんなで楽しい気持ちをシェアしましょう！
+        </p>
       </div>
     );
   }

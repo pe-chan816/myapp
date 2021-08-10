@@ -28,7 +28,7 @@ describe("非ログイン時のホームヘッダー", () => {
     renderDom();
     const target = screen.getByText("Insyutagram");
     fireEvent.click(target);
-    expect(screen.getByText("Welcome to my App!!")).toBeInTheDocument();
+    expect(screen.getByText(/Insyutagram へようこそ！/)).toBeInTheDocument();
   });
 
   it("'ログイン'のリンクが正常に作動する", () => {
