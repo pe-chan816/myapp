@@ -69,7 +69,7 @@ const SearchResult = (prop: any) => {
             <CardHeader
               avatar={
                 <Avatar alt="user-image"
-                  src={`${process.env.REACT_APP_API_DOMAIN}/${e.profile_image?.url}`}
+                  src={`${process.env.REACT_APP_IMAGE_URL}${e.profile_image?.url}`}
                 >
                   <PersonIcon color="inherit" fontSize="large" />
                 </Avatar>

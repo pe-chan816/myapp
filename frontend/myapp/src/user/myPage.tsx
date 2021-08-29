@@ -79,7 +79,7 @@ const MyPage = (props: any) => {
   useEffect(getData, []);
 
   const MypageContent = () => {
-    const url = `${process.env.REACT_APP_API_DOMAIN}/${user.profile_image?.url}`;
+    const url = `${process.env.REACT_APP_IMAGE_URL}${user.profile_image?.url}`;
     const myPageUrl = `/user/${user.id}`;
 
     const followingsPage = {
