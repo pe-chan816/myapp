@@ -142,7 +142,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
             <CardHeader
               avatar={
                 <Avatar alt="user-image"
-                  src={`${process.env.REACT_APP_API_DOMAIN}/${e.profile_image?.url}`}
+                  src={`${process.env.REACT_APP_IMAGE_URL}${e.profile_image?.url}`}
                 >
                   <PersonIcon color="inherit" fontSize="large" />
                 </Avatar>
@@ -159,7 +159,7 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
             />
             {e.tweet_image?.url &&
               <CardMedia component="img"
-                src={`${process.env.REACT_APP_API_DOMAIN}/${e.tweet_image.url}`}
+                src={`${process.env.REACT_APP_IMAGE_URL}${e.tweet_image.url}`}
                 title="post-image" />}
 
             <CardContent className={classes.cardContent}>

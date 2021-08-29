@@ -97,7 +97,7 @@ const UpdateUserSettings = () => {
     if (!preview) {
       return (
         <Avatar alt="user-image"
-          src={`${process.env.REACT_APP_API_DOMAIN}/${currentUser.profile_image?.url}`}
+          src={`${process.env.REACT_APP_IMAGE_URL}${currentUser.profile_image?.url}`}
         >
           <PersonIcon color="inherit" fontSize="large" />
         </Avatar>

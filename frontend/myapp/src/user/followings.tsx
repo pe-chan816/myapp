@@ -22,7 +22,7 @@ const UserRelationship = () => {
   console.log(user);
 
   const mapUserData = data.map((e: UserType, i) => {
-    const imageUrl = `${process.env.REACT_APP_API_DOMAIN}/${e.profile_image?.url}`;
+    const imageUrl = `${process.env.REACT_APP_IMAGE_URL}${e.profile_image?.url}`;
     const userUrl = `/user/${e.id}`;
 
     return (
