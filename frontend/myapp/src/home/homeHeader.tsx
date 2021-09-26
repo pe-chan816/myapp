@@ -172,7 +172,7 @@ const HomeHeader = () => {
           <Route path="/search/:searchWord" exact component={SearchResult} />
 
           <Route path="/hashtag/:hashname" exact component={HashtagDetail} />
-          <Route >
+          <Route>
             <h3 className={classes.exception}>
               そのページはご利用いただけません。他のページを探してみましょう。
             </h3>
