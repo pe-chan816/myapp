@@ -1,6 +1,9 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'http://localhost:8000', 'http://localhost', 'http://ec2-3-112-45-193.ap-northeast-1.compute.amazonaws.com'
+    origins 'http://localhost:8000',
+            'http://localhost',
+            'http://www.insyutagram.net',
+            'https://www.insyutagram.net'
     resource '*',
       headers: :any,
       credentials: true,
