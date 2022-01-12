@@ -15,7 +15,7 @@ services:
       - tmp-data:/myapp/tmp
       - public-data:/myapp/public
     ports:
-      - 3000:3000
+      - 3333:3000
     depends_on:
       - db
 
@@ -32,7 +32,22 @@ services:
     depends_on:
       - rails
 
-  nginx:
+  nginx-front:
+    build:
+      context: .
+      dockerfile: ./containers/nginx/Dockerfile
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - React-build:/myapp/react/build
+    expose:
+      - 80
+    ports:
+      - 80:80
+    depends_on:
+      - react
+
+  nginx-api:
     build:
       context: .
       dockerfile: ./containers/nginx/Dockerfile
@@ -41,9 +56,10 @@ services:
     volumes:
       - tmp-data:/myapp/tmp
       - public-data:/myapp/public
-      - React-build:/myapp/react/build
+    expose:
+      - 3000
     ports:
-      - 80:80
+      - 3000:3000
     depends_on:
       - react
 

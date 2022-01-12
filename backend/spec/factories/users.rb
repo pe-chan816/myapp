@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :administrator, class: User do
     name { "ADMIN_USER" }
+    unique_name { "admin" }
     email { "admin@email.com" }
     password { "password" }
     password_confirmation { "password" }
@@ -9,6 +10,7 @@ FactoryBot.define do
 
   factory :guest, class: User do
     name { "GUEST_USER" }
+    unique_name { "guest" }
     email { "i_am_guest_user@email.com" }
     password { "password" }
     password_confirmation { "password" }
@@ -17,6 +19,7 @@ FactoryBot.define do
 
   factory :testuser, class: User do
     name { "TEST_USER_1" }
+    unique_name { "test1" }
     email { "email@email.com" }
     password { "password" }
     password_confirmation { "password" }
@@ -31,6 +34,7 @@ FactoryBot.define do
 
   factory :testuser2, class: User do
     name { "TEST_USER_2" }
+    unique_name { "test2" }
     email { "email2@email.com" }
     password { "password" }
     password_confirmation { "password" }
@@ -42,6 +46,7 @@ FactoryBot.define do
 
   factory :testuser3, class: User do
     name { "TEST_USER_3" }
+    unique_name { "test3" }
     email { "email3@email.com" }
     password { "password" }
     password_confirmation { "password" }
@@ -53,6 +58,9 @@ FactoryBot.define do
     end
     sequence :email do |n|
       "email#{n}@fake-email.com"
+    end
+    sequence :unique_name do |n|
+      "fake#{n}"
     end
     password { "password" }
     password_confirmation { "password" }
