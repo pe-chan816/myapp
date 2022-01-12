@@ -5,8 +5,4 @@ port        ENV.fetch("PORT") { 3000 }
 environment ENV.fetch("RAILS_ENV") { "development" }
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 
-app_root_path = File.expand_path("../..", __FILE__)
-bind "unix://#{app_root_path}/tmp/sockets/puma.sock"
-#bind "unix://#{Rails.root}/tmp/sockets/puma.sock"
-
 plugin :tmp_restart
