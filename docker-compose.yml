@@ -27,7 +27,6 @@ services:
     command: sh -c "yarn start"
     volumes:
       - ./frontend:/usr/src/app
-      #- React-build:/usr/src/app/myapp/build
     ports:
       - 8000:3000
     depends_on:
@@ -39,9 +38,6 @@ services:
       dockerfile: ./containers/nginx/Dockerfile
     environment:
       TZ: Asia/Tokyo
-    #volumes:
-      #- ./frontend/myapp:/myapp/react
-      #- React-build:/myapp/react/build
     ports:
       - 80:80
     depends_on:
@@ -75,4 +71,3 @@ volumes:
   DB-data:
   tmp-data:
   public-data:
-  React-build:
