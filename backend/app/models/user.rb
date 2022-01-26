@@ -46,7 +46,7 @@ class User < ApplicationRecord
   validates :self_introduction, length: { maximum: 160 }
 
   # unique_name のバリデーション
-  VALID_UNIQUE_NAME_REGEX = /\A[\w\/=.!*+?_~-]+\z/
+  VALID_UNIQUE_NAME_REGEX = /\A[\w=.!*+?_~-]+\z/
   validates :unique_name, format: { with: VALID_UNIQUE_NAME_REGEX,
                                     message: ": 使用できるのは半角英数字、一部の記号（=.!*+?_~-）のみとなります" },
                           length: { maximum: 30 },
