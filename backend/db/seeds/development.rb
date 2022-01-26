@@ -1,10 +1,12 @@
 # サンプルユーザー
 30.times do |n|
   name = Faker::Name.unique.name
+  unique_name = "unique#{n+1}"
   email = "email#{n+1}@email.com"
   password = "password"
   User.create!(
     name: name,
+    unique_name: unique_name,
     email: email,
     password: password,
     password_confirmation: password
@@ -14,6 +16,7 @@ end
 # 管理ユーザー
 User.create!(
   name: "Administrator",
+  unique_name: "admin",
   email: "admin@email.com",
   password: "password",
   password_confirmation: "password",
@@ -23,6 +26,7 @@ User.create!(
 # ゲストユーザー
 User.create!(
   name: "ゲストユーザー",
+  unique_name: "guest_user",
   email: "i_am_guest_user@email.com",
   password: "password",
   password_confirmation: "password",
