@@ -13,16 +13,6 @@ RSpec.describe "Users", type: :request do
     end
   end
 
-  describe "edit メソッド" do
-    describe "GET edit_user_path" do
-      it "ログインしていない場合リダイレクトされる" do
-        # RequestSpec では session が取り扱えないのでログイン中の挙動は login_system_spec.rb に書く
-        get edit_user_path(user)
-        expect(response).to have_http_status(:redirect)
-      end
-    end
-  end
-
   describe "update メソッド" do
     describe "PATCH /users/:id" do
       it  "ログインしていないと更新できない" do
