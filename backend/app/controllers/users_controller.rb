@@ -2,10 +2,12 @@ class UsersController < ApplicationController
   #before_action :user_must_log_in, only:[:edit, :update, :index, :destroy]
   #before_action :correct_user, only:[:edit, :update]
 
+=begin
   def new
     @user = User.new(session[:new_user_params] || {})
     session[:new_user_params] = nil
   end
+=end
 
   def create
     user = User.new(user_params)

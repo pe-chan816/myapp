@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   delete '/logout', to:'sessions#destroy'
   get '/check_login', to:'sessions#login_check' # react側でログイン状態を追跡するのに必要
 
-  get '/signup', to:'users#new'
+  ##get '/signup', to:'users#new'
   post '/signup', to: 'users#create'
   get '/guest', to:'users#guest'
 
@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
   root 'home#home'
 
-  resources :users
+  resources :users, only: [:create, :update, :show, :index, :destroy]
   resources :users do
     member do
       get 'following', 'followers', 'favorite'
