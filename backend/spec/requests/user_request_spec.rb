@@ -45,4 +45,57 @@ RSpec.describe "Users", type: :request do
     end
   end
 
+
+  describe "users#update" do
+    let(:user) { FactoryBot.create(:testuser) }
+
+    context "ユーザー情報変更に成功" do
+      before do
+        @new_name = "new_name"
+        @new_email = "new@email.com"
+        @new_introduction = "hello"
+        @new_unique_name = "new_unique"
+
+        patch user_url(user), params: { user: {
+          email: @new_email,
+          name: @new_name,
+          password: "password2",
+          password_confirmation: "password2",
+          self_introduction: @new_introduction,
+          unique_name: @new_unique_name
+        }}
+
+        @new_pass = User.find(user.id).password_digest
+
+        @json = JSON.parse(response.body)
+      end
+
+      it "変更後のパラメータが返ってくる" do
+        expect(@json['user']).to include(
+          "email" => @new_email,
+          "name" => @new_name,
+          "password_digest" => @new_pass,
+          "self_introduction" => @new_introduction,
+          "unique_name" => @new_unique_name
+        )
+      end
+    end
+
+    context "ユーザー情報変更に失敗" do
+      before do
+        @invalid_name = "a" * 31
+
+        patch user_url(user), params: { user: {
+          name: @invalid_name
+        }}
+
+        @json = JSON.parse(response.body)
+      end
+
+      it "エラーメッセージが返ってくる" do
+        expect(@json['messages'][0]).to eq "Nameは30文字以内で入力してください"
+      end
+    end
+
+  end
 end
