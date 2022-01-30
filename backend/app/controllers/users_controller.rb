@@ -105,13 +105,15 @@ class UsersController < ApplicationController
   def guest
     user = User.find_by(guest: true)
     log_in(user)
-    render json: { user: user}
+    render json: { user: user }
   end
 
+=begin
   def favorite
     @user = User.find(params[:id])
     @favorite_tweets = @user.favorited_tweets
   end
+=end
 
   private
     def user_params

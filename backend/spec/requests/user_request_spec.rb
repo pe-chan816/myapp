@@ -179,4 +179,22 @@ RSpec.describe "Users", type: :request do
       expect(json['message']).to eq "ユーザーアカウントを削除しました"
     end
   end
+
+
+  describe "users#guest" do
+    let(:guest_user) { FactoryBot.create(:guest) }
+
+    it "ゲストユーザー情報が返ってくる" do
+      guest_user
+      get guest_url
+      json = JSON.parse(response.body)
+
+      expect(json['user']).to include(
+        "email" => guest_user.email,
+        "guest" => true,
+        "id" => guest_user.id,
+        "name" => guest_user.name
+      )
+    end
+  end
 end

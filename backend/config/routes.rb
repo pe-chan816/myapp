@@ -27,7 +27,6 @@ Rails.application.routes.draw do
   resources :users do
     member do
       #get 'following', 'followers', 'favorite'
-      get 'favorite'
     end
   end
   resources :tweets, only:[:create, :destroy, :favorite, :index, :show ] do
