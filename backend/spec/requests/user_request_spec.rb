@@ -159,4 +159,24 @@ RSpec.describe "Users", type: :request do
       expect(@json['follow_or_not']).to eq @user.following?(@user)
     end
   end
+
+
+  describe "users#destroy" do
+    before do
+      @user = FactoryBot.create(:testuser)
+    end
+
+    it "ユーザー数が減る" do
+      expect do
+        delete user_url(@user)
+      end.to change(User, :count).by(-1)
+    end
+
+    it "通知メッセージが返ってくる" do
+      delete user_url(@user)
+      json = JSON.parse(response.body)
+
+      expect(json['message']).to eq "ユーザーアカウントを削除しました"
+    end
+  end
 end
