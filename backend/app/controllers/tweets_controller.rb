@@ -4,14 +4,20 @@ class TweetsController < ApplicationController
 
   def create
     tweet = current_user.tweets.build(tweet_params)
-    recieved_tag = params[:hashtag]
-    hashtag = recieved_tag.split(/,/) #受け取った:hashtagはstringなので配列に直す
 
-    if tweet.save
-      hashtag.uniq.map do |h| #すでにタグがあるかどうかを確認しつつリレーションシップを結んでいく
-        tag = Hashtag.find_or_create_by(hashname: h.downcase)
-        tweet.hashtags << tag
+    if params[:hashtag]
+      recieved_tag = params[:hashtag]
+      hashtag = recieved_tag.split(/,/) #受け取った:hashtagはstringなので配列に直す
+
+      if tweet.save
+        hashtag.uniq.map do |h| #すでにタグがあるかどうかを確認しつつリレーションシップを結んでいく
+          tag = Hashtag.find_or_create_by(hashname: h.downcase)
+          tweet.hashtags << tag
+        end
       end
+
+    else
+      tweet.save
     end
   end
 
