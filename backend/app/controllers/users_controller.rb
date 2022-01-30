@@ -90,6 +90,7 @@ class UsersController < ApplicationController
     render json: { message: "ユーザーアカウントを削除しました"}
   end
 
+=begin
   def following
     @user = User.find(params[:id])
     @users = @user.following
@@ -99,6 +100,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @users = @user.followers
   end
+=end
 
   def guest
     user = User.find_by(guest: true)
