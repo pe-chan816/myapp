@@ -2,10 +2,12 @@ class UsersController < ApplicationController
   #before_action :user_must_log_in, only:[:edit, :update, :index, :destroy]
   #before_action :correct_user, only:[:edit, :update]
 
+=begin
   def new
     @user = User.new(session[:new_user_params] || {})
     session[:new_user_params] = nil
   end
+=end
 
   def create
     user = User.new(user_params)
@@ -19,12 +21,9 @@ class UsersController < ApplicationController
     end
   end
 
-  def edit
-  end
-
   def update
     user = User.find(params[:id])
-    if user.update_attributes(user_params)
+    if user.update(user_params)
       render json: {user: user}
     else
       render json: {messages: user.errors.full_messages}
@@ -80,15 +79,18 @@ class UsersController < ApplicationController
                    follow_or_not: follow_or_not}
   end
 
+=begin
   def index
     @users = User.page(params[:page]).per(10)
   end
+=end
 
   def destroy
     User.find(params[:id]).destroy
     render json: { message: "ユーザーアカウントを削除しました"}
   end
 
+=begin
   def following
     @user = User.find(params[:id])
     @users = @user.following
@@ -98,17 +100,20 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @users = @user.followers
   end
+=end
 
   def guest
     user = User.find_by(guest: true)
     log_in(user)
-    render json: { user: user}
+    render json: { user: user }
   end
 
+=begin
   def favorite
     @user = User.find(params[:id])
     @favorite_tweets = @user.favorited_tweets
   end
+=end
 
   private
     def user_params

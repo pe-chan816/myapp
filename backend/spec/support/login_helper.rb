@@ -1,4 +1,13 @@
 module LoginHelpers
+
+  def login_as_testuser
+    post login_url, params: { user: {
+      email: "email@email.com",
+      password: "password"
+    }}
+  end
+
+=begin # system spec用
   def login_as_administrator
     visit login_path
     fill_in 'Email', with: 'admin@email.com'
@@ -19,4 +28,5 @@ module LoginHelpers
     fill_in 'Password', with: 'password'
     click_on 'Login'
   end
+=end
 end

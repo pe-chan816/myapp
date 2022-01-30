@@ -24,6 +24,12 @@ FactoryBot.define do
     password { "password" }
     password_confirmation { "password" }
 
+    trait :invalid do
+      name { nil }
+      email { nil }
+      password { nil }
+    end
+
     after(:create) do |testuser|
       testuser.tweets.create(content: "I'm TEST_USER_1")
       30.times do |n|
