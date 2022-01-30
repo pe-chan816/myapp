@@ -79,9 +79,11 @@ class UsersController < ApplicationController
                    follow_or_not: follow_or_not}
   end
 
+=begin
   def index
     @users = User.page(params[:page]).per(10)
   end
+=end
 
   def destroy
     User.find(params[:id]).destroy

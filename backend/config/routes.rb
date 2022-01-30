@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
   root 'home#home'
 
-  resources :users, only: [:create, :update, :show, :index, :destroy]
+  resources :users, only: [:create, :update, :show, :destroy]
   resources :users do
     member do
       get 'following', 'followers', 'favorite'
