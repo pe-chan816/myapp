@@ -97,4 +97,32 @@ RSpec.describe "Tweets", type: :request do
       )
     end
   end
+
+
+  describe "tweets#show" do
+    before do
+      @user = FactoryBot.create(:testuser)
+      @tweet = Tweet.first
+      login_as_testuser
+      get tweet_url(@tweet.id)
+      @json = JSON.parse(response.body)
+    end
+
+    it "ツイート詳細情報が返ってくる" do
+      expect(@json['tweet'][0]).to include(
+        "content" => @tweet.content,
+        "id" => @tweet.id,
+        "name" => @tweet.user.name,
+        "user_id" => @tweet.user.id
+      )
+    end
+
+    it "いいね総数が返ってくる" do
+      expect(@json['favorite_count']).to eq @tweet.user_favorited.count
+    end
+
+    it "current_userがいいねをしているかの情報が返ってくる" do
+      expect(@json['favorite_or_not']).to eq @tweet.favorited?(@user)
+    end
+  end
 end
