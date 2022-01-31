@@ -53,7 +53,7 @@ RSpec.describe "Tweets", type: :request do
     end
   end
 
-  describe "users#favorite" do
+  describe "tweets#favorite" do
     before do
       FactoryBot.create(:favorite)
       id = Tweet.first
@@ -75,4 +75,26 @@ RSpec.describe "Tweets", type: :request do
     end
   end
 
+
+  describe "tweets#index" do
+    before do
+      @user = FactoryBot.create(:testuser)
+      login_as_testuser
+      get tweets_url
+      @json = JSON.parse(response.body)
+    end
+
+    it "15件分データが返ってくる" do
+      expect(@json['hot_tweet_data'].length).to eq 15
+    end
+
+    it "ツイート情報が返ってくる" do
+      expect(@json['hot_tweet_data'][0]).to include(
+        "content" => @user.tweets.first.content,
+        "id" => @user.tweets.first.id,
+        "name" => @user.name,
+        "user_id" => @user.id
+      )
+    end
+  end
 end
