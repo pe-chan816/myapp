@@ -80,4 +80,45 @@ RSpec.describe "Sessions", type: :request do
       end
     end
   end
+
+
+  describe "sessions#login_check" do
+    let(:user) { FactoryBot.create(:testuser) }
+
+    context "ログイン中の場合" do
+      before do
+        user
+        login_as_testuser
+        get check_login_url
+        @json = JSON.parse(response.body)
+      end
+
+      it "ログインステータスが返ってくる" do
+        expect(@json['logged_in']).to eq true
+      end
+
+      it "ユーザー情報が返ってくる" do
+        expect(@json['user']).to include(
+          "email" => user.email,
+          "id" => user.id,
+          "name" => user.name
+        )
+      end
+    end
+
+    context "ログインしていない場合" do
+      before do
+        get check_login_url
+        @json = JSON.parse(response.body)
+      end
+
+      it "ログインステータスが返ってくる" do
+        expect(@json['logged_in']).to eq false
+      end
+
+      it "メッセージが返ってくる" do
+        expect(@json['message']).to eq "ユーザーが存在しません"
+      end
+    end
+  end
 end
