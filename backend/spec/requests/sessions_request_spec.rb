@@ -51,4 +51,33 @@ RSpec.describe "Sessions", type: :request do
       end
     end
   end
+
+
+  describe "sessions#desroy" do
+    let(:user) { FactoryBot.create(:testuser) }
+
+    context "ログアウトに成功" do
+      before do
+        user
+        login_as_testuser
+        delete logout_url
+        @json = JSON.parse(response.body)
+      end
+
+      it "ログアウトステータスが返ってくる" do
+        expect(@json['logged_out']).to eq true
+      end
+    end
+
+    context "ログアウトに失敗" do
+      before do
+        delete logout_url
+        @json = JSON.parse(response.body)
+      end
+
+      it "エラーメッセージが返ってくる" do
+        expect(@json['message']).to eq "ログインしているユーザーがいません"
+      end
+    end
+  end
 end
