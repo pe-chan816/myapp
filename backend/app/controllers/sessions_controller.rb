@@ -1,6 +1,8 @@
 class SessionsController < ApplicationController
+=begin
   def new
   end
+=end
 
   def create
     user = User.find_by(email: login_params[:email].downcase)
@@ -19,7 +21,7 @@ class SessionsController < ApplicationController
       log_out
       render json: {logged_out: true}
     elsif
-      render json: {message: ["ログインしているユーザーがいません"]}
+      render json: {message: "ログインしているユーザーがいません"}
     end
   end
 
