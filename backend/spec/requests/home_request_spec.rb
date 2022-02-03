@@ -1,14 +1,30 @@
 require 'rails_helper'
 
-RSpec.describe "Homes", type: :request do
+RSpec.describe "Home", type: :request do
+  describe "home#home" do
+    context "ログイン中" do
+      let(:user) { FactoryBot.create(:testuser) }
 
-  describe "new メソッド" do
-    describe "GET /" do
-      it "正しくページを開ける" do
-        get "/"
-        expect(response).to have_http_status(:success)
+      before do
+        user
+        login_as_testuser
+        get root_url
+        @json = JSON.parse(response.body)
+      end
+
+      it "タイムラインのデータが返ってくる" do
+        tweet = user.tweets.first
+        expect(@json['home_data'][0]).to include(
+          "content" => tweet.content,
+          "id" => tweet.id,
+          "name" => user.name,
+          "user_id" => user.id
+        )
+      end
+
+      it "タイムラインのデータ数が返ってくる" do
+        expect(@json['home_data_count']).to eq 31
       end
     end
   end
-
 end
