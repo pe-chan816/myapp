@@ -1,9 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe "Hashtags", type: :request do
-  describe "hashtags#show" do
-    let(:user) { FactoryBot.create(:testuser) }
+  let(:user) { FactoryBot.create(:testuser) }
 
+  describe "hashtags#show" do
     context "ノーマルタグ" do
       let(:tag) { FactoryBot.create(:tag) }
 
@@ -104,6 +104,25 @@ RSpec.describe "Hashtags", type: :request do
           "phone_number" => bar.phone_number
         )
       end
+    end
+  end
+
+
+  describe "hashtags#index" do
+    let(:tag) { FactoryBot.create(:tag) }
+
+    it "ハッシュタグ一覧データが返ってくる" do
+      user
+      login_as_testuser
+      tag
+      get hashtags_url
+      json = JSON.parse(response.body)
+
+      expect(json['hashtags'][0]).to include(
+        "count" => tag.tweets.count,
+        "hashname" => tag.hashname,
+        "id" => tag.id
+      )
     end
   end
 end
