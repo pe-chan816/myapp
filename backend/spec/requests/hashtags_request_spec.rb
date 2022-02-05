@@ -125,4 +125,46 @@ RSpec.describe "Hashtags", type: :request do
       )
     end
   end
+
+  describe "hashtags#update_bar_info" do
+    def update_tag
+      user
+      login_as_testuser
+      tag_name = URI.encode_www_form_component(@tag.hashname)
+
+      post "/hashtag/#{tag_name}/edit/bar", params: {
+        bar: {
+          name: "テスト店舗",
+          address: "福岡県福岡市博多区西中洲 xx-xxx",
+          phone_number: "xx-xxxx-xxxx",
+          lat: 777.777,
+          lng: 777.777
+        }
+      }
+    end
+
+    it "新しいバーの情報が返ってくる" do
+      @tag = FactoryBot.create(:tag)
+      update_tag
+      json = JSON.parse(response.body)
+
+      bar = @tag.bars.first
+      expect(json['result']).to include(
+        "address" => bar.address,
+        "hashtag_id" => @tag.id,
+        "id" => bar.id,
+        "lat" => bar.lat,
+        "lng" => bar.lng,
+        "name" => bar.name,
+        "phone_number" => bar.phone_number
+      )
+    end
+
+    it "レシピ情報は削除される" do
+      @tag = FactoryBot.create(:gin_tonic)
+      update_tag
+
+      expect(Hashtag.find(@tag.id).recipes).to eq []
+    end
+  end
 end
