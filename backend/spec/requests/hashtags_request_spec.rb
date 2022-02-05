@@ -167,4 +167,48 @@ RSpec.describe "Hashtags", type: :request do
       expect(Hashtag.find(@tag.id).recipes).to eq []
     end
   end
+
+
+  describe "hashtags#update_recipe" do
+    def update_tag
+      user
+      login_as_testuser
+      tag_name = URI.encode_www_form_component(@tag.hashname)
+
+      post "/hashtag/#{tag_name}/edit/recipe", params: {
+        recipe: {
+          material: "ソーダ水",
+          amount: nil,
+          unit: "適量"
+        }
+      }
+    end
+
+    it "紐づいているレシピが返ってくる" do
+      @tag = FactoryBot.create(:gin_tonic)
+      update_tag
+      json = JSON.parse(response.body)
+
+      expect(json['recipes'].first).to include(
+        "amount" => 45,
+        "hashtag_id" => @tag.id,
+        "material" => "ジン",
+        "unit" => "ml"
+      )
+      expect(json['recipes'].last).to include(
+        "amount" => nil,
+        "hashtag_id" => @tag.id,
+        "material" => "ソーダ水",
+        "unit" => "適量"
+      )
+    end
+
+    it "バー情報は削除される" do
+      @tag = FactoryBot.create(:tender)
+      update_tag
+      json = JSON.parse(response.body)
+
+      expect(Hashtag.find(@tag.id).bars).to eq []
+    end
+  end
 end
