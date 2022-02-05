@@ -211,4 +211,39 @@ RSpec.describe "Hashtags", type: :request do
       expect(Hashtag.find(@tag.id).bars).to eq []
     end
   end
+
+
+  describe "hashtags#destroy_recipe" do
+    let(:tag) { FactoryBot.create(:gin_tonic) }
+
+    before do
+      user
+      login_as_testuser
+      tag
+      recipe = tag.recipes.first
+
+      delete "/hashtag/delete/recipe/#{recipe.id}"
+      @json = JSON.parse(response.body)
+    end
+
+    it "メッセージが返ってくる" do
+      expect(@json['messages']).to eq "レシピ削除完了"
+    end
+
+    it "削除したレシピは返ってこない" do
+      expect(@json['new_recipe']).not_to include(
+        "amount" => 45,
+        "material" => "ジン",
+        "unit" => "ml"
+      )
+    end
+
+    it "削除後の残ったレシピが返ってくる" do
+      expect(@json['new_recipe'].first).to include(
+        "amount" => nil,
+        "material" => "トニックウォーター",
+        "unit" => "適量"
+      )
+    end
+  end
 end
