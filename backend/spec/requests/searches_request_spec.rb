@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Searches", type: :request do
   describe "searches#search" do
     let(:user) { FactoryBot.create(:testuser) }
-    let(:tag) { FactoryBot.create(:hashtag) }
+    let(:tag) { FactoryBot.create(:tag) }
 
     before do
       user

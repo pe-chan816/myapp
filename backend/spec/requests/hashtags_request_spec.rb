@@ -16,7 +16,7 @@ RSpec.describe "Hashtags", type: :request do
           tweet: {
             content: "テストツイート"
           },
-          hashtag: "テストタグ"
+          hashtag: "test"
         }
 
         get "/hashtag/#{tag_name}"

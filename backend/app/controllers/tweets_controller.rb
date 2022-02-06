@@ -101,13 +101,16 @@ class TweetsController < ApplicationController
   def correct_user
     if current_user.admin === true
       tweet = Tweet.find(params[:id])
-    else
-      tweet = current_user.tweets.find(params[:id])
+    elsif !(current_user.tweets.find_by(id: params[:id]).nil?)
+      tweet = current_user.tweets.find_by(id: params[:id])
     end
 
     if tweet.nil?
-      flash[:danger] = "ツイートがありません"
-      redirect_to root_path
+      #redirect_to root_path
+      render json: {
+        alert: "ツイートがありません"
+      }
+      return
     end
   end
 end

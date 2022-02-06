@@ -33,23 +33,65 @@ RSpec.describe "Tweets", type: :request do
 
   describe "tweets#destroy" do
     let(:user) { FactoryBot.create(:testuser) }
+    let(:admin) { FactoryBot.create(:administrator) }
 
-    before do
-      @id = user.tweets.first.id
-      login_as_testuser
+    context "削除に成功" do
+      context "自分のツイートを削除する場合" do
+        before do
+          @id = user.tweets.first.id
+          login_as_testuser
+        end
+
+        it "ツイート総数が減少する" do
+          expect{
+            delete tweet_url(@id)
+          }.to change{ Tweet.count }.by(-1)
+        end
+
+        it "JSONが返ってくる" do
+          delete tweet_url(@id)
+          json = JSON.parse(response.body)
+
+          expect(json['message']).to eq "ツイート削除"
+        end
+      end
+
+      context "adminユーザーが削除する場合" do
+        before do
+          admin
+          user
+          login_as_admin
+          @id = user.tweets.first.id
+        end
+
+        it "ツイート総数が減少する" do
+          expect{
+            delete tweet_url(@id)
+          }.to change{ Tweet.count }.by(-1)
+        end
+
+        it "JSONが返ってくる" do
+          delete tweet_url(@id)
+          json = JSON.parse(response.body)
+
+          expect(json['message']).to eq "ツイート削除"
+        end
+      end
     end
 
-    it "ツイート総数が減少する" do
-      expect do
-        delete tweet_url(@id)
-      end.to change(Tweet, :count).by(-1)
-    end
+    context "削除に失敗" do
+      it "エラーメッセージが返ってくる" do
+        user
+        user2 = FactoryBot.create(:testuser2)
+        login_as_testuser
 
-    it "JSONが返ってくる" do
-      delete tweet_url(@id)
-      json = JSON.parse(response.body)
+        id = user2.tweets.first.id
 
-      expect(json['message']).to eq "ツイート削除"
+        delete tweet_url(id)
+        json = JSON.parse(response.body)
+
+        expect(json['alert']).to eq "ツイートがありません"
+      end
     end
   end
 
