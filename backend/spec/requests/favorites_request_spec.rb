@@ -62,4 +62,38 @@ RSpec.describe "Favorites", type: :request do
       }.to change{ user2.tweets.first.user_favorited.count }.by(-1)
     end
   end
+
+
+  describe "favorites#my_favorite" do
+    before do
+      user1
+      user2
+      login_as_testuser
+
+      Favorite.create(
+        user_id: user1.id,
+        tweet_id: user2.tweets.first.id
+      )
+
+      get "/users/#{user1.id}/myfavorite"
+      @json = JSON.parse(response.body)
+    end
+
+    it "いいね総数が返ってくる" do
+      expect(@json['my_favorites_count']).to eq 1
+    end
+
+    it "いいねツイート情報が返ってくる" do
+      tweet = user2.tweets.first
+      expect(@json['my_favorites'].first).to include(
+        "content" => tweet.content,
+        "fav_or_not" => true,
+        "favorite_count" => tweet.favorites.count,
+        "id" => tweet.id,
+        "name" => user2.name,
+        "unique_name" => user2.unique_name,
+        "user_id" => user2.id
+      )
+    end
+  end
 end
