@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   get '/search/:search_word', to:'searches#search'
 
   get '/hashtag/:word', to:'hashtags#show'
+  delete '/hashtag/:word', to:'hashtags#destroy'
   post '/hashtag/:word/edit/bar', to:'hashtags#update_bar_info'
   post '/hashtag/:word/edit/recipe', to:'hashtags#update_recipe'
   delete '/hashtag/delete/recipe/:id', to:'hashtags#destroy_recipe'
