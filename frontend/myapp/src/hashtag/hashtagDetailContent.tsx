@@ -1,20 +1,28 @@
 import { useContext, useState } from "react";
 import { TagDataContext, RecipeContext, BarInfoContext } from "./hashtagDetail";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { LoadScript, GoogleMap, Marker } from "@react-google-maps/api";
 
-import { Dialog, DialogContentText, FormControl, FormControlLabel, Grid, Link, makeStyles, Radio, RadioGroup, Tooltip } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContentText, DialogTitle, FormControl, FormControlLabel, Grid, Link, makeStyles, Radio, RadioGroup, Tooltip } from '@material-ui/core';
 import SettingsIcon from '@material-ui/icons/Settings';
+import DeleteIcon from '@material-ui/icons/Delete';
+import axios from "axios";
+
+import { AlertDisplayContext, AlertSeverityContext, MessageContext, CurrentUserContext } from "App";
+import { AlertSeverityType } from "types/typeList";
 
 const HashtagDetailContent = () => {
   console.log("!!HashtagDetailContext!!");
   const { tagData } = useContext(TagDataContext);
   const { recipe } = useContext(RecipeContext);
   const { barInfo } = useContext(BarInfoContext);
+  const { currentUser } = useContext(CurrentUserContext);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [showRecipeEdit, setShowRecipeEdit] = useState<boolean>(false);
   const [showBarInfoEdit, setShowBarInfoEdit] = useState<boolean>(false);
   const [radioValue, setRadioValue] = useState<string>("");
+  const [dialogDisplay, setDialogDisplay] = useState<boolean>(false);
+  const history = useHistory();
   const useStyles = makeStyles({
     base: {
       margin: "0 auto",
@@ -31,6 +39,15 @@ const HashtagDetailContent = () => {
     }
   });
   const classes = useStyles();
+
+  const { setAlertDisplay } = useContext(AlertDisplayContext);
+  const { setAlertSeverity } = useContext(AlertSeverityContext);
+  const { setMessage } = useContext(MessageContext);
+  const makeAlert = (alertSeverity: AlertSeverityType, message: string[]) => {
+    setAlertDisplay(true);
+    setAlertSeverity(alertSeverity);
+    setMessage(message);
+  };
 
   const recipeList = recipe.map((e, i) => {
     if (e) {
@@ -126,10 +143,36 @@ const HashtagDetailContent = () => {
   };
 
   const closeDialog = () => {
-    setShowEdit(!showEdit);
+    setShowEdit(false);
     setRadioValue("");
     setShowRecipeEdit(false);
     setShowBarInfoEdit(false);
+    setDialogDisplay(false);
+  };
+
+  const clickTagDeleteButton = () => {
+    const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${tagData.hashname}`;
+    const config = { withCredentials: true };
+    axios.delete(url, config).then(res => {
+      makeAlert("success", [`${res.data.message}`]);
+      history.push("/");
+    }).catch(error => console.log("エラー", error));
+  };
+
+  const ConfirmationDialog = () => {
+    return (
+      <Dialog open={dialogDisplay} onClose={() => { closeDialog() }}>
+        <DialogTitle>本当にこのタグを削除しますか？</DialogTitle>
+        <DialogActions>
+          <Button onClick={() => { closeDialog() }}>
+            キャンセル
+          </Button>
+          <Button onClick={clickTagDeleteButton}>
+            削除
+          </Button>
+        </DialogActions>
+      </Dialog>
+    );
   };
 
   const linkWithRadioButton = linkWithRadioButtonContent();
@@ -162,6 +205,20 @@ const HashtagDetailContent = () => {
               </Link>
             </Tooltip>
           </Grid>
+          {currentUser.admin === true &&
+            <Grid item>
+              <Tooltip title="タグ削除">
+                <Link
+                  color="inherit"
+                  component="button"
+                  onClick={() => { setDialogDisplay(true) }}
+                >
+                  <DeleteIcon />
+                </Link>
+              </Tooltip>
+              <ConfirmationDialog />
+            </Grid>
+          }
         </Grid>
       </Grid>
 

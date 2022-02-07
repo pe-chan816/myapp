@@ -3,7 +3,7 @@ class Hashtag < ApplicationRecord
                        length: {maximum: 99},
                        uniqueness: {case_sensitive: false}
 
-  has_many :tweet_hashtag_relations
+  has_many :tweet_hashtag_relations, dependent: :destroy
   has_many :tweets, through: :tweet_hashtag_relations
 
   has_many :bars, dependent: :destroy
