@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   #before_action :user_must_log_in, only:[:edit, :update, :index, :destroy]
-  #before_action :correct_user, only:[:edit, :update]
+  #before_action :correct_user, only:[:update, :destroy]
+  before_action :correct_user, only:[:destroy]
 
 =begin
   def new
@@ -86,8 +87,15 @@ class UsersController < ApplicationController
 =end
 
   def destroy
-    User.find(params[:id]).destroy
-    render json: { message: "ユーザーアカウントを削除しました"}
+    if @user.destroy
+      render json: {
+        message: "ユーザーアカウントを削除しました"
+      }
+    else
+      render json: {
+        message: "ユーザーアカウントの削除に失敗しました"
+      }
+    end
   end
 
 =begin
@@ -129,9 +137,11 @@ class UsersController < ApplicationController
 
     def correct_user
       @user = User.find(params[:id])
-      unless are_you_current_user?(@user)
-        flash[:danger] = "ログインしてください"
-        redirect_to root_path
+
+      if !are_you_admin? && !are_you_current_user?(@user)
+        render json: {
+          message: "権限のあるユーザーではありません"
+        }
       end
     end
 end

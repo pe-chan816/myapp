@@ -32,9 +32,14 @@ module SessionsHelper
     end
   end
 
-  # 正しいユーザーかどうか確認
+  # ログイン中のユーザーかどうか確認
   def are_you_current_user?(user)
     user == current_user
+  end
+
+  # current_userがadminユーザーかどうか確認
+  def are_you_admin?
+    current_user == User.find_by( admin: true )
   end
 
   # ユーザーがログイン中か確認

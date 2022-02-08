@@ -162,21 +162,68 @@ RSpec.describe "Users", type: :request do
 
 
   describe "users#destroy" do
-    before do
-      @user = FactoryBot.create(:testuser)
+    let(:user) { FactoryBot.create(:testuser) }
+    let(:admin) { FactoryBot.create(:administrator) }
+
+    def delete_user(subject)
+      delete user_url(subject)
     end
 
-    it "ユーザー数が減る" do
-      expect do
-        delete user_url(@user)
-      end.to change(User, :count).by(-1)
+    context "自分のアカウントを削除" do
+      before do
+        user
+        login_as_testuser
+      end
+
+      it "ユーザー数が減る" do
+        expect{ delete_user(user) }.to change{ User.count }.by(-1)
+      end
+
+      it "通知メッセージが返ってくる" do
+        delete_user(user)
+        json = JSON.parse(response.body)
+
+        expect(json['message']).to eq "ユーザーアカウントを削除しました"
+      end
     end
 
-    it "通知メッセージが返ってくる" do
-      delete user_url(@user)
-      json = JSON.parse(response.body)
+    context "他人のアカウントを削除しようとする" do
+      before do
+        user
+        admin
+        login_as_testuser
+      end
 
-      expect(json['message']).to eq "ユーザーアカウントを削除しました"
+      it "エラーメッセージが返ってくる" do
+        delete_user(admin)
+        json = JSON.parse(response.body)
+        expect(json['message']).to eq "権限のあるユーザーではありません"
+      end
+
+      it " ユーザー数は変動しない" do
+        expect{
+          delete_user(admin)
+        }.to change{ User.count }.by(0)
+      end
+    end
+
+    context "adminユーザーが削除する" do
+      before do
+        admin
+        user
+        login_as_admin
+      end
+
+      it "ユーザー数が減る" do
+        expect{ delete_user(user) }.to change{ User.count }.by(-1)
+      end
+
+      it "通知メッセージが返ってくる" do
+        delete_user(user)
+        json = JSON.parse(response.body)
+
+        expect(json['message']).to eq "ユーザーアカウントを削除しました"
+      end
     end
   end
 
