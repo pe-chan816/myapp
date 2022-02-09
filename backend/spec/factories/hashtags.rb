@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :tag , class: Hashtag do
-    hashname { "テストタグ" }
+    hashname { "test" }
   end
 
   factory :gin_tonic, class: Hashtag do

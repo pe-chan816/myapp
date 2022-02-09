@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useContext, useState } from 'react';
+import { useParams } from "react-router";
 import { useHistory } from 'react-router-dom';
-import { Button, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 
 import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, LoginStateContext, MessageContext } from "App";
 
@@ -13,27 +14,27 @@ const DeleteUserAccount = () => {
   const { setMessage } = useContext(MessageContext);
   const { setLoginState } = useContext(LoginStateContext);
   const history = useHistory();
-  const useStyles = makeStyles({
-    box: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center"
-    },
-    phrase: {
-      fontSize: "13px",
-      marginTop: "70px",
-      textAlign: "center"
-    }
-  });
-  const classes = useStyles();
+
+  const myPageId = Object.values(useParams());
 
   const clickDeleteButton = () => {
-    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${currentUser.id}`;
+    let target;
+    if (myPageId.length) {
+      target = myPageId;
+    } else {
+      target = currentUser.id
+    }
+
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${target}`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
       console.log(res)
-      setCurrentUser({});
-      setLoginState(false);
+
+      if (currentUser.admin === false) {
+        setCurrentUser({});
+        setLoginState(false);
+      }
+
       history.push("/");
     }).catch(error => {
       console.log("error->", error);
@@ -79,19 +80,13 @@ const DeleteUserAccount = () => {
       </div>
     );
   };
-
   return (
-    <div className={classes.box}>
-      <p className={classes.phrase}>
-        もしこのアプリにご満足いただけなかったのであれば
-        <br />
-        アカウントを削除してしまうことも可能です
-      </p>
+    <>
       <Button color="secondary" onClick={() => { setDialogState(true) }}>
         アカウント削除
       </Button>
       <AlartDialog />
-    </div>
+    </>
   );
 };
 

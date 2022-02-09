@@ -61,7 +61,8 @@ const DeleteTweetItem = (props: { indexNumber: number, item: TimelineType }) => 
     );
   };
 
-  if (itemData.user_id === currentUser.id) {
+  if (itemData.user_id === currentUser.id ||
+    currentUser.admin === true) {
     return (
       <>
         <Tooltip title="ポスト削除">

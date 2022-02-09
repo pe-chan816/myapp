@@ -16,7 +16,7 @@ RSpec.describe "Hashtags", type: :request do
           tweet: {
             content: "テストツイート"
           },
-          hashtag: "テストタグ"
+          hashtag: "test"
         }
 
         get "/hashtag/#{tag_name}"
@@ -123,6 +123,56 @@ RSpec.describe "Hashtags", type: :request do
         "hashname" => tag.hashname,
         "id" => tag.id
       )
+    end
+  end
+
+
+  describe "hashtags#destroy" do
+    let(:tag) { FactoryBot.create(:tag) }
+    let(:user) {FactoryBot.create(:testuser)}
+    let(:admin) {FactoryBot.create(:administrator)}
+
+    def delete_tag
+      delete "/hashtag/#{tag.hashname}"
+      @json = JSON.parse(response.body)
+    end
+
+    context "adminユーザーが削除する場合" do
+      before do
+        admin
+        tag
+
+        login_as_admin
+      end
+
+      context "対象タグが存在する" do
+        it "メッセージが返ってくる" do
+          delete_tag
+          expect(@json['message']).to eq "ハッシュタグ: #{tag.hashname} を削除しました"
+        end
+
+        it "ハッシュタグ数が減少する" do
+          expect{ delete_tag }.to change{ Hashtag.count }.by(-1)
+        end
+      end
+    end
+
+    context "一般ユーザーが削除しようとする場合" do
+      before do
+        user
+        tag
+
+        login_as_testuser
+      end
+
+      it "エラーメッセージが返ってくる" do
+        delete_tag
+        expect(@json['message']).to eq "削除する権限がありません"
+      end
+
+      it "ハッシュタグ数が減少しない" do
+        expect{ delete_tag }.to change{ Hashtag.count }.by(0)
+      end
     end
   end
 

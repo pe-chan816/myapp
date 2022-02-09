@@ -7,6 +7,13 @@ module LoginHelpers
     }}
   end
 
+  def login_as_admin
+    post login_url, params: { user: {
+      email: "admin@email.com",
+      password: "password"
+    }}
+  end
+
 =begin # system spec用
   def login_as_administrator
     visit login_path

@@ -36,6 +36,11 @@ const UpdateUserSettings = () => {
   };
 
   const useStyles = makeStyles({
+    box: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center"
+    },
     form: {
       width: "100%",
       marginTop: 5
@@ -46,6 +51,11 @@ const UpdateUserSettings = () => {
       flexDirection: "column",
       margin: "0 auto",
       width: "60%"
+    },
+    phrase: {
+      fontSize: "13px",
+      marginTop: "70px",
+      textAlign: "center"
     }
   });
   const classes = useStyles();
@@ -204,7 +214,14 @@ const UpdateUserSettings = () => {
           message="正式なアカウントを作成するとこの編集機能をご利用いただけます" />
       </form>
 
-      <DeleteUserAccount />
+
+      <div className={classes.box}>
+        <p className={classes.phrase}>
+          もしこのアプリにご満足いただけなかったのであれば<br />
+          アカウントを削除してしまうことも可能です
+        </p>
+        <DeleteUserAccount />
+      </div>
     </div>
   );
 }

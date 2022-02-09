@@ -57,6 +57,22 @@ class HashtagsController < ApplicationController
     render json: {hashtags: data}
   end
 
+  def destroy
+    hashtag = Hashtag.find_by( hashname: params[:word] )
+
+    if current_user.admin === true
+      hashtag.destroy
+
+      render json: {
+        message: "ハッシュタグ: #{hashtag.hashname} を削除しました"
+      }
+    else
+      render json: {
+        message: "削除する権限がありません"
+      }
+    end
+  end
+
   def update_bar_info
     hashtag = Hashtag.find_by(hashname: params[:word])
     hashtag.bars.each do |b| # undefinedの部分がダブって登録されるので一旦クリアする
@@ -98,5 +114,4 @@ class HashtagsController < ApplicationController
     def recipe_params
       params.require(:recipe).permit(:material, :amount, :unit, :position)
     end
-
 end

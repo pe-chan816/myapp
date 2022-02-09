@@ -22,7 +22,9 @@ class TweetsController < ApplicationController
   end
 
   def destroy
-    @tweet.destroy
+    tweet = Tweet.find(params[:id])
+    tweet.destroy
+
     render json: {message: "ツイート削除"}
   end
 
@@ -97,10 +99,18 @@ class TweetsController < ApplicationController
   end
 
   def correct_user
-    @tweet = current_user.tweets.find(params[:id])
-    if @tweet.nil?
-      flash[:danger] = "ツイートがありません"
-      redirect_to root_path
+    if current_user.admin === true
+      tweet = Tweet.find(params[:id])
+    elsif !(current_user.tweets.find_by(id: params[:id]).nil?)
+      tweet = current_user.tweets.find_by(id: params[:id])
+    end
+
+    if tweet.nil?
+      #redirect_to root_path
+      render json: {
+        alert: "ツイートがありません"
+      }
+      return
     end
   end
 end
