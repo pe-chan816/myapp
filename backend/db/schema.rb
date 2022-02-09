@@ -41,15 +41,6 @@ ActiveRecord::Schema.define(version: 2021_08_02_003758) do
     t.index ["hashname"], name: "index_hashtags_on_hashname", unique: true
   end
 
-  create_table "latlngs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.float "lat"
-    t.float "lng"
-    t.bigint "hashtag_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["hashtag_id"], name: "index_latlngs_on_hashtag_id"
-  end
-
   create_table "recipes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "material"
     t.integer "amount"
@@ -107,7 +98,6 @@ ActiveRecord::Schema.define(version: 2021_08_02_003758) do
   end
 
   add_foreign_key "bars", "hashtags"
-  add_foreign_key "latlngs", "hashtags"
   add_foreign_key "recipes", "hashtags"
   add_foreign_key "tweet_hashtag_relations", "hashtags"
   add_foreign_key "tweet_hashtag_relations", "tweets"

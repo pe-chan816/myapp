@@ -11,6 +11,7 @@ import { UserType, TimelineType } from 'types/typeList';
 
 import { CurrentUserContext, UserContext } from 'App';
 import { FollowOrNotContext } from 'App';
+import DeleteUserAccount from "./deleteUserAccount";
 
 import Timeline from "tweet/timeline";
 
@@ -188,6 +189,11 @@ const MyPage = (props: any) => {
               <Grid item>
                 {user.id !== currentUser.id &&
                   <FollowButton />}
+              </Grid>
+
+              <Grid item>
+                {currentUser.admin === true &&
+                  <DeleteUserAccount />}
               </Grid>
 
             </Grid>
