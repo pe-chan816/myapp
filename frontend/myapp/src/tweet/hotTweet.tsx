@@ -30,7 +30,7 @@ const HotTweet = () => {
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
       setData(res.data.hot_tweet_data);
-    }).catch(error => { console.log(error) });
+    }).catch(error => { console.log("error :", error) });
   };
   useEffect(() => { getHotTweetData() }, []);
 
@@ -43,7 +43,7 @@ const HotTweet = () => {
       setData(res.data.hot_tweet_data);
       setPage(previousPage);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
 
@@ -56,7 +56,7 @@ const HotTweet = () => {
       setData(res.data.hot_tweet_data);
       setPage(nextPage);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
 

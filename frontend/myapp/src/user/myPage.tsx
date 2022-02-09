@@ -16,7 +16,6 @@ import DeleteUserAccount from "./deleteUserAccount";
 import Timeline from "tweet/timeline";
 
 const MyPage = (props: any) => {
-  console.log("!!MyPage!!");
   const myPageId = Object.values(useParams());
 
   const { currentUser } = useContext(CurrentUserContext);
@@ -55,13 +54,10 @@ const MyPage = (props: any) => {
   };
 
   const getData = () => {
-    console.log("!!getData!!");
     resetData();
     const url = `${process.env.REACT_APP_API_DOMAIN}/users/${myPageId}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      console.log(res.data);
-
       setUser(res.data.user);
       setData(res.data.mypage_data);
 
@@ -74,7 +70,7 @@ const MyPage = (props: any) => {
       const number = Math.ceil(res.data.mypage_data_count / 15);
       setPageNumber(number);
     }).catch(error => {
-      console.log(error);
+      console.log("error :", error);
     });
   };
   useEffect(getData, []);
@@ -98,11 +94,10 @@ const MyPage = (props: any) => {
         const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
         axios.post(url, sendData, config).then(res => {
-          console.log(res.data);
           setFollowOrNot(true);
           setFollowersNumber(res.data.number_of_followers);
         }).catch(error => {
-          console.log(error);
+          console.log("error :", error);
         });
       };
       const clickUnfollow = () => {
@@ -110,15 +105,13 @@ const MyPage = (props: any) => {
         const sendData = { followed_id: user.id };
         const config = { withCredentials: true };
         axios.post(url, sendData, config).then(res => {
-          console.log(res.data);
           setFollowOrNot(false);
           setFollowersNumber(res.data.number_of_followers);
         }).catch(error => {
-          console.log(error);
+          console.log("error :", error);
         });
       };
 
-      console.log(followOrNot);
       if (followOrNot === false) {
         return (
           <Button color="primary"
@@ -211,7 +204,7 @@ const MyPage = (props: any) => {
     axios.get(url, config).then(res => {
       setData(res.data.mypage_data);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
 

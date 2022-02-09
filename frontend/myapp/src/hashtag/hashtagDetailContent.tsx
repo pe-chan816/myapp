@@ -12,7 +12,6 @@ import { AlertDisplayContext, AlertSeverityContext, MessageContext, CurrentUserC
 import { AlertSeverityType } from "types/typeList";
 
 const HashtagDetailContent = () => {
-  console.log("!!HashtagDetailContext!!");
   const { tagData } = useContext(TagDataContext);
   const { recipe } = useContext(RecipeContext);
   const { barInfo } = useContext(BarInfoContext);
@@ -156,7 +155,7 @@ const HashtagDetailContent = () => {
     axios.delete(url, config).then(res => {
       makeAlert("success", [`${res.data.message}`]);
       history.push("/");
-    }).catch(error => console.log("エラー", error));
+    }).catch(error => console.log("error: ", error));
   };
 
   const ConfirmationDialog = () => {

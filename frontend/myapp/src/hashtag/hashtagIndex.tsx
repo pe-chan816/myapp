@@ -7,8 +7,6 @@ import { Grid, Link, makeStyles } from '@material-ui/core';
 import { HashtagType } from "types/typeList";
 
 const HashtagIndex = () => {
-  console.log("!!hashtagIndex!!");
-
   const [data, setData] = useState<HashtagType[]>([]);
   const useStyles = makeStyles({
     base: {
@@ -26,7 +24,7 @@ const HashtagIndex = () => {
     axios.get(url, config).then(res => {
       setData(res.data.hashtags);
     }).catch(error => {
-      console.log("error ->", error);
+      console.log("error :", error);
     });
   };
   useEffect(getIndexData, []);

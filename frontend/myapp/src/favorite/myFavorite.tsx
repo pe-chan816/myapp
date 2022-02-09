@@ -10,7 +10,6 @@ import { TimelineType } from "types/typeList";
 import Timeline from "tweet/timeline";
 
 const MyFavorite = (props: any) => {
-  console.log(props);
   const userId = Object.values(useParams());
   const [data, setData] = useState<Partial<TimelineType[]>>([]);
   const [page, setPage] = useState<number>(1);
@@ -33,7 +32,6 @@ const MyFavorite = (props: any) => {
     const url = `${process.env.REACT_APP_API_DOMAIN}/users/${userId}/myfavorite`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      console.log(res);
       setData(res.data.my_favorites);
       const number = Math.ceil(res.data.my_favorites_count / 15);
       setPageNumber(number);
@@ -48,7 +46,7 @@ const MyFavorite = (props: any) => {
     axios.get(url, config).then(res => {
       setData(res.data.my_favorites);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
 

@@ -50,8 +50,6 @@ const TweetForm = () => {
   };
 
   const clickSubmit = async () => {
-    console.log("ツイート投稿");
-
     const url = `${process.env.REACT_APP_API_DOMAIN}/tweets`;
     const data = await tweetData();
     const config = {
@@ -62,7 +60,7 @@ const TweetForm = () => {
       history.push("/");
       makeAlert("success", ["ポスト投稿完了！"]);
     }).catch(error => {
-      console.log("error-->", error);
+      console.log("error :", error);
       makeAlert("error", ["ポスト内容が空のままです"])
     });
   };
@@ -117,7 +115,6 @@ const TweetForm = () => {
     );
   };
 
-  console.log(content);
   const hashtagForm = InputTag();
 
   const hashtags = hashtag.map((e, i) => {

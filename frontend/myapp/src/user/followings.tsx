@@ -18,9 +18,6 @@ const UserRelationship = () => {
   const data: UserType[] = location.state;
   const { user } = useContext(UserContext);
 
-  console.log(location);
-  console.log(user);
-
   const mapUserData = data.map((e: UserType, i) => {
     const imageUrl = `${process.env.REACT_APP_IMAGE_URL}${e.profile_image?.url}`;
     const userUrl = `/user/${e.id}`;

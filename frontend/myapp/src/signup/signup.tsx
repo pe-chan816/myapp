@@ -47,7 +47,6 @@ const Signup = () => {
   const classes = useStyles();
 
   const handleSubmit = (e: any) => {
-    console.log("アカウント作成イベント発火");
     const url = `${process.env.REACT_APP_API_DOMAIN}/signup`;
     const data = {
       user: {
@@ -70,7 +69,7 @@ const Signup = () => {
         setPasswordConfirmation("");
       }
     }).catch(error => {
-      console.log("errors ->", error);
+      console.log("error :", error);
     });
 
     e.preventDefault();

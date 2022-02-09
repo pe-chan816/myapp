@@ -9,7 +9,6 @@ import { BarInfoContext } from "./hashtagDetail";
 
 
 const EditMap = () => {
-  console.log("!!EditMap!!");
   const hashname = Object.values(useParams());
   const { barInfo, setBarInfo } = useContext(BarInfoContext);
   const [autocompleteResult, setAutocompleteResult] = useState<any>({});
@@ -28,7 +27,6 @@ const EditMap = () => {
   });
   const classes = useStyles();
 
-  console.log(barInfo);
   const mapContainerStyle = {
     width: '100%',
     height: '60vh',
@@ -41,14 +39,11 @@ const EditMap = () => {
   };
 
   const onLoad = (autocomplete: any) => {
-    console.log('autocomplete: ', autocomplete);
-
     setAutocompleteResult(autocomplete);
   };
 
   const onPlaceChanged = () => {
     if (autocompleteResult !== null) {
-      console.log(autocompleteResult.getPlace());
       const data = autocompleteResult.getPlace()
 
       const newName = data.name;
@@ -58,7 +53,6 @@ const EditMap = () => {
       const newLat = data.geometry.location.lat();
       const newLng = data.geometry.location.lng();
 
-      console.log(newName, newAddress, newPhoneNumber, newLat, newLng);
       setBarInfo({
         name: newName,
         address: newAddress,
@@ -125,7 +119,6 @@ const EditMap = () => {
     };
     const config = { withCredentials: true }
     axios.post(url, data, config).then(res => {
-      console.log(res);
       history.push(`/hashtag/${hashname}`);
     });
   };
@@ -155,8 +148,6 @@ const EditMap = () => {
       </div>
     );
   };
-
-  console.log("barInfo ->", barInfo);
 
   return (
     <Grid alignItems="center"

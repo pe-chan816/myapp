@@ -20,12 +20,10 @@ export const TimelineDataContext = createContext({} as {
 });
 
 const Timeline = (props: { data: Partial<TimelineType[]> }) => {
-  console.log("!!Timeline!!");
   const { currentUser } = useContext(CurrentUserContext);
   const [data, setData] = useState<Partial<TimelineType[]>>([]);
   useEffect(() => {
     setData(props.data);
-    console.log("タイムラインデータにセット");
   }, []);
 
   // いいねの再描画のためのstate //
@@ -70,7 +68,6 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     const newData = { favorite_tweet_id: tweet.id };
     const config = { withCredentials: true };
     axios.post(url, newData, config).then(res => {
-      console.log(res);
       tweet.fav_or_not = !(tweet.fav_or_not);
       tweet.favorite_count += 1;
       setRendering(!rendering);
@@ -82,7 +79,6 @@ const Timeline = (props: { data: Partial<TimelineType[]> }) => {
     const newData = { tweet_id: tweet.id };
     const config = { withCredentials: true };
     axios.post(url, newData, config).then(res => {
-      console.log(res);
       tweet.fav_or_not = !(tweet.fav_or_not);
       tweet.favorite_count -= 1;
       setRendering(!rendering);
