@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { useParams } from "react-router";
 import { useHistory } from 'react-router-dom';
-import { Button, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
+import { Button, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 
 import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, LoginStateContext, MessageContext } from "App";
 
@@ -14,24 +14,18 @@ const DeleteUserAccount = () => {
   const { setMessage } = useContext(MessageContext);
   const { setLoginState } = useContext(LoginStateContext);
   const history = useHistory();
-  const useStyles = makeStyles({
-    box: {
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center"
-    },
-    phrase: {
-      fontSize: "13px",
-      marginTop: "70px",
-      textAlign: "center"
-    }
-  });
-  const classes = useStyles();
 
   const myPageId = Object.values(useParams());
 
   const clickDeleteButton = () => {
-    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${myPageId}`;
+    let target;
+    if (myPageId.length) {
+      target = myPageId;
+    } else {
+      target = currentUser.id
+    }
+
+    const url = `${process.env.REACT_APP_API_DOMAIN}/users/${target}`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
       console.log(res)
