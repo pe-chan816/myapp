@@ -9,7 +9,7 @@
 - ポストに紐づけられるハッシュタグに、カクテルレシピやBARの情報を登録しポストと共に情報を一元化
 
 ## URL
-https://www.insyutagram.net
+[Insyutagram](https://www.insyutagram.net)
 
 ## 利用方法
 ** 準備中 **
