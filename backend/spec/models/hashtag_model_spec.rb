@@ -4,7 +4,7 @@ RSpec.describe Hashtag, type: :model do
   describe "バリデーションについて" do
     describe ":hashnameについて" do
       before do
-        @hashtag = FactoryBot.create(:hashtag)
+        @hashtag = FactoryBot.create(:tag)
       end
 
       it "存在していなければならない" do

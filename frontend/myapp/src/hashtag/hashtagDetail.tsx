@@ -31,7 +31,6 @@ export const BarInfoContext = createContext({} as {
 });
 
 const HashtagDetail = () => {
-  console.log("!!HashtagDetail!!");
   const hashname = Object.values(useParams());
   const [tagData, setTagData] = useState<Partial<HashtagType>>({});
   const [timelineData, setTimelineData] = useState<Partial<TimelineType[]>>([]);
@@ -57,12 +56,10 @@ const HashtagDetail = () => {
   };
 
   const getDetailData = () => {
-    console.log("!!getDetailData!!");
     resetData();
     const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${hashname}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      console.log(res);
       setTagData(res.data.hashtag);
       setTimelineData(res.data.tweets);
       setRecipe(res.data.recipes);
@@ -82,7 +79,7 @@ const HashtagDetail = () => {
     axios.get(url, config).then(res => {
       setTimelineData(res.data.tweets);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
 

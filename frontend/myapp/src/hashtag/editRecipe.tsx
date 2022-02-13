@@ -59,7 +59,6 @@ const EditRecipe = () => {
     };
     const config = { withCredentials: true };
     axios.post(url, data, config).then(res => {
-      console.log(res);
       setRecipe([]);
       setRecipe(res.data.recipes);
     });
@@ -75,11 +74,9 @@ const EditRecipe = () => {
   const recipeList = recipe.map((e, i) => {
     if (e) {
       const deleteList = () => {
-        console.log(e);
         const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/delete/recipe/${e.id}`;
         const config = { withCredentials: true };
         axios.delete(url, config).then(res => {
-          console.log(res);
           setRecipe([]);
           setRecipe(res.data.new_recipe);
         });

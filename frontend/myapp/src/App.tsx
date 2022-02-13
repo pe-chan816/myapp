@@ -61,7 +61,6 @@ const App = () => {
   const [alertSeverity, setAlertSeverity] = useState<AlertSeverityType>("success");
 
   const checkLoginStatus = () => {
-    console.log("!!checkLoginStatus!!");
     const url = `${process.env.REACT_APP_API_DOMAIN}/check_login`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
@@ -72,15 +71,13 @@ const App = () => {
         setCurrentUser({});
       }
     }).catch(res => {
-      console.log("ログインエラー", res);
+      console.log("error :", res);
     })
   };
   useEffect(() => {
     checkLoginStatus();
   }, []);
 
-  console.log("loginState->", loginState);
-  console.log("currentUser->", currentUser);
   return (
     <>
       <Router>

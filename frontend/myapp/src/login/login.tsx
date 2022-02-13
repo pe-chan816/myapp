@@ -43,7 +43,6 @@ const Login = () => {
   const classes = useStyles();
 
   const handleSubmit = (e: any) => {
-    console.log("!!handleSubmit!!");
     setMessage([]);
 
     const url = `${process.env.REACT_APP_API_DOMAIN}/login`;
@@ -66,7 +65,7 @@ const Login = () => {
         setPassword("");
       }
     }).catch(error => {
-      console.log("エラーあり ->", error);
+      console.log("error :", error);
     });
 
     e.preventDefault();

@@ -32,7 +32,6 @@ const GuestLogin = () => {
     const url = `${process.env.REACT_APP_API_DOMAIN}/guest`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      console.log(res);
       setLoginState(true);
       setCurrentUser(res.data.user);
       histroy.push("/");

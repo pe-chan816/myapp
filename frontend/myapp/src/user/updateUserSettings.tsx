@@ -74,18 +74,17 @@ const UpdateUserSettings = () => {
       withCredentials: true,
       headers: { 'content-type': 'multipart/form-data' }
     };
-    console.log(data);
+
     axios.patch(url, data, config).then(res => {
       if (res.data.user) {
         setCurrentUser(res.data.user);
         history.push(`/user/${currentUser.id}`);
         makeAlert("success", ["アカウント設定を変更しました"]);
       } else {
-        console.log(res);
         makeAlert("error", [res.data.messages]);
       }
     }).catch(error => {
-      console.log("error->", error);
+      console.log("error :", error);
     });
 
     e.preventDefault();

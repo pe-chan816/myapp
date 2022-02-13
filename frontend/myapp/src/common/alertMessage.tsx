@@ -7,7 +7,6 @@ const AlertMessage = () => {
   const { alertSeverity, setAlertSeverity } = useContext(AlertSeverityContext);
   const { message, setMessage } = useContext(MessageContext);
   const resetProps = () => {
-    console.log("reset alert message");
     setAlertDisplay(false);
     setAlertSeverity("success");
     setMessage([]);

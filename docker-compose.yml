@@ -63,10 +63,6 @@ services:
     volumes:
       - DB-data:/var/lib/mysql
 
-  chrome:
-    image: selenium/standalone-chrome:latest
-    ports:
-      - 4444:4444
 volumes:
   DB-data:
   tmp-data:

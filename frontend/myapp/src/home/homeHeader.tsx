@@ -24,7 +24,6 @@ import SearchResult from 'search/searchResult';
 
 
 const HomeHeader = () => {
-  console.log("!!HomeHeader!!");
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
   const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
@@ -70,7 +69,7 @@ const HomeHeader = () => {
       } else {
         makeAlert("warning", res.data.message)
       }
-    }).catch(error => console.log("ログアウトエラー", error));
+    }).catch(error => console.log("error :", error));
   }
 
   const clickDrawer = () => {

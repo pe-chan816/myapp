@@ -9,7 +9,6 @@ import { TimelineType } from "types/typeList";
 import Timeline from "tweet/timeline";
 
 const HomeContent = () => {
-  console.log("!!HomeContent!!");
   const [data, setData] = useState<TimelineType[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -43,7 +42,7 @@ const HomeContent = () => {
       const number = Math.ceil(res.data.home_data_count / 15);
       setPageNumber(number);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
   useEffect(getContents, []);
@@ -57,7 +56,7 @@ const HomeContent = () => {
     axios.get(url, config).then(res => {
       setData(res.data.home_data);
     }).catch(error => {
-      console.log("There are something errors", error);
+      console.log("error :", error);
     });
   };
 

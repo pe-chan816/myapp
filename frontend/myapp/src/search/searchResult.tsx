@@ -10,7 +10,6 @@ import Timeline from "tweet/timeline";
 
 
 const SearchResult = (prop: any) => {
-  console.log("!!SearchResult!!");
   const keyword = Object.values(useParams());
   const [radioValue, setRadioValue] = useState<string>("");
   const [showUser, setShowUser] = useState<boolean>(false);
@@ -42,7 +41,6 @@ const SearchResult = (prop: any) => {
     const url = `${process.env.REACT_APP_API_DOMAIN}/search/${keyword}`;
     const config = { withCredentials: true };
     axios.get(url, config).then(res => {
-      console.log(res);
       setTweetData(res.data.searched_tweet);
       setTagData(res.data.searched_tag);
       setUserData(res.data.searched_user);

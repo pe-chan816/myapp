@@ -28,8 +28,6 @@ const DeleteUserAccount = () => {
     const url = `${process.env.REACT_APP_API_DOMAIN}/users/${target}`;
     const config = { withCredentials: true };
     axios.delete(url, config).then(res => {
-      console.log(res)
-
       if (currentUser.admin === false) {
         setCurrentUser({});
         setLoginState(false);
@@ -37,7 +35,7 @@ const DeleteUserAccount = () => {
 
       history.push("/");
     }).catch(error => {
-      console.log("error->", error);
+      console.log("error :", error);
     });
   };
 
