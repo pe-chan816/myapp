@@ -38,3 +38,4 @@ yarn-debug.log*
 # 以下自分で追加
 /.env
 /public/uploads
+/db/seeds/production.rb
