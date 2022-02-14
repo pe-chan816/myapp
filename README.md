@@ -70,7 +70,7 @@
 ![構成図](./images/myapp_diagram.drawio.png)
 
 ## データベース設計図
-** 準備中 **
+![構成図](./images/myapp_db_schema.drawio.png)
 
 ## 今後の予定
 - アプリの安定性強化
