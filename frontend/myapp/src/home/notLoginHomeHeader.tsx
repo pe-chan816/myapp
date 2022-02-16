@@ -1,7 +1,10 @@
 import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
+import { useMedia } from 'use-media';
 
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import { AlertDisplayContext, MessageContext } from "App";
 
@@ -23,9 +26,40 @@ const NotLoginHomeHeader = () => {
     home: {
       fontSize: "20px",
       textAlign: "center",
+    },
+    mobilePhrase: {
+      fontSize: "10px"
     }
   });
   const classes = useStyles();
+
+  const isMobile = useMedia({ maxWidth: '450px' });
+
+  const LoginLink = () => {
+    if (isMobile) {
+      return (
+        <>
+          <ExitToAppIcon />
+          <p className={classes.mobilePhrase}>ログイン</p>
+        </>
+      )
+    } else {
+      return <p>ログイン</p>
+    }
+  };
+
+  const SignupLink = () => {
+    if (isMobile) {
+      return (
+        <>
+          <EmojiPeopleIcon />
+          <p className={classes.mobilePhrase}>アカウント登録</p>
+        </>
+      )
+    } else {
+      return <p>アカウント登録</p>
+    }
+  };
 
   const resetAlert = () => {
     setAlertDisplay(false);
@@ -63,12 +97,26 @@ const NotLoginHomeHeader = () => {
         </Grid>
         <Grid item>
           <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/login">
-            ログイン
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <LoginLink />
+            </Grid>
           </Link>
         </Grid>
         <Grid item>
           <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/signup">
-            アカウント登録
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <SignupLink />
+            </Grid>
           </Link>
         </Grid>
       </Grid>
