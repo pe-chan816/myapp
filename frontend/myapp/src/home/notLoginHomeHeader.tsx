@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
-import { useMedia } from 'use-media';
 
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import { AlertDisplayContext, MessageContext } from "App";
+import { useCheckMobile } from "common/useCheckMobile";
 
 import AlertMessage from 'common/alertMessage';
 import Login from "login/login";
@@ -33,7 +33,7 @@ const NotLoginHomeHeader = () => {
   });
   const classes = useStyles();
 
-  const isMobile = useMedia({ maxWidth: '450px' });
+  const isMobile = useCheckMobile();
 
   const LoginLink = () => {
     if (isMobile) {
