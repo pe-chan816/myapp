@@ -28,12 +28,21 @@ const NotLoginHomeHeader = () => {
       textAlign: "center",
     },
     mobilePhrase: {
-      fontSize: "10px"
+      fontSize: "10px",
+      margin: "5px 0"
     }
   });
   const classes = useStyles();
 
   const isMobile = useCheckMobile();
+
+  const AppTitle = () => {
+    if (isMobile) {
+      return <h3>Insyutagram</h3>
+    } else {
+      return <h2>Insyutagram</h2>
+    }
+  };
 
   const LoginLink = () => {
     if (isMobile) {
@@ -92,7 +101,7 @@ const NotLoginHomeHeader = () => {
         direction="row" justifyContent="flex-start" spacing={2}>
         <Grid item>
           <Link color="inherit" component={RouterLink} onClick={resetAlert} underline="none" to="/">
-            <h2>Insyutagram</h2>
+            <AppTitle />
           </Link>
         </Grid>
         <Grid item>
