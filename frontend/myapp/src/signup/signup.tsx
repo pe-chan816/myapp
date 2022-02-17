@@ -37,7 +37,7 @@ const Signup = () => {
       display: "flex",
       flexDirection: "column",
       margin: "0 auto",
-      width: "60%"
+      width: "80%"
     },
     form: {
       width: "100%",
