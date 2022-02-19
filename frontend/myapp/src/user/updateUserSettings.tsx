@@ -50,7 +50,7 @@ const UpdateUserSettings = () => {
       display: "flex",
       flexDirection: "column",
       margin: "0 auto",
-      width: "60%"
+      width: "80%"
     },
     phrase: {
       fontSize: "13px",

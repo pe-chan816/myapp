@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { AlertDisplayContext, MessageContext } from "App";
+import { AlertDisplayContext, MessageContext, DrawerContext } from "App";
 
-import { InputAdornment, TextField } from '@material-ui/core';
+import { Drawer, InputAdornment, TextField } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 
@@ -12,12 +12,15 @@ const SearchForm = () => {
   const history = useHistory();
   const { setAlertDisplay } = useContext(AlertDisplayContext);
   const { setMessage } = useContext(MessageContext);
+  const { drawerDisplay, setDrawerDisplay } = useContext(DrawerContext);
   const resetAlert = () => {
     setAlertDisplay(false);
     setMessage([]);
   };
 
   const enterSearchForm = () => {
+    setDrawerDisplay(false);
+
     history.push(`/search/${searchWord}`);
     resetAlert();
   };

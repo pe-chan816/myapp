@@ -4,8 +4,10 @@ import axios from 'axios';
 
 import { Button, Container, Drawer, Grid, Link, List, ListItem, makeStyles } from '@material-ui/core';
 import DehazeIcon from '@material-ui/icons/Dehaze';
+import PersonIcon from '@material-ui/icons/Person';
+import CreateIcon from '@material-ui/icons/Create';
 
-import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext, LoginStateContext } from "App";
+import { AlertDisplayContext, AlertSeverityContext, CurrentUserContext, MessageContext, LoginStateContext, DrawerContext } from "App";
 import { AlertSeverityType } from "types/typeList";
 
 import AlertMessage from 'common/alertMessage';
@@ -22,11 +24,13 @@ import SearchForm from 'search/searchForm';
 
 import SearchResult from 'search/searchResult';
 
+import { useCheckMobile } from 'common/useCheckMobile';
+
 
 const HomeHeader = () => {
   const { setLoginState } = useContext(LoginStateContext);
   const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
-  const [drawerStatus, setDrawerStatus] = useState<boolean>(false);
+  const { drawerDisplay, setDrawerDisplay } = useContext(DrawerContext);
   const history = useHistory();
 
   const useStyles = makeStyles({
@@ -40,9 +44,49 @@ const HomeHeader = () => {
     exception: {
       fontSize: "20px",
       textAlign: "center",
+    },
+    mobilePhrase: {
+      fontSize: "10px",
+      margin: "5px 0"
     }
   });
   const classes = useStyles();
+
+  const isMobile = useCheckMobile();
+
+  const AppTitle = () => {
+    if (isMobile) {
+      return <h3>Insyutagram</h3>
+    } else {
+      return <h2>Insyutagram</h2>
+    }
+  };
+
+  const MyPageLink = () => {
+    if (isMobile) {
+      return (
+        <>
+          <PersonIcon />
+          <p className={classes.mobilePhrase}>マイページ</p>
+        </>
+      );
+    } else {
+      return <p>マイページ</p>
+    }
+  };
+
+  const PostLink = () => {
+    if (isMobile) {
+      return (
+        <>
+          <CreateIcon />
+          <p className={classes.mobilePhrase}>ポスト</p>
+        </>
+      );
+    } else {
+      return <p>ポスト</p>
+    }
+  };
 
   const { setAlertDisplay } = useContext(AlertDisplayContext);
   const { setAlertSeverity } = useContext(AlertSeverityContext);
@@ -73,7 +117,7 @@ const HomeHeader = () => {
   }
 
   const clickDrawer = () => {
-    setDrawerStatus(!drawerStatus);
+    setDrawerDisplay(!drawerDisplay);
   };
 
   return (
@@ -85,17 +129,31 @@ const HomeHeader = () => {
             direction="row" justifyContent="flex-start" spacing={2}>
             <Grid item>
               <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/" underline="none">
-                <h2>Insyutagram</h2>
+                <AppTitle />
               </Link>
             </Grid>
             <Grid item>
               <Link color="inherit" component={RouterLink} onClick={resetAlert} to={`/user/${currentUser.id}`}>
-                マイページ
+                <Grid
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <MyPageLink />
+                </Grid>
               </Link>
             </Grid>
             <Grid item>
               <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/tweet">
-                ポスト
+                <Grid
+                  container
+                  direction="column"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <PostLink />
+                </Grid>
               </Link>
             </Grid>
           </Grid>
@@ -104,9 +162,11 @@ const HomeHeader = () => {
         <Grid item>
           <Grid alignItems="center" container
             direction="row" justifyContent="flex-end" spacing={1}>
-            <Grid item>
-              <SearchForm />
-            </Grid>
+            {!isMobile &&
+              <Grid item>
+                <SearchForm />
+              </Grid>
+            }
             <Grid item>
               <Button onClick={clickDrawer} data-testid="dehaze-icon">
                 <DehazeIcon />
@@ -116,7 +176,14 @@ const HomeHeader = () => {
         </Grid>
       </Grid>
 
-      <Drawer anchor="right" open={drawerStatus} onClose={clickDrawer}>
+      <Drawer anchor="right" open={drawerDisplay} onClose={clickDrawer}>
+        {isMobile &&
+          <List>
+            <ListItem>
+              <SearchForm />
+            </ListItem>
+          </List>
+        }
         <List onClick={clickDrawer}>
           <ListItem button divider>
             <Link color="inherit" component={RouterLink}

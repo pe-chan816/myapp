@@ -30,7 +30,7 @@ const TweetForm = () => {
     },
     formFieldWrapper: {
       maxWidth: "800px",
-      width: "60%"
+      width: "80%"
     },
     preview: {
       maxWidth: "600px",

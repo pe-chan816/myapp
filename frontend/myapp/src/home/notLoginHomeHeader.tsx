@@ -2,8 +2,11 @@ import { useContext } from 'react';
 import { BrowserRouter as Router, Switch, Route, Link as RouterLink } from 'react-router-dom';
 
 import { Container, Grid, Link, makeStyles } from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import EmojiPeopleIcon from '@material-ui/icons/EmojiPeople';
 
 import { AlertDisplayContext, MessageContext } from "App";
+import { useCheckMobile } from "common/useCheckMobile";
 
 import AlertMessage from 'common/alertMessage';
 import Login from "login/login";
@@ -23,9 +26,49 @@ const NotLoginHomeHeader = () => {
     home: {
       fontSize: "20px",
       textAlign: "center",
+    },
+    mobilePhrase: {
+      fontSize: "10px",
+      margin: "5px 0"
     }
   });
   const classes = useStyles();
+
+  const isMobile = useCheckMobile();
+
+  const AppTitle = () => {
+    if (isMobile) {
+      return <h3>Insyutagram</h3>
+    } else {
+      return <h2>Insyutagram</h2>
+    }
+  };
+
+  const LoginLink = () => {
+    if (isMobile) {
+      return (
+        <>
+          <ExitToAppIcon />
+          <p className={classes.mobilePhrase}>ログイン</p>
+        </>
+      )
+    } else {
+      return <p>ログイン</p>
+    }
+  };
+
+  const SignupLink = () => {
+    if (isMobile) {
+      return (
+        <>
+          <EmojiPeopleIcon />
+          <p className={classes.mobilePhrase}>アカウント登録</p>
+        </>
+      )
+    } else {
+      return <p>アカウント登録</p>
+    }
+  };
 
   const resetAlert = () => {
     setAlertDisplay(false);
@@ -58,17 +101,31 @@ const NotLoginHomeHeader = () => {
         direction="row" justifyContent="flex-start" spacing={2}>
         <Grid item>
           <Link color="inherit" component={RouterLink} onClick={resetAlert} underline="none" to="/">
-            <h2>Insyutagram</h2>
+            <AppTitle />
           </Link>
         </Grid>
         <Grid item>
           <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/login">
-            ログイン
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <LoginLink />
+            </Grid>
           </Link>
         </Grid>
         <Grid item>
           <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/signup">
-            アカウント登録
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <SignupLink />
+            </Grid>
           </Link>
         </Grid>
       </Grid>

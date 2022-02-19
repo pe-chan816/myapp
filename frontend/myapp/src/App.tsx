@@ -48,6 +48,12 @@ export const MessageContext = createContext({} as {
   setMessage: any
 });
 
+// サイドメニューの表示管理
+export const DrawerContext = createContext({} as {
+  drawerDisplay: boolean,
+  setDrawerDisplay: any
+});
+
 
 const App = () => {
   const [loginState, setLoginState] = useState<boolean>(false);
@@ -59,6 +65,8 @@ const App = () => {
 
   const [alertDisplay, setAlertDisplay] = useState<boolean>(false);
   const [alertSeverity, setAlertSeverity] = useState<AlertSeverityType>("success");
+
+  const [drawerDisplay, setDrawerDisplay] = useState<boolean>(false);
 
   const checkLoginStatus = () => {
     const url = `${process.env.REACT_APP_API_DOMAIN}/check_login`;
@@ -88,7 +96,9 @@ const App = () => {
                 <MessageContext.Provider value={{ message, setMessage }}>
                   <AlertDisplayContext.Provider value={{ alertDisplay, setAlertDisplay }}>
                     <AlertSeverityContext.Provider value={{ alertSeverity, setAlertSeverity }}>
-                      <HomeBase />
+                      <DrawerContext.Provider value={{ drawerDisplay, setDrawerDisplay }}>
+                        <HomeBase />
+                      </DrawerContext.Provider>
                     </AlertSeverityContext.Provider>
                   </AlertDisplayContext.Provider>
                 </MessageContext.Provider>
