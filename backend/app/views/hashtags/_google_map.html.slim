@@ -1,0 +1,30 @@
+- if @hashtag.lat.present? && @hashtag.lng.present?
+  div#map data-turbolinks='false'
+  css:
+    #map {
+      height: 400px;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  javascript:
+    let map
+    let latlngDis = document.getElementById('latlngDisplay')
+    let defaultLat = gon.hashtag_lat;
+    let defaultLng = gon.hashtag_lng;
+
+    function initMap() {
+      address = { lat: defaultLat, lng: defaultLng };
+
+      map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 15,
+        center: address,
+      });
+
+      marker = new google.maps.Marker({
+        position: address,
+        map: map,
+      });
+    }
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=#{ENV['GOOGLE_MAP_API_KEY']}&callback=initMap"></script>

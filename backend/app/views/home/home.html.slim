@@ -1,0 +1,21 @@
+- provide :title, 'home'
+
+- if logged_in?
+  = form_with url: search_path, method: :get, local: true do |t|
+    = t.text_field :search_word, value: '検索'
+    = t.submit :search
+
+  = form_with model: @tweet, local: true do |t|
+
+    = t.label :tweet
+    = t.text_field :content
+
+    = t.file_field :tweet_image
+
+    = t.submit "Send"
+
+  = render 'shared/timeline'
+
+- else
+  h1 Welcome to my App
+  p This is a portfolio.I'm coding now.

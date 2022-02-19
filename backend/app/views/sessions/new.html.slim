@@ -1,0 +1,21 @@
+- provide :title, 'login'
+
+h2 login to my App!
+
+= form_with(scope: :session, url: login_path, local: true) do |f|
+
+  = f.label :email
+  = f.email_field :email
+
+  = f.label :password
+  = f.password_field :password
+
+  = f.submit "Login"
+
+p
+  | Are you new user? Then, why don't you
+  = link_to "siginup?", signup_path
+
+p
+  | ゲストユーザーとしてログインすればアプリの雰囲気が伝わるかもしれません！
+  = link_to "Guest Login", guest_path

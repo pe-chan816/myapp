@@ -1,0 +1,4 @@
+- provide :title, 'いいね'
+
+- @favorite_tweets.each do |tweet|
+  = render partial: 'shared/tweet_body', locals: {tweet: tweet}

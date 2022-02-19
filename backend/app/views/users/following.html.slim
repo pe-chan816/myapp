@@ -1,0 +1,7 @@
+- provide :title, 'Following'
+
+ul
+  - @users.each do |user|
+    li
+      = render partial: 'shared/user_image', locals: {user: user}
+      = link_to user.name, user_path(user)

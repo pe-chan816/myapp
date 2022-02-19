@@ -1,0 +1,15 @@
+- provide :title, 'UserIndex'
+
+h1 All Users
+
+ul
+  - @users.each do |user|
+    li
+      = render partial: 'shared/user_image', locals: {user: user}
+      p
+        = link_to user.name, user_path(user)
+        - if current_user.admin?
+          '  |
+          = link_to "Delete this User", user_path(user), method: :delete, data: {confirm: "本当に削除しますか？"}
+
+= paginate @users

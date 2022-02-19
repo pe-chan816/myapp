@@ -1,0 +1,3 @@
+= form_with(url: relationships_path) do |f|
+  = f.hidden_field(:followed_id, value: @user.id)
+  = f.submit "Follow"

@@ -1,0 +1,10 @@
+= render partial: 'shared/user_image', locals: {user: tweet.user}
+= link_to tweet.user.name, user_path(tweet.user)
+= render_with_hashtags(tweet.content)
+= image_tag(tweet.tweet_image.url) if tweet.tweet_image?
+= tweet.created_at.strftime("%-H:%M %Y/%m/%d")
+= render partial: 'shared/favorite_button', locals: {tweet: tweet}
+
+- if are_you_current_user?(tweet.user)
+  = link_to "Delete this Tweet", tweet_path(tweet), method: :delete, data: {confirm: "本当に削除しますか？"}
+  <br>
