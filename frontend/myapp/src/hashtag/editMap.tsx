@@ -107,7 +107,7 @@ const EditMap = () => {
   const mapComponent = mapJSX();
 
   const updataBarInfomation = () => {
-    const url = `/${hashname}/edit/bar`;
+    const url = `${process.env.REACT_APP_API_DOMAIN}/hashtag/${hashname}/edit/bar`;
     const data = {
       bar: {
         name: barInfo.name,
