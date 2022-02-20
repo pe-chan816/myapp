@@ -180,9 +180,19 @@ const TweetForm = () => {
               </Tooltip>
               <input
                 onChange={(e) => {
+                  const limitSize = 1024 * 1024 * 1;
+
                   if (e.target.files) {
-                    setImage(e.target.files[0]);
-                    setPreview(window.URL.createObjectURL(e.target.files[0]));
+                    const file = e.target.files[0];
+
+                    if (file.size <= limitSize) {
+                      setImage(e.target.files[0]);
+                      setPreview(window.URL.createObjectURL(e.target.files[0]));
+                    } else {
+                      makeAlert("error", ["ファイルサイズは 1024 * 1024 までとなります"]);
+                      setImage(undefined);
+                      setPreview("");
+                    }
                   }
                 }}
                 id="image-upload"
