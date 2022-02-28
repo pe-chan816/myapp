@@ -36,7 +36,7 @@ const HomeHeader = () => {
   const useStyles = makeStyles({
     header: {
       backdropFilter: "blur(20px)",
-      padding: "0 20px 0  20px",
+      padding: "0 15px",
       position: "fixed",
       top: 0,
       zIndex: 10
@@ -47,7 +47,8 @@ const HomeHeader = () => {
     },
     mobilePhrase: {
       fontSize: "10px",
-      margin: "5px 0"
+      margin: "0",
+      width: "fit-content"
     }
   });
   const classes = useStyles();
@@ -66,12 +67,20 @@ const HomeHeader = () => {
     if (isMobile) {
       return (
         <>
-          <PersonIcon />
-          <p className={classes.mobilePhrase}>マイページ</p>
+          <Grid item>
+            <PersonIcon />
+          </Grid>
+          <Grid item>
+            <p className={classes.mobilePhrase}>マイページ</p>
+          </Grid>
         </>
       );
     } else {
-      return <p>マイページ</p>
+      return (
+        <Grid item>
+          <p>マイページ</p>
+        </Grid>
+      );
     }
   };
 
@@ -79,12 +88,20 @@ const HomeHeader = () => {
     if (isMobile) {
       return (
         <>
-          <CreateIcon />
-          <p className={classes.mobilePhrase}>ポスト</p>
+          <Grid item>
+            <CreateIcon />
+          </Grid>
+          <Grid item>
+            <p className={classes.mobilePhrase}>ポスト</p>
+          </Grid>
         </>
       );
     } else {
-      return <p>ポスト</p>
+      return (
+        <Grid item>
+          <p>ポスト</p>
+        </Grid>
+      );
     }
   };
 
@@ -126,7 +143,7 @@ const HomeHeader = () => {
         direction="row" justifyContent="space-between">
         <Grid item>
           <Grid alignItems="center" container
-            direction="row" justifyContent="flex-start" spacing={2}>
+            direction="row" justifyContent="flex-start" spacing={1} wrap="nowrap" style={{ margin: '0px' }}>
             <Grid item>
               <Link color="inherit" component={RouterLink} onClick={resetAlert} to="/" underline="none">
                 <AppTitle />
