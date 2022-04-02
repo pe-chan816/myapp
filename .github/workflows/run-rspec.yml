@@ -20,11 +20,11 @@ jobs:
       - name: Docker Compose Up
         shell: bash
         run: |
-          docker-compose up -d
+          docker compose up -d
 
       - name: Run Rspec
         shell: bash
         env:
           RAILS_ENV: test
         run: |
-          docker-compose exec rails rspec
+          docker compose exec -T rails rspec
