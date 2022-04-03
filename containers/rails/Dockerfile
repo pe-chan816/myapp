@@ -5,10 +5,11 @@ RUN apt-get update -qq && \
     apt-get install -y apt-utils \
             build-essential \
             default-mysql-client \
-            nodejs \
-            vim \
-            yarn && \
-    apt-get clean
+            vim
+RUN curl -SL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs \
+                       yarn
+RUN apt-get clean
 WORKDIR /myapp
 COPY ./backend/Gemfile /myapp/Gemfile
 COPY ./backend/Gemfile.lock /myapp/Gemfile.lock
