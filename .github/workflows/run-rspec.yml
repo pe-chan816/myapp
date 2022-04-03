@@ -17,12 +17,12 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
 
-      - name: Docker Compose Build
+      - name: Setup Docker Container
         shell: bash
         run: |
+          docker compose build
           docker-compose run rails yarn install --check-files
           docker-compose run rails yarn upgrade
-          docker compose build
 
       - name: Create DB
         shell: bash
