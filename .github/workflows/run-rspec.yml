@@ -20,6 +20,8 @@ jobs:
       - name: Docker Compose Build
         shell: bash
         run: |
+          docker-compose run app yarn install --check-files
+          docker-compose run app yarn upgrade
           docker compose build
 
       - name: Create DB
