@@ -25,11 +25,11 @@ jobs:
       - name: Create DB
         shell: bash
         run: |
-          docker compose exec -T rails rails db:create
+          docker compose run -T rails rails db:create
 
       - name: Run Rspec
         shell: bash
         env:
           RAILS_ENV: test
         run: |
-          docker compose exec -T rails rspec
+          docker compose run -T rails rspec
