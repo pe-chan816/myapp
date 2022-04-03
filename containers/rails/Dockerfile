@@ -9,6 +9,8 @@ RUN apt-get update -qq && \
             vim \
             yarn && \
     apt-get clean
+RUN yarn install --check-files
+RUN yarn upgrade
 WORKDIR /myapp
 COPY ./backend/Gemfile /myapp/Gemfile
 COPY ./backend/Gemfile.lock /myapp/Gemfile.lock
