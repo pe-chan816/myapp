@@ -6,7 +6,7 @@ RUN apt-get update -qq && \
             build-essential \
             default-mysql-client \
             vim
-RUN curl -SL https://deb.nodesource.com/setup_16.x | bash - && \
+RUN curl -SL https://deb.nodesource.com/setup_12.x | bash - && \
     apt-get install -y nodejs \
                        yarn
 RUN apt-get clean
