@@ -17,11 +17,10 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
 
-      - name: Docker Compose Up
+      - name: Docker Compose Build
         shell: bash
         run: |
           docker compose build
-          docker compose up -d
 
       - name: Create DB
         shell: bash
