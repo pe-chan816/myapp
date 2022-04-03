@@ -22,6 +22,11 @@ jobs:
         run: |
           docker compose up -d
 
+      - name: Create DB
+        shell: bash
+        run: |
+          docker compose exec -T rails db:crate RAILS_ENV=test
+
       - name: Run Rspec
         shell: bash
         env:
