@@ -9,12 +9,12 @@ RUN apt-get update -qq && \
             vim \
             yarn && \
     apt-get clean
-RUN yarn install --check-files
-RUN yarn upgrade
 WORKDIR /myapp
 COPY ./backend/Gemfile /myapp/Gemfile
 COPY ./backend/Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
 COPY ./backend /myapp
 RUN mkdir -p /myapp/tmp/sockets
+RUN yarn install --check-files
+RUN yarn upgrade
 EXPOSE 3000
