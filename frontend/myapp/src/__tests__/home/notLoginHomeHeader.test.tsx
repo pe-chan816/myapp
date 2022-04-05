@@ -5,6 +5,8 @@ import { createMemoryHistory } from 'history'
 
 import App from "App";
 
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
+
 afterEach(cleanup);
 
 const renderDom = () => {
@@ -17,6 +19,13 @@ const renderDom = () => {
 };
 
 describe("非ログイン時のホームヘッダー", () => {
+  beforeEach(() => {
+    jestMockMatchMedia({
+      media: '',
+      matches: false
+    });
+  });
+
   it("各ヘッダー要素が表示されている", () => {
     renderDom();
     expect(screen.getByText("Insyutagram")).toBeInTheDocument();
