@@ -6,8 +6,15 @@ import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
 
 import App from "App";
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
 
 afterEach(cleanup);
+beforeEach(() => {
+  jestMockMatchMedia({
+    media: '',
+    matches: false
+  });
+});
 
 describe("ログイン時のホームヘッダー", () => {
   const renderLoginSituation = () => {
@@ -53,6 +60,7 @@ describe("ログイン時のホームヘッダー", () => {
         </Router>
       );
     })
+
   };
 
   it("各要素が正しく表示されている", async () => {
@@ -76,9 +84,9 @@ describe("ログイン時のホームヘッダー", () => {
     const target = await screen.findByText("マイページ");
     act(() => { userEvent.click(target) });
 
-    expect(await screen.findByText("somebody1"));
-    expect(await screen.findByText("100"));
-    expect(await screen.findByText("50"));
+    expect(await screen.findByText("somebody1")).toBeInTheDocument();
+    expect(await screen.findByText("100")).toBeInTheDocument();
+    expect(await screen.findByText("50")).toBeInTheDocument();
   });
 
   it("'ポスト'のリンクが正常に動作する", async () => {
@@ -86,7 +94,8 @@ describe("ログイン時のホームヘッダー", () => {
     const target = await screen.findByText("ポスト");
     act(() => { userEvent.click(target) });
 
-    expect(await screen.findByPlaceholderText("何かつぶやいてみましょう"));
+    expect(await screen.findByRole('textbox')).toBeInTheDocument();
+    //expect(screen.getByPlaceholderText("何かつぶやいてみましょう")).toBeInTheDocument();
   });
 
   it("'マイいいね'のリンクが正常に動作する", async () => {
@@ -134,7 +143,7 @@ describe("ログイン時のホームヘッダー", () => {
     const target = await screen.findByText("ログアウト");
     act(() => { userEvent.click(target) });
 
-    expect(await screen.findByText("アカウント登録"));
-    expect(screen.getByText("ログアウトが完了しました"));
+    expect(await screen.findByText("ログアウトが完了しました")).toBeInTheDocument();
+    expect(screen.getByText("アカウント登録")).toBeInTheDocument();
   });
 });

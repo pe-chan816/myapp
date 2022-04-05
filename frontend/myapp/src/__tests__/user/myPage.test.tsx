@@ -6,8 +6,15 @@ import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
 
 import App from "App";
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
 
 afterEach(cleanup);
+beforeEach(() => {
+  jestMockMatchMedia({
+    media: '',
+    matches: false
+  });
+});
 
 describe("マイページの挙動", () => {
   const renderLoginSituation = async () => {

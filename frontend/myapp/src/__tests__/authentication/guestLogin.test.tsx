@@ -7,10 +7,18 @@ import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
 
 import App from "App";
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
 
 afterEach(cleanup);
 
 describe("ゲストログイン機能の挙動", () => {
+  beforeEach(() => {
+    jestMockMatchMedia({
+      media: '',
+      matches: false
+    });
+  });
+
   const renderLogin = async () => {
     const history = createMemoryHistory();
     const mock = new MockAdapter(axios);
@@ -50,7 +58,6 @@ describe("ゲストログイン機能の挙動", () => {
 
     const loginButton = await screen.findByRole("button", { name: "ゲストとして利用してみる" });
     act(() => { userEvent.click(loginButton); });
-
   };
 
   it("ログインボタンを押すとログイン状態になりHomeHeaderに切り替わる", async () => {
