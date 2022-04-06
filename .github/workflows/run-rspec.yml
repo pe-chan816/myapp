@@ -1,4 +1,4 @@
-name: Run Rspec
+name: Run Tests
 
 on: [push]
 
@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Set .env File
+      - name: Set .env File for DB
         shell: bash
         run: |
           touch .env
@@ -17,12 +17,26 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
 
+      - name: Set .env File for React
+        shell: bash
+        run: |
+          touch frontend/myapp/.env
+          echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_API_DOMAIN }}" >> frontend/myapp/.env
+          echo "REACT_APP_IMAGE_URL=${{ secrets.REACT_APP_IMAGE_URL }}" >> frontend/myapp/.env
+
       - name: Setup Docker Container
         shell: bash
         run: |
           docker compose build
-          docker-compose run rails yarn install --check-files
-          docker-compose run rails yarn upgrade
+          docker compose run rails yarn install --check-files
+          docker compose run rails yarn upgrade
+          docker compose run react yarn install
+          docker compose up -d
+
+      - name: Run Jest
+        shell: bash
+        run: |
+          docker compose run -T react yarn test --watchAll=false
 
       - name: Create DB
         shell: bash
