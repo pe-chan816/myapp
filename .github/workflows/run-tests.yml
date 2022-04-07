@@ -6,9 +6,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Set .env File for DB
+      -
+        uses: actions/checkout@v2
+      -
+        name: Set .env File for DB
         shell: bash
         run: |
           touch .env
@@ -16,15 +17,15 @@ jobs:
           echo "DB_USER=${{ secrets.DB_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
           echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
-
-      - name: Set .env File for React
+      -
+        name: Set .env File for React
         shell: bash
         run: |
           touch frontend/myapp/.env
           echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_API_DOMAIN }}" >> frontend/myapp/.env
           echo "REACT_APP_IMAGE_URL=${{ secrets.REACT_APP_IMAGE_URL }}" >> frontend/myapp/.env
-
-      - name: Setup Docker Container
+      -
+        name: Setup Docker Container
         shell: bash
         run: |
           docker compose build
@@ -32,18 +33,18 @@ jobs:
           docker compose run rails yarn upgrade
           docker compose run react yarn install
           docker compose up -d
-
-      - name: Run Jest
+      -
+        name: Run Jest
         shell: bash
         run: |
           docker compose run -T react yarn test --watchAll=false
-
-      - name: Create DB
+      -
+        name: Create DB
         shell: bash
         run: |
           docker compose run -T rails rails db:create
-
-      - name: Run Rspec
+      -
+        name: Run Rspec
         shell: bash
         env:
           RAILS_ENV: test
