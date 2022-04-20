@@ -50,6 +50,7 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15'
+  gem 'rspec-retry', '~> 0.6.2'
   gem 'selenium-webdriver'
   #gem 'webdrivers'
 end

@@ -1,0 +1,72 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        uses: actions/checkout@v2
+      -
+        name: Set .env File for DB
+        shell: bash
+        run: |
+          touch .env
+          echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env
+      -
+        name: Set .env File for React
+        shell: bash
+        run: |
+          touch frontend/myapp/.env
+          echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_API_DOMAIN }}" >> frontend/myapp/.env
+          echo "REACT_APP_IMAGE_URL=${{ secrets.REACT_APP_IMAGE_URL }}" >> frontend/myapp/.env
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+      -
+        name: Build cache
+        run: |
+          docker buildx bake -f docker-compose.yml --set *.cache-from=type=local,src=/tmp/.buildx-cache --set *.cache-to=type=local,dest=/tmp/.buildx-cache-new
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      -
+        name: Setup Docker Container
+        shell: bash
+        run: |
+          docker buildx bake -f docker-compose.yml --load --set *.cache-from=type=local,src=/tmp/.build-cache
+          docker compose run rails yarn install --check-files
+          docker compose run rails yarn upgrade
+          docker compose run react yarn install
+          docker compose up -d
+      -
+        name: Run Jest
+        shell: bash
+        run: |
+          docker compose run -T react yarn test --watchAll=false
+      -
+        name: Create DB
+        shell: bash
+        run: |
+          docker compose run -T rails rails db:create
+      -
+        name: Run Rspec
+        shell: bash
+        env:
+          RAILS_ENV: test
+        run: |
+          docker compose run -T rails rspec
