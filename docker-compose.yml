@@ -15,8 +15,6 @@ services:
       - tmp-data:/myapp/tmp
       - public-data:/myapp/public
     hostname: rails
-    expose:
-      - 3000
     depends_on:
       - db
 
@@ -35,7 +33,7 @@ services:
   nginx-front:
     build:
       context: .
-      dockerfile: ./containers/nginx/Dockerfile
+      dockerfile: ./containers/nginx-front/Dockerfile
     environment:
       TZ: Asia/Tokyo
     ports:
@@ -46,7 +44,7 @@ services:
   nginx-api:
     build:
       context: .
-      dockerfile: ./containers/nginx/Dockerfile
+      dockerfile: ./containers/nginx-api/Dockerfile
     environment:
       TZ: Asia/Tokyo
     volumes:

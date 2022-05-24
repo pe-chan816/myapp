@@ -16,6 +16,8 @@ COPY ./backend/Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
 COPY ./backend /myapp
 RUN mkdir -p /myapp/tmp/sockets
+RUN mkdir -p /myapp/tmp/pids
+VOLUME ["/myapp/tmp"]
+VOLUME ["/myapp/public"]
 RUN yarn install --check-files
 RUN yarn upgrade
-EXPOSE 3000
