@@ -88,7 +88,7 @@ const EditRecipe = () => {
           <Link className={classes.button}
             color="inherit"
             component="button"
-            data-testId={`CloseIcon${i}`}
+            data-testid={`CloseIcon${i}`}
             onClick={deleteList}
           >
             <CloseIcon fontSize="small" />

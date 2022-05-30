@@ -7,6 +7,8 @@ import { createMemoryHistory } from 'history';
 
 import App from "App";
 
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
+
 afterEach(cleanup);
 
 describe("ホーム画面", () => {
@@ -62,6 +64,13 @@ describe("ホーム画面", () => {
       );
     })
   };
+
+  beforeEach(() => {
+    jestMockMatchMedia({
+      media: '',
+      matches: false
+    });
+  });
 
   const assertExisting = async () => {
     expect(await screen.findByText("通りすがりのビール好き")).toBeInTheDocument();

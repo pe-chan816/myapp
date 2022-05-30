@@ -6,6 +6,8 @@ import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
 
 import App from "App";
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
+
 
 afterEach(cleanup);
 
@@ -55,6 +57,13 @@ describe("いいね一覧の挙動", () => {
       );
     });
   };
+
+  beforeEach(() => {
+    jestMockMatchMedia({
+      media: '',
+      matches: false
+    });
+  });
 
   it("各要素が正常に表示されている", async () => {
     renderLoginSituation();

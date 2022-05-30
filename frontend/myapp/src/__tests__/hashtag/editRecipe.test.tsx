@@ -6,8 +6,17 @@ import MockAdapter from "axios-mock-adapter";
 import { createMemoryHistory } from 'history';
 
 import App from "App";
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
+
 
 afterEach(cleanup);
+
+beforeEach(() => {
+  jestMockMatchMedia({
+    media: '',
+    matches: false
+  });
+});
 
 const renderLoginSituation = async () => {
   const history = createMemoryHistory();
@@ -104,7 +113,7 @@ const renderLoginSituation = async () => {
 
   await screen.findAllByText("マイページ");
   const dehazeIcon = screen.getByTestId("dehaze-icon");
-  act(async () => { userEvent.click(dehazeIcon) });
+  await act(async () => { userEvent.click(dehazeIcon) });
 
   const tagIndexLink = await screen.findByText("タグ一覧");
   act(() => { userEvent.click(tagIndexLink) });

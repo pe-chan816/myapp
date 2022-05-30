@@ -97,5 +97,14 @@ RSpec.configure do |config|
 =end
 end
 
+require 'rspec/retry'
+RSpec.configure do |config|
+  config.verbose_retry = true
+  config.display_try_failure_messages = true
+  config.around :each do |ex|
+    ex.run_with_retry retry: 3
+  end
+end
+
 #以下自分で追加
 require 'capybara/rails'

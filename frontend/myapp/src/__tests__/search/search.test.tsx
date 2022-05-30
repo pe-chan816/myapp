@@ -8,6 +8,15 @@ import { createMemoryHistory } from 'history';
 import App from "App";
 
 afterEach(cleanup);
+import { jestMockMatchMedia } from 'test-utilities/jestMockMatchMedia';
+
+afterEach(cleanup);
+beforeEach(() => {
+  jestMockMatchMedia({
+    media: '',
+    matches: false
+  });
+});
 
 const renderLoginSituation = async () => {
   const history = createMemoryHistory();
