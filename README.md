@@ -1,4 +1,4 @@
-# Insyutagram(仮)
+# Insyutagram
 カクテルレシピやBARの情報を登録できる、お酒の情報が集まるSNSアプリです。
 <br>
 夜な夜な更新され続けるカクテルブック、BAR情報誌を目指しました。
@@ -33,14 +33,19 @@
 - データベース
   - MySQL:5.7
 - インフラ・開発環境
-  - Docker/docker-comopose
+  - Docker/docker-compose
   - AWS
-    - EC2
     - ECS
     - ECR
+    - Fargate
     - RDB
     - S3
     - Route53
+  - CI/CD
+    - Github Actions
+      - テスト
+      - ビルド
+      - ECRへのプッシュ
 - API
   - GoogleMapsAPI
 - テストツール
@@ -68,7 +73,3 @@
 
 ## データベース設計図
 ![構成図](./images/myapp_db_schema.drawio.png)
-
-## 今後の予定
-- アプリの安定性強化
-- アプリの機能拡張
